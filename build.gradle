@@ -11,4 +11,5 @@ plugins {
 
 ext {
     nav_version = "2.5.3"
+    constraintlayout_compose_version = "1.0.1"
 }

@@ -1,6 +1,5 @@
 package com.test_application.hollyscompose.nav
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
