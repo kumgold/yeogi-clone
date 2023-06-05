@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">Hollys Compose</string>
 
+<!--    Home -->
     <string name="home">Home</string>
+    <string name="delivery_button_title">딜리버리</string>
+    <string name="delivery_button_subtitle">이제는 집에서 즐기는 할리스</string>
+    <string name="smart_order_button_title">스마트오더</string>
+    <string name="smart_order_button_subtitle">줄서지 않고 주문하세요</string>
+
 </resources>

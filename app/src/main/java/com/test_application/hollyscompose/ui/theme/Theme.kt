@@ -40,7 +40,7 @@ fun HollysComposeTheme(
 
     MaterialTheme(
         colors = colors,
-        typography = Typography,
+        typography = HollysTypography,
         shapes = Shapes,
         content = content
     )
