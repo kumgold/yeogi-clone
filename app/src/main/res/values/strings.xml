@@ -2,6 +2,7 @@
     <string name="app_name">Hollys Compose</string>
 
 <!--    Home -->
+    <string name="user_intro_comment">따뜻한 커피 어때요</string>
     <string name="home">Home</string>
     <string name="delivery_button_title">딜리버리</string>
     <string name="delivery_button_subtitle">이제는 집에서 즐기는 할리스</string>
