@@ -2,6 +2,7 @@ package com.test_application.hollyscompose.ui.home
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
@@ -10,11 +11,13 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,7 +42,7 @@ fun HomeScreen() {
         Column {
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = "따뜻한 커피 어때요",
+                text = stringResource(id = R.string.user_intro_comment),
                 fontSize = 12.sp,
                 textAlign = TextAlign.Center
             )
@@ -55,6 +58,7 @@ fun HomeScreen() {
                         .zIndex(1.0f),
                     mainColor = Color.White,
                     subColor = Color.Black,
+                    thirdColor = Red,
                     topMargin = 30.dp,
                     title = R.string.delivery_button_title,
                     subtitle = R.string.delivery_button_subtitle
@@ -67,8 +71,11 @@ fun HomeScreen() {
                     subColor = Color.White,
                     topMargin = 150.dp,
                     title = R.string.smart_order_button_title,
-                    subtitle = R.string.smart_order_button_subtitle
+                    subtitle = R.string.smart_order_button_subtitle,
+                    dropdownIcon = Icons.Filled.KeyboardArrowRight
                 )
+                Spacer(modifier = Modifier.height(50.dp))
+
             }
         }
     }
@@ -79,14 +86,17 @@ fun HomeDropDownButton(
     modifier: Modifier,
     mainColor: Color,
     subColor: Color,
+    thirdColor: Color = Color.White,
     topMargin: Dp = 0.dp,
     @StringRes title: Int,
-    @StringRes subtitle: Int
+    @StringRes subtitle: Int,
+    dropdownIcon: ImageVector = Icons.Filled.KeyboardArrowDown
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .background(mainColor, shape = MainBottomStartRoundShape)
+            .clickable { }
             .padding(35.dp, topMargin, 20.dp, 40.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -109,17 +119,22 @@ fun HomeDropDownButton(
            modifier = Modifier
                .size(30.dp)
                .clip(CircleShape)
-               .background(subColor)
+               .background(thirdColor)
         ) {
             Icon(
                 modifier = Modifier
                     .fillMaxSize(),
-                imageVector = Icons.Filled.KeyboardArrowDown,
+                imageVector = dropdownIcon,
                 contentDescription = null,
                 tint = mainColor
             )
         }
     }
+}
+
+@Composable
+fun HomeNavigationIconButton() {
+    
 }
 
 @Composable
@@ -139,6 +154,7 @@ private fun HomeDropDownButtonPreView() {
                     .zIndex(1.0f),
                 mainColor = Color.Black,
                 subColor = Color.White,
+                thirdColor = Red,
                 topMargin = 40.dp,
                 title = R.string.delivery_button_title,
                 subtitle = R.string.delivery_button_subtitle
@@ -149,7 +165,7 @@ private fun HomeDropDownButtonPreView() {
                 },
                 mainColor = Color.Red,
                 subColor = Color.White,
-                topMargin = 160.dp,
+                topMargin = 150.dp,
                 title = R.string.smart_order_button_title,
                 subtitle = R.string.smart_order_button_subtitle
             )
