@@ -43,7 +43,7 @@ fun HomeScreen() {
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(id = R.string.user_intro_comment),
-                fontSize = 12.sp,
+                style = MaterialTheme.typography.caption,
                 textAlign = TextAlign.Center
             )
 
@@ -56,10 +56,6 @@ fun HomeScreen() {
                             top.linkTo(parent.top)
                         }
                         .zIndex(1.0f),
-                    mainColor = Color.White,
-                    subColor = Color.Black,
-                    thirdColor = Red,
-                    topMargin = 30.dp,
                     title = R.string.delivery_button_title,
                     subtitle = R.string.delivery_button_subtitle
                 )
@@ -84,10 +80,10 @@ fun HomeScreen() {
 @Composable
 fun HomeDropDownButton(
     modifier: Modifier,
-    mainColor: Color,
-    subColor: Color,
-    thirdColor: Color = Color.White,
-    topMargin: Dp = 0.dp,
+    mainColor: Color = MaterialTheme.colors.background,
+    subColor: Color = MaterialTheme.colors.surface,
+    thirdColor: Color = Red,
+    topMargin: Dp = 30.dp,
     @StringRes title: Int,
     @StringRes subtitle: Int,
     dropdownIcon: ImageVector = Icons.Filled.KeyboardArrowDown
@@ -95,7 +91,8 @@ fun HomeDropDownButton(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(mainColor, shape = MainBottomStartRoundShape)
+            .clip(MainBottomStartRoundShape)
+            .background(mainColor)
             .clickable { }
             .padding(35.dp, topMargin, 20.dp, 40.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -104,14 +101,12 @@ fun HomeDropDownButton(
             Text(
                 text = stringResource(id = title),
                 color = subColor,
-                fontWeight = HollysTypography.h1.fontWeight,
-                fontSize = HollysTypography.h1.fontSize
+                style = MaterialTheme.typography.h1
             )
             Text(
                 text = stringResource(id = subtitle),
                 color = subColor,
-                fontWeight = HollysTypography.body1.fontWeight,
-                fontSize = HollysTypography.body1.fontSize
+                style = MaterialTheme.typography.body1
             )
         }
         Spacer(modifier = Modifier.weight(1f))
