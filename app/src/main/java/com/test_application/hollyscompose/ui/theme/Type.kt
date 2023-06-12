@@ -10,13 +10,13 @@ import androidx.compose.ui.unit.sp
 val HollysTypography = Typography(
     h1 = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Bold,
+        fontWeight = FontWeight.ExtraBold,
         fontSize = 22.sp
     ),
     body1 = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Bold,
-        fontSize = 13.sp
+        fontWeight = FontWeight.Medium,
+        fontSize = 15.sp
     ),
     caption = TextStyle(
         fontFamily = FontFamily.Default,
