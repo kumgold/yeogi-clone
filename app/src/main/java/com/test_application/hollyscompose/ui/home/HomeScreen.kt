@@ -39,55 +39,40 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.test_application.hollyscompose.R
-import com.test_application.hollyscompose.ui.compose.HollysTopAppBar
 import com.test_application.hollyscompose.ui.theme.MainBottomStartRoundShape
 import com.test_application.hollyscompose.ui.theme.Red
 
 @Composable
 fun HomeScreen() {
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        backgroundColor = MaterialTheme.colors.background,
-        topBar = { HollysTopAppBar() },
+    Column(
+        modifier = Modifier.fillMaxHeight()
     ) {
-        Column(
-            modifier = Modifier.fillMaxHeight(),
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
 
-            Column {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(id = R.string.user_intro_comment),
-                    style = MaterialTheme.typography.caption,
-                    textAlign = TextAlign.Center
-                )
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = stringResource(id = R.string.user_intro_comment),
+            style = MaterialTheme.typography.caption,
+            textAlign = TextAlign.Center
+        )
 
-                HomeTopLayoutBarAndRoundButton()
-            }
-
-
-            Column {
-                HomeIconButtonLayout()
-                HomeIconButtonLayout()
-            }
-
-
-            Box(
-                modifier = Modifier
-                    .weight(1f, false)
-                    .fillMaxWidth()
-                    .height(110.dp)
-                    .padding(10.dp)
-                    .clip(RoundedCornerShape(15.dp))
-                    .background(color = Color.Blue)
-            )
-        }
+        HomeTopRoundButtons()
+        Spacer(modifier = Modifier.weight(1f))
+        HomeIconButtons()
+        Spacer(modifier = Modifier.weight(1f))
+        Box(
+            modifier = Modifier
+                .weight(1f, false)
+                .fillMaxWidth()
+                .height(110.dp)
+                .padding(10.dp)
+                .clip(RoundedCornerShape(15.dp))
+                .background(color = Color.Blue)
+        )
     }
 }
 
 @Composable
-fun HomeTopLayoutBarAndRoundButton() {
+private fun HomeTopRoundButtons() {
     ConstraintLayout {
         val (delivery, order) = createRefs()
 
@@ -126,7 +111,7 @@ fun HomeTopLayoutBarAndRoundButton() {
 }
 
 @Composable
-fun HomeDropDownButton(
+private fun HomeDropDownButton(
     modifier: Modifier,
     mainColor: Color = MaterialTheme.colors.background,
     subColor: Color = MaterialTheme.colors.surface,
@@ -170,19 +155,43 @@ fun HomeDropDownButton(
 }
 
 @Composable
-fun HomeIconButtonLayout() {
+private fun HomeIconButtons() {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
     ) {
-        HomeIconButton()
-        HomeIconButton()
-        HomeIconButton()
+        HomeIconButton(
+            name = "0/12"
+        )
+        HomeIconButton(
+            name = stringResource(id = R.string.hollys_card)
+        )
+        HomeIconButton(
+            name = stringResource(id = R.string.coupon)
+        )
+    }
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        HomeIconButton(
+            name = stringResource(id = R.string.hollys_mall)
+        )
+        HomeIconButton(
+            name = stringResource(id = R.string.market_place)
+        )
+        HomeIconButton(
+            name = stringResource(id = R.string.cake_reservation)
+        )
     }
 }
 
 @Composable
-fun HomeIconButton() {
+private fun HomeIconButton(
+    image: ImageVector = Icons.Filled.Face,
+    name: String
+) {
     Column(
         modifier = Modifier.clickable {  },
         horizontalAlignment = Alignment.CenterHorizontally
@@ -191,13 +200,13 @@ fun HomeIconButton() {
             modifier = Modifier
                 .padding(30.dp, 10.dp)
                 .size(50.dp),
-            imageVector = Icons.Filled.Face,
+            imageVector = image,
             contentDescription = null,
             alignment = Alignment.Center,
             contentScale = ContentScale.Fit,
         )
         Text(
-            text = "쿠폰",
+            text = name,
             color = MaterialTheme.colors.surface,
             style = MaterialTheme.typography.body1,
             textAlign = TextAlign.Center

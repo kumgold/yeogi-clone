@@ -8,5 +8,11 @@
     <string name="delivery_button_subtitle">이제는 집에서 즐기는 할리스</string>
     <string name="smart_order_button_title">스마트오더</string>
     <string name="smart_order_button_subtitle">줄서지 않고 주문하세요</string>
+    
+    <string name="hollys_card">할리스카드</string>
+    <string name="coupon">쿠폰</string>
+    <string name="hollys_mall">할리스 몰</string>
+    <string name="market_place">매장</string>
+    <string name="cake_reservation">홀케이크 예약</string>
 
 </resources>
