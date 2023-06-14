@@ -16,9 +16,10 @@ import com.test_application.hollyscompose.ui.theme.HollysComposeTheme
 fun HollysComposeApp() {
     HollysComposeTheme {
         val navController = rememberNavController()
+        val modifier = Modifier.fillMaxSize()
 
         Scaffold(
-            modifier = Modifier.fillMaxSize(),
+            modifier = modifier,
             backgroundColor = MaterialTheme.colors.background,
             topBar = { HollysTopAppBar() },
         ) {
@@ -28,7 +29,7 @@ fun HollysComposeApp() {
                 startDestination = HollysDestinations.Home
             ) {
                 composable(HollysDestinations.Home) {
-                    HomeScreen()
+                    HomeScreen(modifier = modifier)
                 }
             }
         }
