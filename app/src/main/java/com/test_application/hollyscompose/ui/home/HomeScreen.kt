@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -25,6 +24,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.material.icons.outlined.ShoppingCart
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,9 +45,11 @@ import com.test_application.hollyscompose.ui.theme.MainBottomStartRoundShape
 import com.test_application.hollyscompose.ui.theme.Red
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    modifier: Modifier
+) {
     Column(
-        modifier = Modifier.fillMaxHeight()
+        modifier = modifier
     ) {
 
         Text(
@@ -156,11 +160,14 @@ private fun HomeDropDownButton(
 
 @Composable
 private fun HomeIconButtons() {
+    val modifier = Modifier.fillMaxWidth()
+
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
         horizontalArrangement = Arrangement.Center
     ) {
         HomeIconButton(
+            image = Icons.Outlined.Star,
             name = "0/12"
         )
         HomeIconButton(
@@ -172,13 +179,15 @@ private fun HomeIconButtons() {
     }
 
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
         horizontalArrangement = Arrangement.Center
     ) {
         HomeIconButton(
+            image = Icons.Outlined.ShoppingCart,
             name = stringResource(id = R.string.hollys_mall)
         )
         HomeIconButton(
+            image = Icons.Outlined.LocationOn,
             name = stringResource(id = R.string.market_place)
         )
         HomeIconButton(
