@@ -8,7 +8,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun HollysTopAppBar() {
+fun HollysTopAppBar(
+    onClick: () -> Unit
+) {
     TopAppBar(
         title = {
             Text(text = "")
@@ -16,7 +18,7 @@ fun HollysTopAppBar() {
         backgroundColor = Color.White,
         elevation = 0.dp,
         actions = {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = onClick) {
                 Icon(
                     imageVector = Icons.Filled.Menu,
                     contentDescription = null,

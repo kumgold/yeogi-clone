@@ -34,6 +34,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -65,9 +66,8 @@ fun HomeScreen(
         Spacer(modifier = Modifier.weight(1f))
         Box(
             modifier = Modifier
-                .weight(1f, false)
                 .fillMaxWidth()
-                .height(110.dp)
+                .height(120.dp)
                 .padding(10.dp)
                 .clip(RoundedCornerShape(15.dp))
                 .background(color = Color.Blue)
