@@ -34,6 +34,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -65,13 +66,16 @@ fun HomeScreen(
         Spacer(modifier = Modifier.weight(1f))
         HomeIconButtons(navController)
         Spacer(modifier = Modifier.weight(1f))
-        Box(
+        Image(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(120.dp)
                 .padding(10.dp)
                 .clip(RoundedCornerShape(15.dp))
-                .background(color = Color.Blue)
+                .background(color = Color.Blue),
+            painter = painterResource(id = R.drawable.image_home_ad),
+            contentDescription = null,
+            contentScale = ContentScale.Crop
         )
     }
 }
@@ -170,19 +174,25 @@ private fun HomeIconButtons(
     val modifier = Modifier.fillMaxWidth()
 
     Row(
-        modifier = modifier,
+        modifier = modifier
+            .padding(0.dp, 0.dp, 0.dp, 20.dp),
         horizontalArrangement = Arrangement.Center
     ) {
+        val buttonModifier = Modifier.weight(1f)
+
         HomeIconButton(
+            modifier = buttonModifier,
             image = Icons.Outlined.Star,
             name = "0/12",
             navController = navController
         )
         HomeIconButton(
+            modifier = buttonModifier,
             name = stringResource(id = R.string.hollys_card),
             navController = navController
         )
         HomeIconButton(
+            modifier = buttonModifier,
             name = stringResource(id = R.string.coupon),
             navController = navController
         )
@@ -192,27 +202,42 @@ private fun HomeIconButtons(
         modifier = modifier,
         horizontalArrangement = Arrangement.Center
     ) {
+        val buttonModifier = Modifier.weight(1f)
+
         HomeIconButton(
+            modifier = buttonModifier,
             image = Icons.Outlined.ShoppingCart,
             name = stringResource(id = R.string.hollys_mall),
             navController = navController
         )
         HomeIconButton(
+            modifier = buttonModifier,
             image = Icons.Outlined.LocationOn,
             name = stringResource(id = R.string.market_place),
             navController = navController
         )
-        HomeIconButton(
-            name = stringResource(id = R.string.cake_reservation),
-            navController = navController
-        )
+        Box(
+            modifier = buttonModifier
+                .clip(RoundedCornerShape(50.dp, 0.dp, 0.dp, 50.dp))
+                .background(Red),
+        ) {
+            HomeIconButton(
+                modifier = modifier,
+                name = stringResource(id = R.string.cake_reservation),
+                textColor = Color.White,
+                navController = navController
+            )
+        }
+
     }
 }
 
 @Composable
 private fun HomeIconButton(
+    modifier: Modifier,
     image: ImageVector = Icons.Filled.Face,
     name: String,
+    textColor: Color = MaterialTheme.colors.surface,
     navController: NavHostController
 ) {
     val destination = when (name) {
@@ -221,7 +246,7 @@ private fun HomeIconButton(
     }
 
     Column(
-        modifier = Modifier.clickable {
+        modifier = modifier.clickable {
             navController.navigate(destination)
         },
         horizontalAlignment = Alignment.CenterHorizontally
@@ -237,7 +262,7 @@ private fun HomeIconButton(
         )
         Text(
             text = name,
-            color = MaterialTheme.colors.surface,
+            color = textColor,
             style = MaterialTheme.typography.body1,
             textAlign = TextAlign.Center
         )
