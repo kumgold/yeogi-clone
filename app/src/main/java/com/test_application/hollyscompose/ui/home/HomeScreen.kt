@@ -34,25 +34,26 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.NavHostController
+import com.test_application.hollyscompose.HollysDestinations
 import com.test_application.hollyscompose.R
 import com.test_application.hollyscompose.ui.theme.MainBottomStartRoundShape
 import com.test_application.hollyscompose.ui.theme.Red
 
 @Composable
 fun HomeScreen(
-    modifier: Modifier
+    modifier: Modifier,
+    navController: NavHostController
 ) {
     Column(
         modifier = modifier
     ) {
-
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(id = R.string.user_intro_comment),
@@ -60,9 +61,9 @@ fun HomeScreen(
             textAlign = TextAlign.Center
         )
 
-        HomeTopRoundButtons()
+        HomeTopRoundButtons(navController)
         Spacer(modifier = Modifier.weight(1f))
-        HomeIconButtons()
+        HomeIconButtons(navController)
         Spacer(modifier = Modifier.weight(1f))
         Box(
             modifier = Modifier
@@ -76,7 +77,9 @@ fun HomeScreen(
 }
 
 @Composable
-private fun HomeTopRoundButtons() {
+private fun HomeTopRoundButtons(
+    navController: NavHostController
+) {
     ConstraintLayout {
         val (delivery, order) = createRefs()
 
@@ -102,7 +105,9 @@ private fun HomeTopRoundButtons() {
                 .fillMaxWidth()
                 .clip(MainBottomStartRoundShape)
                 .background(Red)
-                .clickable { }
+                .clickable {
+                    navController.navigate(HollysDestinations.SMART_ORDER)
+                }
                 .padding(35.dp, 150.dp, 20.dp, 40.dp),
             mainColor = Red,
             subColor = Color.White,
@@ -159,7 +164,9 @@ private fun HomeDropDownButton(
 }
 
 @Composable
-private fun HomeIconButtons() {
+private fun HomeIconButtons(
+    navController: NavHostController
+) {
     val modifier = Modifier.fillMaxWidth()
 
     Row(
@@ -168,13 +175,16 @@ private fun HomeIconButtons() {
     ) {
         HomeIconButton(
             image = Icons.Outlined.Star,
-            name = "0/12"
+            name = "0/12",
+            navController = navController
         )
         HomeIconButton(
-            name = stringResource(id = R.string.hollys_card)
+            name = stringResource(id = R.string.hollys_card),
+            navController = navController
         )
         HomeIconButton(
-            name = stringResource(id = R.string.coupon)
+            name = stringResource(id = R.string.coupon),
+            navController = navController
         )
     }
 
@@ -184,14 +194,17 @@ private fun HomeIconButtons() {
     ) {
         HomeIconButton(
             image = Icons.Outlined.ShoppingCart,
-            name = stringResource(id = R.string.hollys_mall)
+            name = stringResource(id = R.string.hollys_mall),
+            navController = navController
         )
         HomeIconButton(
             image = Icons.Outlined.LocationOn,
-            name = stringResource(id = R.string.market_place)
+            name = stringResource(id = R.string.market_place),
+            navController = navController
         )
         HomeIconButton(
-            name = stringResource(id = R.string.cake_reservation)
+            name = stringResource(id = R.string.cake_reservation),
+            navController = navController
         )
     }
 }
@@ -199,10 +212,18 @@ private fun HomeIconButtons() {
 @Composable
 private fun HomeIconButton(
     image: ImageVector = Icons.Filled.Face,
-    name: String
+    name: String,
+    navController: NavHostController
 ) {
+    val destination = when (name) {
+        stringResource(id = R.string.coupon) -> HollysDestinations.COUPON
+        else -> HollysDestinations.COUPON
+    }
+
     Column(
-        modifier = Modifier.clickable {  },
+        modifier = Modifier.clickable {
+            navController.navigate(destination)
+        },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(

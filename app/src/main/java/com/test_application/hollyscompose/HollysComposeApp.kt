@@ -12,7 +12,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.test_application.hollyscompose.ui.compose.HollysDrawer
 import com.test_application.hollyscompose.ui.compose.HollysTopAppBar
+import com.test_application.hollyscompose.ui.coupon.CouponScreen
 import com.test_application.hollyscompose.ui.home.HomeScreen
+import com.test_application.hollyscompose.ui.smart_order.SmartOrderScreen
 import com.test_application.hollyscompose.ui.theme.HollysComposeTheme
 import kotlinx.coroutines.launch
 
@@ -30,20 +32,35 @@ fun HollysComposeApp() {
             backgroundColor = MaterialTheme.colors.background,
             topBar = {
                 HollysTopAppBar {
-                        coroutineScope.launch { scaffoldState.drawerState.open()
+                    coroutineScope.launch { scaffoldState.drawerState.open()
                     }
                 }
             },
-            drawerContent = { HollysDrawer(modifier = modifier) },
+            drawerContent = {
+                HollysDrawer(
+                    modifier = modifier
+                )
+            },
             drawerGesturesEnabled = scaffoldState.drawerState.isOpen
         ) {
             NavHost(
                 modifier = Modifier.fillMaxSize(),
                 navController = navController,
-                startDestination = HollysDestinations.Home
+                startDestination = HollysDestinations.HOME
             ) {
-                composable(HollysDestinations.Home) {
-                    HomeScreen(modifier = modifier)
+                composable(HollysDestinations.HOME) {
+                    HomeScreen(
+                        modifier = modifier,
+                        navController = navController
+                    )
+                }
+
+                composable(HollysDestinations.SMART_ORDER) {
+                    SmartOrderScreen()
+                }
+
+                composable(HollysDestinations.COUPON) {
+                    CouponScreen()
                 }
             }
         }

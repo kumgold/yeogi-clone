@@ -23,5 +23,7 @@ fun HollysDrawer(
 @Preview
 @Composable
 private fun HollysDrawerPreview() {
-    HollysDrawer(modifier = Modifier.fillMaxSize())
+    HollysDrawer(
+        modifier = Modifier.fillMaxSize()
+    )
 }

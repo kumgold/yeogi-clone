@@ -3,7 +3,9 @@ package com.test_application.hollyscompose
 import androidx.compose.runtime.Composable
 
 object HollysDestinations {
-    const val Home = "Home"
+    const val HOME = "home"
+    const val SMART_ORDER = "smart_order"
+    const val COUPON = "coupon"
 }
 
 @Composable

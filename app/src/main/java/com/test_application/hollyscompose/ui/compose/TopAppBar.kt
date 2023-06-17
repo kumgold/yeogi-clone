@@ -17,7 +17,7 @@ fun HollysTopAppBar(
         },
         backgroundColor = Color.White,
         elevation = 0.dp,
-        actions = {
+        navigationIcon = {
             IconButton(onClick = onClick) {
                 Icon(
                     imageVector = Icons.Filled.Menu,
