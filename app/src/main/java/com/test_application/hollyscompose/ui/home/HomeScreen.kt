@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
@@ -28,6 +29,7 @@ import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,17 +46,27 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.test_application.hollyscompose.HollysDestinations
 import com.test_application.hollyscompose.R
+import com.test_application.hollyscompose.ui.compose.HollysHomeTopAppBar
 import com.test_application.hollyscompose.ui.theme.MainBottomStartRoundShape
 import com.test_application.hollyscompose.ui.theme.Red
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
     modifier: Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    scaffoldState: ScaffoldState
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
     Column(
         modifier = modifier
     ) {
+        HollysHomeTopAppBar {
+            coroutineScope.launch {
+                scaffoldState.drawerState.open()
+            }
+        }
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(id = R.string.user_intro_comment),
@@ -175,7 +187,7 @@ private fun HomeIconButtons(
 
     Row(
         modifier = modifier
-            .padding(0.dp, 0.dp, 0.dp, 20.dp),
+            .padding(bottom = 20.dp),
         horizontalArrangement = Arrangement.Center
     ) {
         val buttonModifier = Modifier.weight(1f)
@@ -218,7 +230,7 @@ private fun HomeIconButtons(
         )
         Box(
             modifier = buttonModifier
-                .clip(RoundedCornerShape(50.dp, 0.dp, 0.dp, 50.dp))
+                .clip(RoundedCornerShape(topStart = 50.dp, bottomStart = 50.dp))
                 .background(Red),
         ) {
             HomeIconButton(
@@ -246,14 +258,16 @@ private fun HomeIconButton(
     }
 
     Column(
-        modifier = modifier.clickable {
-            navController.navigate(destination)
-        },
+        modifier = modifier
+            .padding(vertical = 10.dp)
+            .clickable {
+                navController.navigate(destination)
+            },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
             modifier = Modifier
-                .padding(30.dp, 10.dp)
+                .padding(horizontal = 30.dp)
                 .size(50.dp),
             imageVector = image,
             contentDescription = null,

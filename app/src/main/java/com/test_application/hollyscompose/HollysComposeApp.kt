@@ -5,24 +5,20 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.test_application.hollyscompose.ui.compose.HollysDrawer
-import com.test_application.hollyscompose.ui.compose.HollysTopAppBar
 import com.test_application.hollyscompose.ui.coupon.CouponScreen
 import com.test_application.hollyscompose.ui.home.HomeScreen
 import com.test_application.hollyscompose.ui.smart_order.SmartOrderScreen
 import com.test_application.hollyscompose.ui.theme.HollysComposeTheme
-import kotlinx.coroutines.launch
 
 @Composable
 fun HollysComposeApp() {
     HollysComposeTheme {
         val scaffoldState = rememberScaffoldState()
-        val coroutineScope = rememberCoroutineScope()
         val navController = rememberNavController()
         val modifier = Modifier.fillMaxSize()
 
@@ -30,12 +26,6 @@ fun HollysComposeApp() {
             modifier = modifier,
             scaffoldState = scaffoldState,
             backgroundColor = MaterialTheme.colors.background,
-            topBar = {
-                HollysTopAppBar {
-                    coroutineScope.launch { scaffoldState.drawerState.open()
-                    }
-                }
-            },
             drawerContent = {
                 HollysDrawer(
                     modifier = modifier
@@ -51,12 +41,16 @@ fun HollysComposeApp() {
                 composable(HollysDestinations.HOME) {
                     HomeScreen(
                         modifier = modifier,
-                        navController = navController
+                        navController = navController,
+                        scaffoldState = scaffoldState
                     )
                 }
 
                 composable(HollysDestinations.SMART_ORDER) {
-                    SmartOrderScreen()
+                    SmartOrderScreen(
+                        modifier = modifier,
+                        navController = navController
+                    )
                 }
 
                 composable(HollysDestinations.COUPON) {
