@@ -1,6 +1,9 @@
 package com.test_application.hollyscompose.ui.home
 
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,11 +28,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.material.icons.outlined.Place
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -97,7 +106,8 @@ private fun HomeTopRoundButtons(
     navController: NavHostController
 ) {
     ConstraintLayout {
-        val (delivery, order) = createRefs()
+        var isVisible by remember { mutableStateOf(false) }
+        val (delivery, button, order) = createRefs()
 
         HomeDropDownButton(
             modifier = Modifier
@@ -108,11 +118,42 @@ private fun HomeTopRoundButtons(
                 .fillMaxWidth()
                 .clip(MainBottomStartRoundShape)
                 .background(Color.White)
-                .clickable { }
+                .clickable { isVisible = isVisible.not() }
                 .padding(35.dp, 40.dp, 20.dp, 40.dp),
             title = R.string.delivery_button_title,
             subtitle = R.string.delivery_button_subtitle
         )
+        AnimatedVisibility(
+            visible = isVisible,
+            modifier = Modifier
+                .constrainAs(button) {
+                    top.linkTo(parent.top)
+                }
+                .zIndex(0.8f)
+                .fillMaxWidth()
+                .clip(MainBottomStartRoundShape),
+            enter = slideInVertically(initialOffsetY = { -it }),
+            exit =  slideOutVertically(targetOffsetY = { -it })
+        ) {
+            Row(
+                modifier = Modifier
+                    .background(MaterialTheme.colors.background)
+                    .padding(35.dp, 130.dp, 20.dp, 10.dp)
+            ) {
+                HomeIconButton(
+                    modifier = Modifier.weight(1f),
+                    image = Icons.Outlined.Edit,
+                    name = "메뉴보기",
+                    navController = navController
+                )
+                HomeIconButton(
+                    modifier = Modifier.weight(1f),
+                    image = Icons.Outlined.Place,
+                    name = "매장선택",
+                    navController = navController
+                )
+            }
+        }
         HomeDropDownButton(
             modifier = Modifier
                 .constrainAs(order) {
