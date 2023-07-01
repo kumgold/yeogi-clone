@@ -28,7 +28,9 @@ fun HollysComposeApp() {
             backgroundColor = MaterialTheme.colors.background,
             drawerContent = {
                 HollysDrawer(
-                    modifier = modifier
+                    modifier = modifier,
+                    navController = navController,
+                    scaffoldState = scaffoldState
                 )
             },
             drawerGesturesEnabled = scaffoldState.drawerState.isOpen
