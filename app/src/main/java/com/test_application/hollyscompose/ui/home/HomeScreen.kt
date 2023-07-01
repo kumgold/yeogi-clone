@@ -161,12 +161,12 @@ private fun HomeTopRoundButtons(
                 }
                 .fillMaxWidth()
                 .clip(MainBottomStartRoundShape)
-                .background(Red)
+                .background(MaterialTheme.colors.primary)
                 .clickable {
                     navController.navigate(HollysDestinations.SMART_ORDER)
                 }
                 .padding(35.dp, 150.dp, 20.dp, 40.dp),
-            mainColor = Red,
+            mainColor = MaterialTheme.colors.primary,
             subColor = Color.White,
             thirdColor = Color.White,
             title = R.string.smart_order_button_title,
@@ -181,7 +181,7 @@ private fun HomeDropDownButton(
     modifier: Modifier,
     mainColor: Color = MaterialTheme.colors.background,
     subColor: Color = MaterialTheme.colors.surface,
-    thirdColor: Color = Red,
+    thirdColor: Color = MaterialTheme.colors.primary,
     @StringRes title: Int,
     @StringRes subtitle: Int,
     dropdownIcon: ImageVector = Icons.Filled.KeyboardArrowDown
@@ -272,7 +272,7 @@ private fun HomeIconButtons(
         Box(
             modifier = buttonModifier
                 .clip(RoundedCornerShape(topStart = 50.dp, bottomStart = 50.dp))
-                .background(Red),
+                .background(MaterialTheme.colors.primary),
         ) {
             HomeIconButton(
                 modifier = modifier,
@@ -346,7 +346,7 @@ private fun HomeDropDownButtonPreView() {
                 modifier = Modifier.constrainAs(order) {
                     top.linkTo(parent.top)
                 },
-                mainColor = Color.Red,
+                mainColor = MaterialTheme.colors.primary,
                 subColor = Color.White,
                 title = R.string.smart_order_button_title,
                 subtitle = R.string.smart_order_button_subtitle
