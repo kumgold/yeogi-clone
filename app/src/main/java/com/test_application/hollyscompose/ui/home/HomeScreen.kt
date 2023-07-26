@@ -143,13 +143,13 @@ private fun HomeTopRoundButtons(
                 HomeIconButton(
                     modifier = Modifier.weight(1f),
                     image = Icons.Outlined.Edit,
-                    name = "메뉴보기",
+                    name = stringResource(id = R.string.menu_list),
                     navController = navController
                 )
                 HomeIconButton(
                     modifier = Modifier.weight(1f),
                     image = Icons.Outlined.Place,
-                    name = "매장선택",
+                    name = stringResource(id = R.string.choice_store),
                     navController = navController
                 )
             }

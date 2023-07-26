@@ -5,6 +5,8 @@
     <string name="user_intro_comment">따뜻한 커피 어때요</string>
     <string name="home">Home</string>
     <string name="delivery_button_title">딜리버리</string>
+    <string name="menu_list">메뉴보기</string>
+    <string name="choice_store">매장선택</string>
     <string name="delivery_button_subtitle">이제는 집에서 즐기는 할리스</string>
     <string name="smart_order_button_title">스마트오더</string>
     <string name="smart_order_button_subtitle">줄서지 않고 주문하세요</string>
@@ -14,5 +16,7 @@
     <string name="hollys_mall">할리스 몰</string>
     <string name="market_place">매장</string>
     <string name="cake_reservation">홀케이크 예약</string>
+
+    <string name="my_coupon">나의 쿠폰</string>
 
 </resources>

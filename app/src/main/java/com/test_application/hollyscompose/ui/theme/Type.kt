@@ -13,6 +13,11 @@ val HollysTypography = Typography(
         fontWeight = FontWeight.ExtraBold,
         fontSize = 22.sp
     ),
+    h2 = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Medium,
+        fontSize = 22.sp
+    ),
     body1 = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Medium,
