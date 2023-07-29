@@ -14,3 +14,5 @@ val Shapes = Shapes(
 val MainBottomStartRoundShape = RoundedCornerShape(bottomStart = 50.dp)
 
 val DefaultCardRoundShape = RoundedCornerShape(20.dp)
+
+val HollysDefaultRoundShape = RoundedCornerShape(10.dp)
