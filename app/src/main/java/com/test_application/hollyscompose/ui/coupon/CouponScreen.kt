@@ -5,7 +5,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -24,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.test_application.hollyscompose.R
+import com.test_application.hollyscompose.data.Coupon
 import com.test_application.hollyscompose.ui.compose.HollysDefaultTopAppBar
 import com.test_application.hollyscompose.ui.theme.HollysDefaultRoundShape
 import com.test_application.hollyscompose.ui.theme.HollysTypography
@@ -118,14 +127,10 @@ private fun CouponTabLayout(
     ) { index ->
         when (list[index]) {
             "사용가능쿠폰" -> {
-                Text(
-                    text = "사용가능쿠폰"
-                )
+                AvailableCouponListScreen()
             }
             "만료쿠폰" -> {
-                Text(
-                    text = "만료쿠폰"
-                )
+                ExpiredCouponListScreen()
             }
         }
     }
@@ -133,7 +138,40 @@ private fun CouponTabLayout(
 
 @Composable
 private fun AvailableCouponListScreen() {
+    val gridState = rememberLazyGridState()
 
+    LazyColumn(
+        modifier = Modifier.fillMaxSize()
+            .background(MaterialTheme.colors.background)
+    ) {
+        items(
+            listOf(
+                Coupon(
+                    title = "멤버십 쿠폰",
+                    name = "아메리카노 1 + 1 쿠폰",
+                    startDate = "2023-07-01",
+                    expiredDate = "2023-07-31",
+                    store = "쿠폰 주의 사항 확인",
+                    isExpired = false,
+                    isAvailable = true
+                ),
+                Coupon(
+                    title = "멤버십 쿠폰",
+                    name = "아메리카노 1 + 1 쿠폰",
+                    startDate = "2023-06-01",
+                    expiredDate = "2023-06-30",
+                    store = "쿠폰 주의 사항 확인",
+                    isExpired = true,
+                    isAvailable = true
+                )
+            )
+        ) {coupon ->
+            CouponListItemView(
+                coupon = coupon,
+                onClick = {}
+            )
+        }
+    }
 }
 
 @Composable
