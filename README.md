@@ -1,4 +1,4 @@
 # hollys-compose (Study Compose Project)
 <br><br>
 메인화면
-![캡처](./images/main.png)
+<img src="https://github.com/kumgold/hollys-compose/images/main.png" height=50%>
