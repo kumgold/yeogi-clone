@@ -4,4 +4,4 @@
 
 메인화면 <br>
 
-<img src="./images/main.png" height="400">
+<img src="./images/main.png" height="400" width="200">
