@@ -18,5 +18,7 @@
     <string name="cake_reservation">홀케이크 예약</string>
 
     <string name="my_coupon">나의 쿠폰</string>
+    <string name="enable_coupon">사용가능쿠폰</string>
+    <string name="disable_coupon">만료쿠폰</string>
 
 </resources>

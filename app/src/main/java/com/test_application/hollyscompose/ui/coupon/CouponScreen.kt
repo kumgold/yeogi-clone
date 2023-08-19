@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
@@ -23,8 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.test_application.hollyscompose.R
 import com.test_application.hollyscompose.data.Coupon
@@ -40,6 +39,7 @@ fun CouponScreen(
     navController: NavHostController
 ) {
     val pagerState = rememberPagerState()
+    val viewModel = viewModel<CouponViewModel>()
 
     Column(
         modifier = modifier
@@ -53,7 +53,8 @@ fun CouponScreen(
         )
 
         CouponTabLayout(
-            pagerState = pagerState
+            pagerState = pagerState,
+            viewModel = viewModel
         )
     }
 }
@@ -61,10 +62,14 @@ fun CouponScreen(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun CouponTabLayout(
-    pagerState: PagerState
+    pagerState: PagerState,
+    viewModel: CouponViewModel
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val list = listOf("사용가능쿠폰", "만료쿠폰")
+    val list = listOf(
+        stringResource(id = R.string.enable_coupon),
+        stringResource(id = R.string.disable_coupon)
+    )
     val selectedIndex = pagerState.currentPage
 
     // Tab row
@@ -121,76 +126,38 @@ private fun CouponTabLayout(
         verticalAlignment = Alignment.Top
     ) { index ->
         when (list[index]) {
-            "사용가능쿠폰" -> {
-                AvailableCouponListScreen()
+            stringResource(id = R.string.enable_coupon) -> {
+                CouponListView(
+                    viewModel.couponList.filter {
+                        !it.isExpired
+                    }
+                )
             }
-            "만료쿠폰" -> {
-                ExpiredCouponListScreen()
+            stringResource(id = R.string.disable_coupon) -> {
+                CouponListView(
+                    viewModel.couponList.filter {
+                        it.isExpired
+                    }
+                )
             }
         }
     }
 }
 
 @Composable
-private fun AvailableCouponListScreen() {
-    val gridState = rememberLazyGridState()
-
+private fun CouponListView(
+    couponList: List<Coupon>
+) {
     LazyColumn(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .background(MaterialTheme.colors.background)
     ) {
-        items(
-            listOf(
-                Coupon(
-                    title = "멤버십 쿠폰",
-                    name = "아메리카노 1 + 1 쿠폰",
-                    startDate = "2023-07-01",
-                    expiredDate = "2023-07-31",
-                    store = "쿠폰 주의 사항 확인",
-                    isExpired = false,
-                    isAvailable = true
-                ),
-                Coupon(
-                    title = "멤버십 쿠폰",
-                    name = "아메리카노 1 + 1 쿠폰",
-                    startDate = "2023-06-01",
-                    expiredDate = "2023-06-30",
-                    store = "쿠폰 주의 사항 확인",
-                    isExpired = true,
-                    isAvailable = true
-                )
-            )
-        ) {coupon ->
+        items(couponList) {coupon ->
             CouponItemView(
                 coupon = coupon,
                 onClick = {}
             )
         }
-    }
-}
-
-@Composable
-private fun ExpiredCouponListScreen() {
-
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-@Preview
-private fun CouponScreenPreview() {
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        val pagerState = rememberPagerState()
-
-        HollysDefaultTopAppBar {  }
-
-        Text(
-            modifier = Modifier.padding(vertical = 20.dp, horizontal = 10.dp),
-            text = stringResource(id = R.string.my_coupon),
-            style = HollysTypography.h2
-        )
-
-        CouponTabLayout(pagerState = pagerState)
     }
 }
