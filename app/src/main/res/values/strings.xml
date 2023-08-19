@@ -20,5 +20,8 @@
     <string name="my_coupon">나의 쿠폰</string>
     <string name="enable_coupon">사용가능쿠폰</string>
     <string name="disable_coupon">만료쿠폰</string>
+    <string name="usage_store">사용가능매장</string>
+    <string name="expiration_date">유효기간</string>
+    <string name="expiration_of_term">기간만료</string>
 
 </resources>
