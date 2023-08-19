@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,10 +17,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.test_application.hollyscompose.R
 import com.test_application.hollyscompose.data.Coupon
@@ -29,7 +28,7 @@ import com.test_application.hollyscompose.ui.theme.BlackAlpha50
 import com.test_application.hollyscompose.ui.theme.HollysTypography
 
 @Composable
-fun CouponListItemView(
+fun CouponItemView(
     coupon: Coupon,
     onClick: () -> Unit
 ) {
@@ -84,14 +83,38 @@ fun CouponListItemView(
                 text = coupon.name,
                 style = HollysTypography.body2,
             )
-            Text(
-                text = "유효기간         | ${coupon.startDate}~${coupon.expiredDate}",
-                style = HollysTypography.button,
-            )
-            Text(
-                text = "사용가능매장  | ${coupon.store}",
-                style = HollysTypography.button,
-            )
+            Row {
+                Text(
+                    text = "유효기간",
+                    style = HollysTypography.button,
+                )
+                Text(
+                    modifier = Modifier.padding(start = 45.5.dp),
+                    text = "| ${coupon.startDate}~${coupon.expiredDate}",
+                    style = HollysTypography.button,
+                )
+            }
+            Row {
+                Text(
+                    text = "사용가능매장",
+                    style = HollysTypography.button,
+                )
+                Text(
+                    modifier = Modifier.padding(start = 20.dp),
+                    text = "| ${coupon.store}",
+                    style = HollysTypography.button,
+                )
+            }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun CouponItemPreview() {
+    CouponItemView(
+        coupon = Coupon("", "", "2023-08-08", "2024-08-08", "", false, false)
+    ) {
+
     }
 }

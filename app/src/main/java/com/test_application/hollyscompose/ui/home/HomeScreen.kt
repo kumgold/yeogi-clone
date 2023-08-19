@@ -57,7 +57,6 @@ import com.test_application.hollyscompose.HollysDestinations
 import com.test_application.hollyscompose.R
 import com.test_application.hollyscompose.ui.compose.HollysHomeTopAppBar
 import com.test_application.hollyscompose.ui.theme.MainBottomStartRoundShape
-import com.test_application.hollyscompose.ui.theme.Red
 import kotlinx.coroutines.launch
 
 @Composable
