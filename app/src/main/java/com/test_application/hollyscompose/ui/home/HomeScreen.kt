@@ -53,7 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
-import com.test_application.hollyscompose.HollysDestinations
+import com.test_application.hollyscompose.util.HollysDestination
 import com.test_application.hollyscompose.R
 import com.test_application.hollyscompose.ui.compose.HollysHomeTopAppBar
 import com.test_application.hollyscompose.ui.theme.MainBottomStartRoundShape
@@ -162,7 +162,7 @@ private fun HomeTopRoundButtons(
                 .clip(MainBottomStartRoundShape)
                 .background(MaterialTheme.colors.primary)
                 .clickable {
-                    navController.navigate(HollysDestinations.SMART_ORDER)
+                    navController.navigate(HollysDestination.SMART_ORDER)
                 }
                 .padding(35.dp, 150.dp, 20.dp, 40.dp),
             mainColor = MaterialTheme.colors.primary,
@@ -293,8 +293,8 @@ private fun HomeIconButton(
     navController: NavHostController
 ) {
     val destination = when (name) {
-        stringResource(id = R.string.coupon) -> HollysDestinations.COUPON
-        else -> HollysDestinations.COUPON
+        stringResource(id = R.string.coupon) -> HollysDestination.COUPON
+        else -> HollysDestination.COUPON
     }
 
     Column(

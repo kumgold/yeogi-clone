@@ -24,12 +24,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.test_application.hollyscompose.R
 import com.test_application.hollyscompose.data.Coupon
 import com.test_application.hollyscompose.ui.compose.HollysDefaultTopAppBar
 import com.test_application.hollyscompose.ui.theme.HollysDefaultRoundShape
 import com.test_application.hollyscompose.ui.theme.HollysTypography
+import com.test_application.hollyscompose.util.HollysDestination
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -54,7 +56,8 @@ fun CouponScreen(
 
         CouponTabLayout(
             pagerState = pagerState,
-            viewModel = viewModel
+            viewModel = viewModel,
+            navController = navController
         )
     }
 }
@@ -63,7 +66,8 @@ fun CouponScreen(
 @Composable
 private fun CouponTabLayout(
     pagerState: PagerState,
-    viewModel: CouponViewModel
+    viewModel: CouponViewModel,
+    navController: NavHostController
 ) {
     val coroutineScope = rememberCoroutineScope()
     val list = listOf(
@@ -130,14 +134,16 @@ private fun CouponTabLayout(
                 CouponListView(
                     viewModel.couponList.filter {
                         !it.isExpired
-                    }
+                    },
+                    navController = navController
                 )
             }
             stringResource(id = R.string.disable_coupon) -> {
                 CouponListView(
                     viewModel.couponList.filter {
                         it.isExpired
-                    }
+                    },
+                    navController = navController
                 )
             }
         }
@@ -146,7 +152,8 @@ private fun CouponTabLayout(
 
 @Composable
 private fun CouponListView(
-    couponList: List<Coupon>
+    couponList: List<Coupon>,
+    navController: NavHostController
 ) {
     LazyColumn(
         modifier = Modifier
@@ -156,7 +163,9 @@ private fun CouponListView(
         items(couponList) {coupon ->
             CouponItemView(
                 coupon = coupon,
-                onClick = {}
+                onClick = {
+                    navController.navigate("${HollysDestination.COUPON}/${coupon.id}")
+                }
             )
         }
     }
