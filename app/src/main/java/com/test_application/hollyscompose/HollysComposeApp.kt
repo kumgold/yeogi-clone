@@ -7,14 +7,13 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavArgument
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.test_application.hollyscompose.ui.compose.HollysDrawer
-import com.test_application.hollyscompose.ui.coupon.CouponDetail
+import com.test_application.hollyscompose.ui.coupon.coupon_detail.CouponDetail
 import com.test_application.hollyscompose.ui.coupon.CouponScreen
 import com.test_application.hollyscompose.ui.home.HomeScreen
 import com.test_application.hollyscompose.ui.smart_order.SmartOrderScreen
