@@ -23,5 +23,6 @@
     <string name="usage_store">사용가능매장</string>
     <string name="expiration_date">유효기간</string>
     <string name="expiration_of_term">기간만료</string>
+    <string name="barcode">바코드 영역</string>
 
 </resources>

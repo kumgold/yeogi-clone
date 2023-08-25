@@ -13,8 +13,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.test_application.hollyscompose.ui.compose.HollysDrawer
-import com.test_application.hollyscompose.ui.coupon.coupon_detail.CouponDetail
 import com.test_application.hollyscompose.ui.coupon.CouponScreen
+import com.test_application.hollyscompose.ui.coupon.coupon_detail.CouponDetailScreen
 import com.test_application.hollyscompose.ui.home.HomeScreen
 import com.test_application.hollyscompose.ui.smart_order.SmartOrderScreen
 import com.test_application.hollyscompose.ui.theme.HollysComposeTheme
@@ -75,7 +75,9 @@ fun HollysComposeApp() {
                 ) { backStackEntry ->
                     val arguments = requireNotNull(backStackEntry.arguments)
                     val couponId = arguments.getLong(HollysDestination.COUPON_ID_KEY)
-                    CouponDetail(
+                    CouponDetailScreen(
+                        modifier = modifier,
+                        navController = navController,
                         couponId = couponId
                     )
                 }
