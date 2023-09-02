@@ -25,14 +25,8 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material.icons.outlined.Place
-import androidx.compose.material.icons.outlined.ShoppingCart
-import androidx.compose.material.icons.outlined.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -146,13 +141,13 @@ private fun HomeTopRoundButtons(
             ) {
                 HomeIconButton(
                     modifier = Modifier.weight(1f),
-                    image = Icons.Outlined.Edit,
+                    icon = painterResource(id = R.drawable.ic_menu_list),
                     name = stringResource(id = R.string.menu_list),
                     navController = navController
                 )
                 HomeIconButton(
                     modifier = Modifier.weight(1f),
-                    image = Icons.Outlined.Place,
+                    icon = painterResource(id = R.drawable.ic_location),
                     name = stringResource(id = R.string.choice_store),
                     navController = navController
                 )
@@ -241,17 +236,19 @@ private fun HomeIconButtons(
 
         HomeIconButton(
             modifier = buttonModifier,
-            image = Icons.Outlined.Star,
+            icon = painterResource(id = R.drawable.ic_star),
             name = "${stampState}/12",
             navController = navController
         )
         HomeIconButton(
             modifier = buttonModifier,
+            icon = painterResource(id = R.drawable.ic_credit_card),
             name = stringResource(id = R.string.hollys_card),
             navController = navController
         )
         HomeIconButton(
             modifier = buttonModifier,
+            icon = painterResource(id = R.drawable.ic_credit_card),
             name = stringResource(id = R.string.coupon),
             navController = navController
         )
@@ -265,13 +262,13 @@ private fun HomeIconButtons(
 
         HomeIconButton(
             modifier = buttonModifier,
-            image = Icons.Outlined.ShoppingCart,
+            icon = painterResource(id = R.drawable.ic_shopping),
             name = stringResource(id = R.string.hollys_mall),
             navController = navController
         )
         HomeIconButton(
             modifier = buttonModifier,
-            image = Icons.Outlined.LocationOn,
+            icon = painterResource(id = R.drawable.ic_location),
             name = stringResource(id = R.string.market_place),
             navController = navController
         )
@@ -282,6 +279,7 @@ private fun HomeIconButtons(
         ) {
             HomeIconButton(
                 modifier = modifier,
+                icon = painterResource(id = R.drawable.ic_cake),
                 name = stringResource(id = R.string.cake_reservation),
                 textColor = Color.White,
                 navController = navController
@@ -294,7 +292,7 @@ private fun HomeIconButtons(
 @Composable
 private fun HomeIconButton(
     modifier: Modifier,
-    image: ImageVector = Icons.Filled.Face,
+    icon: Painter,
     name: String,
     textColor: Color = MaterialTheme.colors.surface,
     navController: NavHostController
@@ -317,7 +315,7 @@ private fun HomeIconButton(
             modifier = Modifier
                 .padding(horizontal = 30.dp)
                 .size(50.dp),
-            imageVector = image,
+            painter = icon,
             contentDescription = null,
             alignment = Alignment.Center,
             contentScale = ContentScale.Fit,
