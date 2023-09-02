@@ -15,6 +15,7 @@ import androidx.navigation.navArgument
 import com.test_application.hollyscompose.ui.compose.HollysDrawer
 import com.test_application.hollyscompose.ui.coupon.CouponScreen
 import com.test_application.hollyscompose.ui.coupon.coupon_detail.CouponDetailScreen
+import com.test_application.hollyscompose.ui.hollys_card.HollysCardScreen
 import com.test_application.hollyscompose.ui.home.HomeScreen
 import com.test_application.hollyscompose.ui.smart_order.SmartOrderScreen
 import com.test_application.hollyscompose.ui.theme.HollysComposeTheme
@@ -64,6 +65,13 @@ fun HollysComposeApp() {
 
                 composable(HollysDestination.COUPON) {
                     CouponScreen(
+                        modifier = modifier,
+                        navController = navController
+                    )
+                }
+
+                composable(HollysDestination.HOLLYS_CARD) {
+                    HollysCardScreen(
                         modifier = modifier,
                         navController = navController
                     )

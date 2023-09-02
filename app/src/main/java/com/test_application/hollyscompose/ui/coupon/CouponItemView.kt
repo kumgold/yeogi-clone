@@ -116,7 +116,15 @@ fun CouponItemView(
 @Composable
 private fun CouponItemPreview() {
     CouponItemView(
-        coupon = Coupon(id = 1L, "", "", "2023-08-08", "2024-08-08", "", false, false)
+        coupon = Coupon(
+            id = 1L,
+            title = "",
+            name = "",
+            startDate = "2023-08-08",
+            expiredDate = "2024-08-08",
+            store = "",
+            isExpired = false
+        )
     ) {
 
     }

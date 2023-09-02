@@ -24,7 +24,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.test_application.hollyscompose.R
 import com.test_application.hollyscompose.data.Coupon
@@ -164,7 +163,9 @@ private fun CouponListView(
             CouponItemView(
                 coupon = coupon,
                 onClick = {
-                    navController.navigate("${HollysDestination.COUPON}/${coupon.id}")
+                    if (!coupon.isExpired) {
+                        navController.navigate("${HollysDestination.COUPON}/${coupon.id}")
+                    }
                 }
             )
         }

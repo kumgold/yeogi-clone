@@ -7,6 +7,5 @@ data class Coupon(
     val startDate: String,
     val expiredDate: String,
     val store: String,
-    val isExpired: Boolean,
-    val isAvailable: Boolean
+    val isExpired: Boolean
 )

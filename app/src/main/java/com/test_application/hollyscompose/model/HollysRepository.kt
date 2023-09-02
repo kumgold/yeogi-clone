@@ -14,8 +14,7 @@ class HollysRepository {
             startDate = "2023-07-01",
             expiredDate = "2023-07-31",
             store = "쿠폰 주의 사항 확인",
-            isExpired = false,
-            isAvailable = true
+            isExpired = false
         ),
         Coupon(
             id = 1L,
@@ -24,8 +23,7 @@ class HollysRepository {
             startDate = "2023-06-01",
             expiredDate = "2023-06-30",
             store = "쿠폰 주의 사항 확인",
-            isExpired = true,
-            isAvailable = true
+            isExpired = true
         ),
         Coupon(
             id = 2L,
@@ -34,8 +32,7 @@ class HollysRepository {
             startDate = "2023-07-01",
             expiredDate = "2023-07-31",
             store = "쿠폰 주의 사항 확인",
-            isExpired = false,
-            isAvailable = true
+            isExpired = false
         ),
         Coupon(
             id = 3L,
@@ -44,8 +41,7 @@ class HollysRepository {
             startDate = "2023-06-01",
             expiredDate = "2023-06-30",
             store = "쿠폰 주의 사항 확인",
-            isExpired = true,
-            isAvailable = true
+            isExpired = true
         )
     )
 

@@ -52,6 +52,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.test_application.hollyscompose.util.HollysDestination
 import com.test_application.hollyscompose.R
@@ -66,6 +67,7 @@ fun HomeScreen(
     scaffoldState: ScaffoldState
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val viewModel = viewModel<HomeViewModel>()
 
     Column(
         modifier = modifier
@@ -84,7 +86,10 @@ fun HomeScreen(
 
         HomeTopRoundButtons(navController)
         Spacer(modifier = Modifier.weight(1f))
-        HomeIconButtons(navController)
+        HomeIconButtons(
+            navController = navController,
+            viewModel = viewModel
+        )
         Spacer(modifier = Modifier.weight(1f))
         Image(
             modifier = Modifier
@@ -221,9 +226,11 @@ private fun HomeDropDownButton(
 
 @Composable
 private fun HomeIconButtons(
-    navController: NavHostController
+    navController: NavHostController,
+    viewModel: HomeViewModel
 ) {
     val modifier = Modifier.fillMaxWidth()
+    val stampState by viewModel.stamp
 
     Row(
         modifier = modifier
@@ -235,7 +242,7 @@ private fun HomeIconButtons(
         HomeIconButton(
             modifier = buttonModifier,
             image = Icons.Outlined.Star,
-            name = "0/12",
+            name = "${stampState}/12",
             navController = navController
         )
         HomeIconButton(
@@ -294,6 +301,7 @@ private fun HomeIconButton(
 ) {
     val destination = when (name) {
         stringResource(id = R.string.coupon) -> HollysDestination.COUPON
+        stringResource(id = R.string.hollys_card) -> HollysDestination.HOLLYS_CARD
         else -> HollysDestination.COUPON
     }
 
