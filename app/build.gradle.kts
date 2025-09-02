@@ -41,12 +41,14 @@ android {
 
 dependencies {
 
+    // Bottom Navigation
+    implementation(libs.androidx.navigation.compose)
+
+    // Coil
+    implementation(libs.coil.compose)
+
     // Icon
     implementation(libs.androidx.material.icons.extended)
-
-    // Pager
-    implementation(libs.accompanist.pager)
-    implementation(libs.accompanist.pager.indicators)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
