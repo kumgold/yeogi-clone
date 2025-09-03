@@ -93,8 +93,8 @@ fun FavoritesScreen(
                     EmptyFavoritesView()
                 }
             }
-            1 -> EmptyFavoritesView(message = "찜한 맛집이 없어요.")
-            2 -> EmptyFavoritesView(message = "찜한 액티비티가 없어요.")
+            1 -> EmptyFavoritesView(message = "찜한 공간이 없어요.")
+            2 -> EmptyFavoritesView(message = "찜한 레저·티켓이 없어요.")
         }
     }
 }
@@ -121,11 +121,10 @@ fun FavoriteItemCard(item: Accommodation) {
             .clickable { /* 상세 페이지로 이동 */ },
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Row(
-            modifier = Modifier.padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.padding(12.dp)
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -135,47 +134,101 @@ fun FavoriteItemCard(item: Accommodation) {
                 contentDescription = item.name,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(100.dp)
+                    .weight(0.3f)
+                    .aspectRatio(3f / 4f)
                     .clip(RoundedCornerShape(8.dp))
             )
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            Column(modifier = Modifier.weight(1f)) {
+            Column(
+                modifier = Modifier.weight(0.7f)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "item.category",
+                        fontSize = 12.sp,
+                        color = Color.Gray
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    IconButton(
+                        onClick = { isFavorite = !isFavorite },
+                        modifier = Modifier.size(24.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Favorite,
+                            contentDescription = "찜하기",
+                            tint = if (isFavorite) Color.Red else Color.LightGray
+                        )
+                    }
+                }
+
                 Text(
                     text = item.name,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
-                    maxLines = 1,
+                    fontSize = 17.sp,
+                    maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
-                Spacer(modifier = Modifier.height(4.dp))
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Filled.Star, contentDescription = "별점", tint = Color(0xFFFFC107), modifier = Modifier.size(14.dp))
-                    Spacer(modifier = Modifier.width(2.dp))
-                    Text(text = "${item.rating} (${item.reviewCount})", fontSize = 12.sp, color = Color.Gray)
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                Row(verticalAlignment = Alignment.Bottom) {
-                    if (item.isSpecialPrice) {
-                        Text("특가", color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                        Spacer(modifier = Modifier.width(4.dp))
-                    }
-                    Text(text = item.price, fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
-                }
-            }
 
-            IconButton(onClick = { isFavorite = !isFavorite }) {
-                Icon(
-                    imageVector = Icons.Filled.Favorite,
-                    contentDescription = "찜하기",
-                    tint = Color.Red,
-                    modifier = Modifier.size(28.dp)
+                Text(
+                    text = "item.address",
+                    fontSize = 13.sp,
+                    color = Color.Gray,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(vertical = 4.dp)
                 )
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        Icons.Filled.Star,
+                        contentDescription = "별점",
+                        tint = Color(0xFFFFC107),
+                        modifier = Modifier.size(14.dp)
+                    )
+                    Spacer(modifier = Modifier.width(2.dp))
+                    Text(
+                        text = "${item.rating}",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = " (${item.reviewCount})",
+                        fontSize = 12.sp,
+                        color = Color.Gray
+                    )
+                }
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "1박",
+                        fontSize = 12.sp,
+                        color = Color.Gray,
+                        modifier = Modifier.align(Alignment.Bottom)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = item.price,
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 18.sp,
+                        modifier = Modifier.align(Alignment.Bottom)
+                    )
+                }
             }
         }
     }
 }
+
 
 @Composable
 fun EmptyFavoritesView(message: String = "찜 내역이 없어요.") {
