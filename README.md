@@ -9,10 +9,19 @@ View : Compose <br>
 ## ✨ 주요 기능
 
 ## 🏞️ 화면
+<p>
+  <img src="./images/yeogi-1.png" width="24%">
+  <img src="./images/yeogi-2.png" width="24%">
+  <img src="./images/yeogi-3.png" width="24%">
+  <img src="./images/yeogi-4.png" width="24%">
+</p>
+<p>
+  <img src="./images/yeogi-5.png" width="24%">
+  <img src="./images/yeogi-6.png" width="24%">
+</p>
+
 
 ## 👀 개발 과정에서 발생한 이슈
-
-### 1. 테스트 코드 작성
 
 ## 🎯 개발 계획
 
