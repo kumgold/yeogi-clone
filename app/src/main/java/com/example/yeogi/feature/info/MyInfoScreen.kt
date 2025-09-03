@@ -6,9 +6,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import com.example.yeogi.SystemBarColor
 
 @Composable
 fun MyInfoScreen() {
+    SystemBarColor(color = Color.White)
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center

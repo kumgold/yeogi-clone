@@ -21,10 +21,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -39,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.yeogi.SystemBarColor
 import com.example.yeogi.feature.search.view.DomesticAccommodationContent
 import com.example.yeogi.feature.search.view.FlightContent
 import com.example.yeogi.feature.search.view.LeisureTicketContent
@@ -49,8 +52,10 @@ import com.example.yeogi.ui.theme.YeogiTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(navController: NavController) {
-    var selectedTabIndex by remember { mutableStateOf(0) }
+    var selectedTabIndex by remember { mutableIntStateOf(0) }
     val tabs = listOf("국내숙소", "해외숙소", "항공", "레저·티켓")
+
+    SystemBarColor(color = White)
 
     Scaffold(
         topBar = {
@@ -77,19 +82,12 @@ fun SearchScreen(navController: NavController) {
 
             AnimatedContent(
                 targetState = selectedTabIndex,
-                label = "tab-animation",
                 transitionSpec = {
                     if (targetState > initialState) {
-                        // 오른쪽 탭으로 이동하는 경우 (index 증가)
-                        // 새 화면은 오른쪽에서 왼쪽으로 들어옴
                         slideInHorizontally { fullWidth -> fullWidth } togetherWith
-                                // 이전 화면은 왼쪽으로 사라짐
                                 slideOutHorizontally { fullWidth -> -fullWidth }
                     } else {
-                        // 왼쪽 탭으로 이동하는 경우 (index 감소)
-                        // 새 화면은 왼쪽에서 오른쪽으로 들어옴
                         slideInHorizontally { fullWidth -> -fullWidth } togetherWith
-                                // 이전 화면은 오른쪽으로 사라짐
                                 slideOutHorizontally { fullWidth -> fullWidth }
                     }
                 }

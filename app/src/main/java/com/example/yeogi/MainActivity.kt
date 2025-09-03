@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
@@ -19,7 +20,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             YeogiTheme {
-                SystemBarColor(color = Background)
                 MainScreen()
             }
         }
@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun SystemBarColor(color: androidx.compose.ui.graphics.Color) {
+fun SystemBarColor(color: Color) {
     val view = LocalView.current
     val darkTheme = isSystemInDarkTheme()
 

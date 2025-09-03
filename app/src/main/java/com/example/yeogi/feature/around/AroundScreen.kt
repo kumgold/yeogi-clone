@@ -65,6 +65,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.yeogi.SystemBarColor
 import com.example.yeogi.dummy.Accommodation
 import com.example.yeogi.dummy.dummyAccommodation
 import com.example.yeogi.ui.theme.YeogiTheme
@@ -80,6 +81,8 @@ fun AroundMeScreen(navController: NavController) {
         bottomSheetState = sheetState
     )
     val scope = rememberCoroutineScope()
+
+    SystemBarColor(color = Color.White)
 
     BottomSheetScaffold(
         scaffoldState = scaffoldState,

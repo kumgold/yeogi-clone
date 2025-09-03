@@ -29,6 +29,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.yeogi.SystemBarColor
 import com.example.yeogi.dummy.Accommodation
 import com.example.yeogi.dummy.dummyAccommodation
 import com.example.yeogi.ui.theme.Background
@@ -39,12 +40,14 @@ import com.example.yeogi.ui.theme.YeogiTheme
 fun FavoritesScreen(
     navController: NavController
 ) {
-    var selectedTabIndex by remember { mutableStateOf(0) }
-    val tabs = listOf("숙소", "맛집", "액티비티")
+    var selectedTabIndex by remember { mutableIntStateOf(0) }
+    val tabs = listOf("숙소", "공간대여", "레저·티켓")
 
     val favoriteAccommodations = remember {
         dummyAccommodation.subList(0, 10)
     }
+
+    SystemBarColor(color = Color.White)
 
     Column(
         modifier = Modifier
@@ -64,13 +67,13 @@ fun FavoritesScreen(
                 Text("찜 목록", style = MaterialTheme.typography.bodyMedium)
             },
             colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                containerColor = Background
+                containerColor = Color.White
             )
         )
 
         TabRow(
             selectedTabIndex = selectedTabIndex,
-            containerColor = Background,
+            containerColor = Color.White,
             contentColor = MaterialTheme.colorScheme.primary
         ) {
             tabs.forEachIndexed { index, title ->
