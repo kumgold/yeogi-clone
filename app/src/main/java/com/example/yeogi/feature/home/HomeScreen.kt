@@ -35,9 +35,11 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,49 +52,59 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.yeogi.SystemBarColor
 import com.example.yeogi.dummy.Accommodation
 import com.example.yeogi.dummy.dummyAccommodation
+import com.example.yeogi.navigation.BottomNavItem
+import com.example.yeogi.navigation.BottomNavigationBar
+import com.example.yeogi.navigation.Navigation
 import com.example.yeogi.ui.theme.Background
 import com.example.yeogi.ui.theme.YeogiTheme
 
 data class ServiceCategory(val name: String, val icon: ImageVector)
 
 @Composable
-fun HomeScreen(innerPadding: PaddingValues) {
+fun HomeScreen(navController: NavController) {
     SystemBarColor(color = Background)
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(innerPadding)
-            .background(Background),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        item { HomeHeader() }
+    Scaffold(
+        bottomBar = { BottomNavigationBar(navController = navController) }
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .background(Background),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            item { HomeHeader() }
 
-        item { ServiceCategorySection() }
+            item { ServiceCategorySection() }
 
-        item {
-            RecommendationSection(
-                title = "우리 동네 BEST",
-                accommodations = remember {
-                    dummyAccommodation.subList(0, 5)
-                }
-            )
+            item {
+                RecommendationSection(
+                    title = "우리 동네 BEST",
+                    accommodations = remember {
+                        dummyAccommodation.subList(0, 5)
+                    }
+                )
+            }
+
+            item {
+                RecommendationSection(
+                    title = "이번 주 특가",
+                    accommodations = remember {
+                        dummyAccommodation.subList(6, 10)
+                    }
+                )
+            }
+            item { Spacer(modifier = Modifier.height(16.dp)) }
         }
-
-        item {
-            RecommendationSection(
-                title = "이번 주 특가",
-                accommodations = remember {
-                    dummyAccommodation.subList(6, 10)
-                }
-            )
-        }
-        item { Spacer(modifier = Modifier.height(16.dp)) }
     }
 }
 
@@ -259,6 +271,6 @@ fun AccommodationItem(accommodation: Accommodation) {
 @Composable
 fun HomeScreenPreview() {
     YeogiTheme {
-        HomeScreen(innerPadding = PaddingValues(0.dp))
+        HomeScreen(navController = rememberNavController())
     }
 }

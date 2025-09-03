@@ -18,5 +18,4 @@ sealed class BottomNavItem(
     data object AroundMe : BottomNavItem("around_me", "주변", Icons.Filled.LocationOn)
     data object Favorites : BottomNavItem("favorites", "찜 목록", Icons.Filled.FavoriteBorder)
     data object MyInfo : BottomNavItem("my_info", "내정보", Icons.Filled.Person)
-
 }
