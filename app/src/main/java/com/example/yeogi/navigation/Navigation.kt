@@ -5,10 +5,11 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.yeogi.feature.AroundMeScreen
+import com.example.yeogi.feature.around.AroundMeScreen
 import com.example.yeogi.feature.favorite.FavoritesScreen
 import com.example.yeogi.feature.home.HomeScreen
-import com.example.yeogi.feature.MyInfoScreen
+import com.example.yeogi.feature.info.MyInfoScreen
+import com.example.yeogi.feature.search.SearchScreen
 
 @Composable
 fun Navigation(navController: NavHostController, innerPadding: PaddingValues) {
@@ -17,13 +18,16 @@ fun Navigation(navController: NavHostController, innerPadding: PaddingValues) {
             HomeScreen(innerPadding = innerPadding)
         }
         composable(BottomNavItem.AroundMe.route) {
-            AroundMeScreen(innerPadding = innerPadding)
+            AroundMeScreen(navController = navController)
         }
         composable(BottomNavItem.Favorites.route) {
-            FavoritesScreen(innerPadding = innerPadding)
+            FavoritesScreen(navController = navController)
         }
         composable(BottomNavItem.MyInfo.route) {
             MyInfoScreen()
+        }
+        composable(BottomNavItem.Search.route) {
+            SearchScreen(navController = navController)
         }
     }
 }

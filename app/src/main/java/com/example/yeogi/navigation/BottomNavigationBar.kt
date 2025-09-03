@@ -15,6 +15,7 @@ import com.example.yeogi.ui.theme.Background
 fun BottomNavigationBar(navController: NavController) {
     val items = listOf(
         BottomNavItem.Home,
+        BottomNavItem.Search,
         BottomNavItem.AroundMe,
         BottomNavItem.Favorites,
         BottomNavItem.MyInfo
@@ -32,15 +33,19 @@ fun BottomNavigationBar(navController: NavController) {
                 label = { Text(item.title) },
                 selected = currentRoute == item.route,
                 onClick = {
-                    navController.navigate(item.route) {
-                        // 백스택에 화면이 쌓이는 것을 방지
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
+                    if (item != BottomNavItem.Home) {
+                        navController.navigate(item.route)
+                    } else {
+                        navController.navigate(item.route) {
+                            // 백스택에 화면이 쌓이는 것을 방지
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            // 같은 화면을 다시 눌렀을 때 재실행 방지
+                            launchSingleTop = true
+                            // 이전에 선택했던 화면으로 돌아갈 때 상태 복원
+                            restoreState = true
                         }
-                        // 같은 화면을 다시 눌렀을 때 재실행 방지
-                        launchSingleTop = true
-                        // 이전에 선택했던 화면으로 돌아갈 때 상태 복원
-                        restoreState = true
                     }
                 }
             )

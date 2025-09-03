@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.FavoriteBorder
@@ -24,39 +25,52 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.yeogi.feature.home.Accommodation
+import com.example.yeogi.dummy.Accommodation
+import com.example.yeogi.dummy.dummyAccommodation
+import com.example.yeogi.ui.theme.Background
 import com.example.yeogi.ui.theme.YeogiTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FavoritesScreen(innerPadding: PaddingValues) {
+fun FavoritesScreen(
+    navController: NavController
+) {
     var selectedTabIndex by remember { mutableStateOf(0) }
     val tabs = listOf("숙소", "맛집", "액티비티")
 
     val favoriteAccommodations = remember {
-        (1..5).map {
-            Accommodation(it, "찜한 호텔 $it", 4.9, 310, "135,000원", "https://picsum.photos/seed/fav${it}/400", isSpecialPrice = true)
-        }
+        dummyAccommodation.subList(0, 10)
     }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(innerPadding)
-            .background(Color(0xFFF5F5F5))
+            .background(Background)
     ) {
         CenterAlignedTopAppBar(
-            title = { Text("찜", fontWeight = FontWeight.Bold) },
+            navigationIcon = {
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "뒤로가기"
+                    )
+                }
+            },
+            title = {
+                Text("찜 목록", style = MaterialTheme.typography.bodyMedium)
+            },
             colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                containerColor = Color(0xFFF5F5F5)
+                containerColor = Background
             )
         )
 
         TabRow(
             selectedTabIndex = selectedTabIndex,
-            containerColor = Color(0xFFF5F5F5),
+            containerColor = Background,
             contentColor = MaterialTheme.colorScheme.primary
         ) {
             tabs.forEachIndexed { index, title ->
@@ -69,7 +83,7 @@ fun FavoritesScreen(innerPadding: PaddingValues) {
         }
 
         when (selectedTabIndex) {
-            0 -> { 
+            0 -> {
                 if (favoriteAccommodations.isNotEmpty()) {
                     FavoriteList(items = favoriteAccommodations)
                 } else {
@@ -96,7 +110,7 @@ fun FavoriteList(items: List<Accommodation>) {
 
 @Composable
 fun FavoriteItemCard(item: Accommodation) {
-    var isFavorite by remember { mutableStateOf(true) } // 찜 목록이므로 기본값은 true
+    var isFavorite by remember { mutableStateOf(true) }
 
     Card(
         modifier = Modifier
@@ -124,7 +138,6 @@ fun FavoriteItemCard(item: Accommodation) {
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // 텍스트 정보
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = item.name,
@@ -149,7 +162,6 @@ fun FavoriteItemCard(item: Accommodation) {
                 }
             }
 
-            // 찜하기 버튼 (찜 해제 기능)
             IconButton(onClick = { isFavorite = !isFavorite }) {
                 Icon(
                     imageVector = Icons.Filled.Favorite,
@@ -199,6 +211,8 @@ fun EmptyFavoritesView(message: String = "찜 내역이 없어요.") {
 @Composable
 fun FavoritesScreenPreview() {
     YeogiTheme {
-        FavoritesScreen(innerPadding = PaddingValues(0.dp))
+        FavoritesScreen(
+            navController = rememberNavController()
+        )
     }
 }

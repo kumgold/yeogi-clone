@@ -52,19 +52,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.yeogi.dummy.Accommodation
+import com.example.yeogi.dummy.dummyAccommodation
 import com.example.yeogi.ui.theme.Background
 import com.example.yeogi.ui.theme.YeogiTheme
 
 data class ServiceCategory(val name: String, val icon: ImageVector)
-data class Accommodation(
-    val id: Int,
-    val name: String,
-    val rating: Double,
-    val reviewCount: Int,
-    val price: String,
-    val imageUrl: String,
-    val isSpecialPrice: Boolean = false
-)
 
 @Composable
 fun HomeScreen(innerPadding: PaddingValues) {
@@ -83,16 +76,7 @@ fun HomeScreen(innerPadding: PaddingValues) {
             RecommendationSection(
                 title = "우리 동네 BEST",
                 accommodations = remember {
-                    (1..5).map {
-                        Accommodation(
-                            it,
-                            "역삼 호텔 $it",
-                            4.8,
-                            120,
-                            "120,000원",
-                            "https://picsum.photos/seed/${it}/400"
-                        )
-                    }
+                    dummyAccommodation.subList(0, 5)
                 }
             )
         }
@@ -101,9 +85,7 @@ fun HomeScreen(innerPadding: PaddingValues) {
             RecommendationSection(
                 title = "이번 주 특가",
                 accommodations = remember {
-                    (6..10).map {
-                        Accommodation(it, "강남 펜션 ${it-5}", 4.9, 250, "89,000원", "https://picsum.photos/seed/${it}/400", isSpecialPrice = true)
-                    }
+                    dummyAccommodation.subList(6, 10)
                 }
             )
         }
@@ -229,9 +211,9 @@ fun AccommodationItem(accommodation: Accommodation) {
                 .fillMaxWidth()
                 .aspectRatio(1f),
             shape = RoundedCornerShape(8.dp),
-            elevation = CardDefaults.cardElevation(0.dp), // 그림자 효과 제거
+            elevation = CardDefaults.cardElevation(0.dp),
             colors = CardDefaults.cardColors(
-                containerColor = Color(0xFFEEEEEE) // 이미지가 없을 때 보일 연한 회색 배경
+                containerColor = Color(0xFFEEEEEE)
             )
         ) {
             AsyncImage(
