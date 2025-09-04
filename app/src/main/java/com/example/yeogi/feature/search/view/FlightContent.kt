@@ -56,7 +56,6 @@ fun FlightContent() {
 
     var departure by remember { mutableStateOf("서울 (SEL)") }
     var arrival by remember { mutableStateOf("도쿄 (NRT)") }
-    var isDirectOnly by remember { mutableStateOf(true) }
 
     Column(
         modifier = Modifier
