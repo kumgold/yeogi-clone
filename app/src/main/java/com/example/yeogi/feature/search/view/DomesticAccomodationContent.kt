@@ -1,6 +1,5 @@
 package com.example.yeogi.feature.search.view
 
-import android.provider.CalendarContract
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -81,10 +80,7 @@ val dayOfWeekFormatter: (LocalDate) -> String = { date -> date.dayOfWeek.getDisp
 fun DomesticAccommodationContent() {
     val today = LocalDate.now()
     val tomorrow = today.plusDays(1)
-    val formatter = DateTimeFormatter.ofPattern("MM.dd")
-    val todayDayOfWeek = today.toString()
-    val tomorrowDayOfWeek = tomorrow.toString()
-    val dateRangeText = "${today.format(formatter)}($todayDayOfWeek) - ${tomorrow.format(formatter)}($tomorrowDayOfWeek)"
+    val dateRangeText = "${today.format(monthDayFormatter)}(${dayOfWeekFormatter(today)}) - ${tomorrow.format(monthDayFormatter)}(${dayOfWeekFormatter(tomorrow)})"
     val guestText = "성인 2"
     val recentSearches = remember { dummyDomesticRecentSearch.toMutableStateList() }
     val searchRankings = listOf(
