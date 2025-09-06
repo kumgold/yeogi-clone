@@ -1,9 +1,9 @@
 package com.example.yeogi.feature.search.view
 
+import android.provider.CalendarContract
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,7 +39,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -48,6 +47,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -57,11 +57,7 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.LayoutCoordinates
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -97,18 +93,18 @@ fun DomesticAccommodationContent() {
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
-    var isSheetOpen by remember { mutableStateOf(false) }
+    var isSearchSheetOpen by remember { mutableStateOf(false) }
 
     val dateGuestSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var isDateGuestSheetOpen by remember { mutableStateOf(false) }
 
     var startDate by remember { mutableStateOf(LocalDate.now()) }
     var endDate by remember { mutableStateOf(LocalDate.now().plusDays(1)) }
-    var guestCount by remember { mutableStateOf(2) }
+    var guestCount by remember { mutableIntStateOf(2) }
 
-    if (isSheetOpen) {
+    if (isSearchSheetOpen) {
         ModalBottomSheet(
-            onDismissRequest = { isSheetOpen = false },
+            onDismissRequest = { isSearchSheetOpen = false },
             sheetState = sheetState,
             modifier = Modifier.fillMaxSize(),
             containerColor = Color.White
@@ -121,7 +117,7 @@ fun DomesticAccommodationContent() {
                 onDismiss = {
                     scope.launch { sheetState.hide() }.invokeOnCompletion {
                         if (!sheetState.isVisible) {
-                            isSheetOpen = false
+                            isSearchSheetOpen = false
                         }
                     }
                 }
@@ -164,7 +160,7 @@ fun DomesticAccommodationContent() {
                 .padding(horizontal = 16.dp)
         ) {
             Spacer(modifier = Modifier.height(16.dp))
-            SearchInputField(onClick = { isSheetOpen = true })
+            SearchInputField(onClick = { isSearchSheetOpen = true })
             Spacer(modifier = Modifier.height(12.dp))
             DateAndGuestPicker(
                 dateRangeText = dateRangeText,
@@ -177,7 +173,7 @@ fun DomesticAccommodationContent() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Button(
-                    onClick = { /* 검색 결과 표시 */ },
+                    onClick = { isSearchSheetOpen = true },
                     modifier = Modifier.weight(1f).height(50.dp),
                     shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
@@ -365,7 +361,7 @@ fun DateGuestBottomSheetContent(
 ) {
     var tempStartDate by remember { mutableStateOf<LocalDate?>(initialStartDate) }
     var tempEndDate by remember { mutableStateOf<LocalDate?>(initialEndDate) }
-    var tempGuestCount by remember { mutableStateOf(initialGuestCount) }
+    var tempGuestCount by remember { mutableIntStateOf(initialGuestCount) }
 
     Column(modifier = Modifier.fillMaxSize()) {
         // 헤더
@@ -392,11 +388,19 @@ fun DateGuestBottomSheetContent(
         Column(
             Modifier
                 .weight(1f)
-                .verticalScroll(rememberScrollState()) // 전체 스크롤을 위해 추가
+                .verticalScroll(rememberScrollState())
         ) {
+            var isDateSelectionExpanded by remember { mutableStateOf(true) }
+            var isGuestSelectionExpanded by remember { mutableStateOf(false) }
+
             DateSelectionView(
                 startDate = tempStartDate,
                 endDate = tempEndDate,
+                isExpanded = isDateSelectionExpanded,
+                onExpand = {
+                    isDateSelectionExpanded = !isDateSelectionExpanded
+                    isGuestSelectionExpanded = false
+                },
                 onDatesSelected = { start, end ->
                     tempStartDate = start
                     tempEndDate = end
@@ -405,11 +409,19 @@ fun DateGuestBottomSheetContent(
             Spacer(modifier = Modifier.height(16.dp))
             GuestSelectionView(
                 guestCount = tempGuestCount,
+                isExpanded = isGuestSelectionExpanded,
+                onExpand = {
+                    isGuestSelectionExpanded = !isGuestSelectionExpanded
+                    isDateSelectionExpanded = false
+                },
                 onGuestCountChange = { tempGuestCount = it }
             )
         }
 
-        Surface(shadowElevation = 8.dp) {
+        Surface(
+            shadowElevation = 8.dp,
+            color = Color.White
+        ) {
             Button(
                 onClick = {
                     if (tempStartDate != null && tempEndDate != null) {
@@ -434,9 +446,10 @@ fun DateGuestBottomSheetContent(
 fun DateSelectionView(
     startDate: LocalDate?,
     endDate: LocalDate?,
+    isExpanded: Boolean,
+    onExpand: () -> Unit,
     onDatesSelected: (LocalDate?, LocalDate?) -> Unit
 ) {
-    var isExpanded by remember { mutableStateOf(true) }
     val nights = if (startDate != null && endDate != null) ChronoUnit.DAYS.between(startDate, endDate) else 0
 
     val headerText = if (startDate != null && endDate != null) {
@@ -452,14 +465,14 @@ fun DateSelectionView(
     Column {
         Column(modifier = Modifier.padding(horizontal = 16.dp)) {
             Row(
-                modifier = Modifier.fillMaxWidth().clickable { isExpanded = !isExpanded }.padding(vertical = 12.dp),
+                modifier = Modifier.fillMaxWidth().clickable { onExpand() }.padding(vertical = 12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(Icons.Default.CalendarToday, contentDescription = "달력 아이콘", tint = Color.Gray)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(headerText, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
                 if (nights > 0) {
-                    Text("($nights" + "박)", color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
+                    Text("$nights" + "박", color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
                 }
             }
         }
@@ -489,14 +502,6 @@ fun DateSelectionView(
                     onDatesSelected(newStart, newEnd)
                 }
             )
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                OutlinedButton(onClick = { onDatesSelected(null, null) }) { Text("초기화") }
-                Button(onClick = { isExpanded = false }) { Text("선택 완료") }
-            }
         }
     }
 }
@@ -541,14 +546,21 @@ fun MonthItem(
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         Text(text = "${month.year}년 ${month.monthValue}월", fontWeight = FontWeight.Bold, fontSize = 18.sp, modifier = Modifier.padding(bottom = 16.dp, start = 8.dp))
         Row(modifier = Modifier.fillMaxWidth()) {
-            DayOfWeek.entries.forEach {
+            Text(
+                text = DayOfWeek.SUNDAY.getDisplayName(TextStyle.SHORT, Locale.KOREAN),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.weight(1f),
+                fontWeight = FontWeight.Bold,
+                color = Color.Red
+            )
+
+            for (day in DayOfWeek.entries.subList(0, 6)) {
                 Text(
-                    text = it.getDisplayName(TextStyle.SHORT, Locale.KOREAN),
+                    text = day.getDisplayName(TextStyle.SHORT, Locale.KOREAN),
                     textAlign = TextAlign.Center,
                     modifier = Modifier.weight(1f),
                     fontWeight = FontWeight.Bold,
-                    color = when (it) {
-                        DayOfWeek.SUNDAY -> Color.Red
+                    color = when (day) {
                         DayOfWeek.SATURDAY -> Color.Blue
                         else -> Color.Black
                     }
@@ -626,15 +638,15 @@ fun DayCell(
 @Composable
 fun GuestSelectionView(
     guestCount: Int,
+    isExpanded: Boolean,
+    onExpand: () -> Unit,
     onGuestCountChange: (Int) -> Unit
 ) {
-    var isExpanded by remember { mutableStateOf(false) }
-
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { isExpanded = !isExpanded }
+                .clickable { onExpand() }
                 .padding(vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
