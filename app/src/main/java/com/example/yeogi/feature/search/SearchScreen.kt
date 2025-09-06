@@ -37,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.yeogi.SystemBarColor
@@ -50,6 +51,7 @@ import com.example.yeogi.ui.theme.YeogiTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(navController: NavController) {
+    val viewModel = viewModel<SearchViewModel>()
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     val tabs = listOf("국내숙소", "해외숙소", "항공", "레저·티켓")
 
@@ -91,7 +93,7 @@ fun SearchScreen(navController: NavController) {
                 }
             ) { targetIndex ->
                 when (targetIndex) {
-                    0 -> DomesticAccommodationContent()
+                    0 -> DomesticAccommodationContent(viewModel)
                     1 -> OverseasAccommodationContent()
                     2 -> FlightContent()
                     3 -> LeisureTicketContent()

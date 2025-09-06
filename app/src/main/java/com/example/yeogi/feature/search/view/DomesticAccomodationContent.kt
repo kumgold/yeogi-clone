@@ -51,7 +51,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,27 +61,23 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.yeogi.dummy.RecentSearch
-import com.example.yeogi.dummy.dummyDomesticRecentSearch
+import com.example.yeogi.feature.search.SearchViewModel
+import com.example.yeogi.util.getFormattedMonthDay
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
-import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.time.temporal.ChronoUnit
 import java.util.Locale
 
-val monthDayFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM.dd")
-val dayOfWeekFormatter: (LocalDate) -> String = { date -> date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN) }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DomesticAccommodationContent() {
-    val today = LocalDate.now()
-    val tomorrow = today.plusDays(1)
-    val dateRangeText = "${today.format(monthDayFormatter)}(${dayOfWeekFormatter(today)}) - ${tomorrow.format(monthDayFormatter)}(${dayOfWeekFormatter(tomorrow)})"
-    val guestText = "성인 2"
-    val recentSearches = remember { dummyDomesticRecentSearch.toMutableStateList() }
+fun DomesticAccommodationContent(
+    viewModel: SearchViewModel
+) {
+    val recentSearches = remember { viewModel.recentSearches.toMutableStateList() }
     val searchRankings = listOf(
         "제주도", "강릉", "부산", "여수", "경주", "속초", "서울", "가평", "해운대", "전주"
     )
@@ -94,9 +89,9 @@ fun DomesticAccommodationContent() {
     val dateGuestSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var isDateGuestSheetOpen by remember { mutableStateOf(false) }
 
-    var startDate by remember { mutableStateOf(LocalDate.now()) }
-    var endDate by remember { mutableStateOf(LocalDate.now().plusDays(1)) }
-    var guestCount by remember { mutableIntStateOf(2) }
+    var startDate by remember { mutableStateOf(viewModel.startDate) }
+    var endDate by remember { mutableStateOf(viewModel.endDate) }
+    var guestCount by remember { mutableIntStateOf(viewModel.guest) }
 
     if (isSearchSheetOpen) {
         ModalBottomSheet(
@@ -138,6 +133,11 @@ fun DomesticAccommodationContent() {
                     }
                 },
                 onApply = { newStart, newEnd, newGuests ->
+                    viewModel.setDateAndGuest(
+                        startDate = newStart,
+                        endDate = newEnd,
+                        guest = newGuests
+                    )
                     startDate = newStart
                     endDate = newEnd
                     guestCount = newGuests
@@ -159,8 +159,9 @@ fun DomesticAccommodationContent() {
             SearchInputField(onClick = { isSearchSheetOpen = true })
             Spacer(modifier = Modifier.height(12.dp))
             DateAndGuestPicker(
-                dateRangeText = dateRangeText,
-                guestText = guestText,
+                startDate = startDate,
+                endDate = endDate,
+                guestCount = guestCount,
                 onClick = { isDateGuestSheetOpen = true }
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -212,7 +213,7 @@ fun DomesticAccommodationContent() {
  */
 @Composable
 fun SearchBottomSheetContent(
-    recentSearches: SnapshotStateList<RecentSearch>,
+    recentSearches: MutableList<RecentSearch>,
     searchRankings: List<String>,
     onClearAll: () -> Unit,
     onDeleteItem: (RecentSearch) -> Unit,
@@ -303,8 +304,9 @@ fun SearchInputField(onClick: () -> Unit) {
 
 @Composable
 fun DateAndGuestPicker(
-    dateRangeText: String,
-    guestText: String,
+    startDate: LocalDate,
+    endDate: LocalDate,
+    guestCount: Int,
     onClick: () -> Unit
 ) {
     Row(
@@ -313,6 +315,8 @@ fun DateAndGuestPicker(
             .height(50.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
+        val dateRange = "${startDate.getFormattedMonthDay()} - ${endDate.getFormattedMonthDay()}"
+
         Row(
             modifier = Modifier
                 .weight(2f)
@@ -325,7 +329,7 @@ fun DateAndGuestPicker(
         ) {
             Icon(Icons.Default.CalendarToday, contentDescription = "달력 아이콘", modifier = Modifier.size(20.dp), tint = Color.Gray)
             Spacer(modifier = Modifier.width(8.dp))
-            Text(dateRangeText, fontSize = 14.sp, fontWeight = FontWeight.Bold, maxLines = 1)
+            Text(dateRange, fontSize = 14.sp, fontWeight = FontWeight.Bold, maxLines = 1)
         }
         Row(
             modifier = Modifier
@@ -339,7 +343,7 @@ fun DateAndGuestPicker(
         ) {
             Icon(Icons.Default.Person, contentDescription = "인원 아이콘", modifier = Modifier.size(20.dp), tint = Color.Gray)
             Spacer(modifier = Modifier.width(8.dp))
-            Text(guestText, fontSize = 14.sp, fontWeight = FontWeight.Bold, maxLines = 1)
+            Text("성인 $guestCount", fontSize = 14.sp, fontWeight = FontWeight.Bold, maxLines = 1)
         }
     }
 }
@@ -360,7 +364,6 @@ fun DateGuestBottomSheetContent(
     var tempGuestCount by remember { mutableIntStateOf(initialGuestCount) }
 
     Column(modifier = Modifier.fillMaxSize()) {
-        // 헤더
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -449,8 +452,8 @@ fun DateSelectionView(
     val nights = if (startDate != null && endDate != null) ChronoUnit.DAYS.between(startDate, endDate) else 0
 
     val headerText = if (startDate != null && endDate != null) {
-        val start = "${startDate.format(monthDayFormatter)}(${dayOfWeekFormatter(startDate)})"
-        val end = "${endDate.format(monthDayFormatter)}(${dayOfWeekFormatter(endDate)})"
+        val start = startDate.getFormattedMonthDay()
+        val end = endDate.getFormattedMonthDay()
         "$start - $end"
     } else if (startDate != null) {
         "종료 날짜를 선택해주세요."
