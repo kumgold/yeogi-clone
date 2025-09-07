@@ -1,42 +1,26 @@
-package com.example.yeogi.feature.favorite
+package com.example.yeogi.shared
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -47,99 +31,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.yeogi.SystemBarColor
 import com.example.yeogi.dummy.Accommodation
-import com.example.yeogi.dummy.dummyAccommodations
-import com.example.yeogi.ui.theme.Background
-import com.example.yeogi.ui.theme.YeogiTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
+/**
+ * 세로 스크롤에 사용될 숙소 아이템
+ */
 @Composable
-fun FavoritesScreen(
-    navController: NavController
-) {
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
-    val tabs = listOf("숙소", "공간대여", "레저·티켓")
-
-    val favoriteAccommodations = remember {
-        dummyAccommodations.subList(0, 10)
-    }
-
-    SystemBarColor(color = Color.White)
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Background)
-    ) {
-        CenterAlignedTopAppBar(
-            navigationIcon = {
-                IconButton(onClick = { navController.popBackStack() }) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "뒤로가기"
-                    )
-                }
-            },
-            title = {
-                Text("찜 목록", style = MaterialTheme.typography.bodyMedium)
-            },
-            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                containerColor = Color.White
-            )
-        )
-
-        TabRow(
-            selectedTabIndex = selectedTabIndex,
-            containerColor = Color.White,
-            contentColor = MaterialTheme.colorScheme.primary
-        ) {
-            tabs.forEachIndexed { index, title ->
-                Tab(
-                    selected = selectedTabIndex == index,
-                    onClick = { selectedTabIndex = index },
-                    text = { Text(text = title, fontWeight = FontWeight.Bold) }
-                )
-            }
-        }
-
-        when (selectedTabIndex) {
-            0 -> {
-                if (favoriteAccommodations.isNotEmpty()) {
-                    FavoriteList(items = favoriteAccommodations)
-                } else {
-                    EmptyFavoritesView()
-                }
-            }
-            1 -> EmptyFavoritesView(message = "찜한 공간이 없어요.")
-            2 -> EmptyFavoritesView(message = "찜한 레저·티켓이 없어요.")
-        }
-    }
-}
-
-@Composable
-fun FavoriteList(items: List<Accommodation>) {
-    LazyColumn(
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        items(items) { item ->
-            FavoriteItemCard(item = item)
-        }
-    }
-}
-
-@Composable
-fun FavoriteItemCard(item: Accommodation) {
+fun VerticalAccommodationItem(item: Accommodation) {
     var isFavorite by remember { mutableStateOf(true) }
 
     Card(
@@ -176,7 +79,7 @@ fun FavoriteItemCard(item: Accommodation) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "item.category",
+                        text = item.category,
                         fontSize = 12.sp,
                         color = Color.Gray
                     )
@@ -202,7 +105,7 @@ fun FavoriteItemCard(item: Accommodation) {
                 )
 
                 Text(
-                    text = "item.address",
+                    text = item.address,
                     fontSize = 13.sp,
                     color = Color.Gray,
                     maxLines = 1,
@@ -235,7 +138,7 @@ fun FavoriteItemCard(item: Accommodation) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.Bottom
                 ) {
                     Text(
                         text = "1박",
@@ -248,54 +151,9 @@ fun FavoriteItemCard(item: Accommodation) {
                         text = item.price,
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 18.sp,
-                        modifier = Modifier.align(Alignment.Bottom)
                     )
                 }
             }
         }
-    }
-}
-
-
-@Composable
-fun EmptyFavoritesView(message: String = "찜 내역이 없어요.") {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Icon(
-                imageVector = Icons.Outlined.FavoriteBorder,
-                contentDescription = "찜 내역 없음",
-                modifier = Modifier.size(64.dp),
-                tint = Color.Gray
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = message,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.DarkGray
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "관심 있는 상품을 찜 해보세요!",
-                fontSize = 14.sp,
-                color = Color.Gray,
-                textAlign = TextAlign.Center
-            )
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun FavoritesScreenPreview() {
-    YeogiTheme {
-        FavoritesScreen(
-            navController = rememberNavController()
-        )
     }
 }

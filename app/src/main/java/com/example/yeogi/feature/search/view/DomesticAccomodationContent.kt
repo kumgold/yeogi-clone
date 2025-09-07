@@ -62,6 +62,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.yeogi.dummy.RecentSearch
 import com.example.yeogi.feature.search.SearchViewModel
+import com.example.yeogi.shared.RecentHistorySection
+import com.example.yeogi.shared.SearchRankingSection
 import com.example.yeogi.util.getFormattedMonthDay
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
