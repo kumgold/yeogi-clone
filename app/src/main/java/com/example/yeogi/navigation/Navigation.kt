@@ -18,6 +18,7 @@ import com.example.yeogi.feature.favorite.FavoritesScreen
 import com.example.yeogi.feature.home.HomeScreen
 import com.example.yeogi.feature.info.MyInfoScreen
 import com.example.yeogi.feature.search.SearchScreen
+import com.example.yeogi.feature.searchdetail.SearchDetailScreen
 
 @Composable
 fun Navigation(navController: NavHostController) {
@@ -37,6 +38,9 @@ fun Navigation(navController: NavHostController) {
         }
         horizontalSlideComposable(BottomNavItem.Search.route) {
             SearchScreen(navController = navController)
+        }
+        horizontalSlideComposable(NavItem.SearchDetail.route) {
+            SearchDetailScreen()
         }
     }
 }

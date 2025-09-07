@@ -45,6 +45,7 @@ import com.example.yeogi.feature.search.view.DomesticAccommodationContent
 import com.example.yeogi.feature.search.view.FlightContent
 import com.example.yeogi.feature.search.view.LeisureTicketContent
 import com.example.yeogi.feature.search.view.OverseasAccommodationContent
+import com.example.yeogi.navigation.NavItem
 import com.example.yeogi.ui.theme.Background
 import com.example.yeogi.ui.theme.YeogiTheme
 
@@ -93,7 +94,12 @@ fun SearchScreen(navController: NavController) {
                 }
             ) { targetIndex ->
                 when (targetIndex) {
-                    0 -> DomesticAccommodationContent(viewModel)
+                    0 -> DomesticAccommodationContent(
+                        viewModel = viewModel,
+                        navigateToDetail = {
+                            navController.navigate(NavItem.SearchDetail.route)
+                        }
+                    )
                     1 -> OverseasAccommodationContent()
                     2 -> FlightContent()
                     3 -> LeisureTicketContent()

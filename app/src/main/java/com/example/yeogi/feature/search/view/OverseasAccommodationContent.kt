@@ -97,7 +97,8 @@ fun OverseasAccommodationContent() {
             RecentHistorySection(
                 items = overseasRecentSearches,
                 onClearAll = { overseasRecentSearches.clear() },
-                onDeleteItem = { item -> overseasRecentSearches.remove(item) }
+                onDeleteItem = { item -> overseasRecentSearches.remove(item) },
+                onClick = {}
             )
         }
     }

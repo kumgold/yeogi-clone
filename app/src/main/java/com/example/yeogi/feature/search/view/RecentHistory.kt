@@ -32,7 +32,8 @@ import com.example.yeogi.util.getFormattedMonthDay
 fun RecentHistorySection(
     items: MutableList<RecentSearch>,
     onClearAll: () -> Unit,
-    onDeleteItem: (RecentSearch) -> Unit
+    onDeleteItem: (RecentSearch) -> Unit,
+    onClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -56,17 +57,23 @@ fun RecentHistorySection(
         items.forEach { item ->
             RecentHistoryItem(
                 item = item,
-                onDelete = { onDeleteItem(item) }
+                onDelete = { onDeleteItem(item) },
+                onClick = onClick
             )
         }
     }
 }
 
 @Composable
-private fun RecentHistoryItem(item: RecentSearch, onDelete: () -> Unit) {
+private fun RecentHistoryItem(
+    item: RecentSearch,
+    onDelete: () -> Unit,
+    onClick: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable { onClick() }
             .padding(vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

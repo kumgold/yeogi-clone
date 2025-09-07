@@ -75,7 +75,8 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DomesticAccommodationContent(
-    viewModel: SearchViewModel
+    viewModel: SearchViewModel,
+    navigateToDetail: () -> Unit
 ) {
     val recentSearches = remember { viewModel.recentSearches.toMutableStateList() }
     val searchRankings = listOf(
@@ -111,7 +112,8 @@ fun DomesticAccommodationContent(
                             isSearchSheetOpen = false
                         }
                     }
-                }
+                },
+                navigateToDetail = navigateToDetail
             )
         }
     }
@@ -199,7 +201,8 @@ fun DomesticAccommodationContent(
             RecentHistorySection(
                 items = recentSearches,
                 onClearAll = { recentSearches.clear() },
-                onDeleteItem = { item -> recentSearches.remove(item) }
+                onDeleteItem = { item -> recentSearches.remove(item) },
+                onClick = navigateToDetail
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -217,7 +220,8 @@ fun SearchBottomSheetContent(
     searchRankings: List<String>,
     onClearAll: () -> Unit,
     onDeleteItem: (RecentSearch) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    navigateToDetail: () -> Unit
 ) {
     var searchText by remember { mutableStateOf("") }
 
@@ -273,7 +277,8 @@ fun SearchBottomSheetContent(
             RecentHistorySection(
                 items = recentSearches,
                 onClearAll = onClearAll,
-                onDeleteItem = onDeleteItem
+                onDeleteItem = onDeleteItem,
+                onClick = navigateToDetail
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
