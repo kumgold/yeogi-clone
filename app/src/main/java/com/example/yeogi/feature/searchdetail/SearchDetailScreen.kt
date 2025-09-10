@@ -55,8 +55,9 @@ import java.time.LocalDate
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchDetailScreen() {
-    // 임시 더미 데이터
+fun SearchDetailScreen(
+    navigateToAccommodation: (Int) -> Unit,
+) {
     val recommendedAccommodation = dummyAccommodations.first()
     val horizontalAccommodations = remember {
         dummyAccommodations.subList(1, 6)
@@ -105,16 +106,17 @@ fun SearchDetailScreen() {
                 }
             }
 
-            // 지금 지역에서 주목할 숙소 (가로 리스트)
             item {
                 RecommendationSection(
                     title = "지금 지역에서 주목할 숙소",
                     accommodations = horizontalAccommodations,
-                    isAd = true
+                    isAd = true,
+                    onItemClick = { id ->
+                        navigateToAccommodation(id)
+                    }
                 )
             }
 
-            // 전체 숙소 목록 (세로 리스트)
             items(verticalAccommodations) { accommodation ->
                 Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)) {
                     VerticalAccommodationItem(item = accommodation)

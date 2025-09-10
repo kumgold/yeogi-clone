@@ -44,7 +44,8 @@ import com.example.yeogi.data.Accommodation
 fun RecommendationSection(
     title: String,
     accommodations: List<Accommodation>,
-    isAd: Boolean = false
+    isAd: Boolean = false,
+    onItemClick: (Int) -> Unit,
 ) {
     Column(modifier = Modifier.padding(top = 24.dp, bottom = 12.dp)) {
         Row(
@@ -83,18 +84,26 @@ fun RecommendationSection(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(accommodations) { accommodation ->
-                AccommodationItem(accommodation = accommodation)
+                AccommodationItem(
+                    accommodation = accommodation,
+                    onClick = {
+                        onItemClick(accommodation.id)
+                    }
+                )
             }
         }
     }
 }
 
 @Composable
-private fun AccommodationItem(accommodation: Accommodation) {
+private fun AccommodationItem(
+    accommodation: Accommodation,
+    onClick: () -> Unit,
+) {
     Column(
         modifier = Modifier
             .width(150.dp)
-            .clickable { /* 상세 페이지로 이동 */ }
+            .clickable { onClick() }
     ) {
         Card(
             modifier = Modifier

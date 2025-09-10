@@ -46,6 +46,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.yeogi.SystemBarColor
 import com.example.yeogi.data.dummyAccommodations
 import com.example.yeogi.navigation.BottomNavigationBar
+import com.example.yeogi.navigation.NavItem
 import com.example.yeogi.shared.RecommendationSection
 import com.example.yeogi.ui.theme.Background
 import com.example.yeogi.ui.theme.YeogiTheme
@@ -73,14 +74,20 @@ fun HomeScreen(navController: NavController) {
             item {
                 RecommendationSection(
                     title = "우리 동네 BEST",
-                    accommodations = dummyAccommodations.subList(0, 5)
+                    accommodations = dummyAccommodations.subList(0, 5),
+                    onItemClick = { id ->
+                        navController.navigate(NavItem.AccommodationDetail.createRoute(id))
+                    }
                 )
             }
 
             item {
                 RecommendationSection(
                     title = "이번 주 특가",
-                    accommodations = dummyAccommodations.subList(6, 10)
+                    accommodations = dummyAccommodations.subList(6, 10),
+                    onItemClick = { id ->
+                        navController.navigate(NavItem.AccommodationDetail.createRoute(id))
+                    }
                 )
             }
             item { Spacer(modifier = Modifier.height(16.dp)) }

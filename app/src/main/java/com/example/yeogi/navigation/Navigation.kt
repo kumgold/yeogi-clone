@@ -1,18 +1,20 @@
 package com.example.yeogi.navigation
 
 import androidx.compose.animation.AnimatedContentScope
-import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.unit.IntOffset
+import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import com.example.yeogi.data.dummyAccommodations
+import com.example.yeogi.feature.accommodation.AccommodationDetailScreen
 import com.example.yeogi.feature.around.AroundMeScreen
 import com.example.yeogi.feature.favorite.FavoritesScreen
 import com.example.yeogi.feature.home.HomeScreen
@@ -40,7 +42,30 @@ fun Navigation(navController: NavHostController) {
             SearchScreen(navController = navController)
         }
         horizontalSlideComposable(NavItem.SearchDetail.route) {
-            SearchDetailScreen()
+            SearchDetailScreen(
+                navigateToAccommodation = { id ->
+                    navController.navigate(NavItem.AccommodationDetail.createRoute(id))
+                }
+            )
+        }
+        horizontalSlideComposable(
+            route = NavItem.AccommodationDetail.route,
+            arguments = listOf(
+                navArgument("accommodationId") { type = NavType.IntType }
+            )
+        ) { backStackEntry ->
+            val accommodationId = backStackEntry.arguments?.getInt("accommodationId")
+
+            requireNotNull(accommodationId) { "Accommodation ID is required as an argument" }
+            val accommodation = dummyAccommodations.find { it.id == accommodationId }
+            requireNotNull(accommodation) { "Accommodation not found for ID: $accommodationId" }
+
+            AccommodationDetailScreen(
+                accommodation = accommodation,
+                popBackStack = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }
@@ -48,10 +73,12 @@ fun Navigation(navController: NavHostController) {
 fun NavGraphBuilder.horizontalSlideComposable(
     route: String,
     durationMillis: Int = 350,
+    arguments: List<NamedNavArgument> = emptyList(),
     content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit
 ) {
     composable(
         route = route,
+        arguments = arguments,
         enterTransition = {
             slideInHorizontally(
                 initialOffsetX = { fullWidth -> fullWidth },
