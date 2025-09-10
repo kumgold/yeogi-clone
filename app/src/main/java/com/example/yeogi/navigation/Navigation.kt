@@ -45,6 +45,9 @@ fun Navigation(navController: NavHostController) {
             SearchDetailScreen(
                 navigateToAccommodation = { id ->
                     navController.navigate(NavItem.AccommodationDetail.createRoute(id))
+                },
+                popBackStack = {
+                    navController.popBackStack()
                 }
             )
         }

@@ -78,7 +78,7 @@ import java.util.Locale
 @Composable
 fun DomesticAccommodationContent(
     viewModel: SearchViewModel,
-    navigateToDetail: () -> Unit
+    navigateToDetail: () -> Unit,
 ) {
     val recentSearches = remember { viewModel.recentSearches.toMutableStateList() }
     val searchRankings = listOf(

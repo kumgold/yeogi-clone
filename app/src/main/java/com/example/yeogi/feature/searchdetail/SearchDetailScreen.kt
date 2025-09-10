@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Search
@@ -57,6 +58,7 @@ import java.time.LocalDate
 @Composable
 fun SearchDetailScreen(
     navigateToAccommodation: (Int) -> Unit,
+    popBackStack: () -> Unit,
 ) {
     val recommendedAccommodation = dummyAccommodations.first()
     val horizontalAccommodations = remember {
@@ -73,7 +75,7 @@ fun SearchDetailScreen(
                 startDate = LocalDate.now(),
                 endDate = LocalDate.now().plusDays(1),
                 guestCount = 2,
-                onBackClick = { /* 뒤로가기 */ },
+                onBackClick = { popBackStack() },
                 onSearchClick = { /* 검색 화면으로 이동 */ },
                 onKeywordSearchClick = { /* 키워드 검색 로직 */ }
             )
@@ -141,7 +143,7 @@ fun SearchResultTopBar(
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(onClick = onBackClick) {
-            Icon(Icons.Default.ArrowBack, contentDescription = "뒤로가기")
+            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "뒤로가기")
         }
         SearchKeywordField(
             modifier = Modifier.weight(3f),
