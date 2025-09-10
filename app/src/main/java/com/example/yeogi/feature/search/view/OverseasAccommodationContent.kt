@@ -35,7 +35,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.yeogi.dummy.dummyOverseasRecentSearch
+import com.example.yeogi.data.dummyOverseasRecentSearch
 import com.example.yeogi.shared.RecentHistorySection
 
 @Composable

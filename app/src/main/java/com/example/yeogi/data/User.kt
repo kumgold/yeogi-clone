@@ -1,4 +1,4 @@
-package com.example.yeogi.dummy
+package com.example.yeogi.data
 
 data class User(
     val id: String,

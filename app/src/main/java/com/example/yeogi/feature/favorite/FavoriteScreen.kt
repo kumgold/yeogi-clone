@@ -57,8 +57,8 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.yeogi.SystemBarColor
-import com.example.yeogi.dummy.Accommodation
-import com.example.yeogi.dummy.dummyAccommodations
+import com.example.yeogi.data.Accommodation
+import com.example.yeogi.data.dummyAccommodations
 import com.example.yeogi.ui.theme.Background
 import com.example.yeogi.ui.theme.YeogiTheme
 

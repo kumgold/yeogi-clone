@@ -33,8 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.yeogi.dummy.dummyKeywords
-import com.example.yeogi.dummy.dummyRegions
+import com.example.yeogi.data.dummyKeywords
+import com.example.yeogi.data.dummyRegions
 import com.example.yeogi.ui.theme.Background
 
 @OptIn(ExperimentalLayoutApi::class)

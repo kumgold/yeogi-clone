@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.yeogi.SystemBarColor
-import com.example.yeogi.dummy.dummyAccommodations
+import com.example.yeogi.data.dummyAccommodations
 import com.example.yeogi.navigation.BottomNavigationBar
 import com.example.yeogi.shared.RecommendationSection
 import com.example.yeogi.ui.theme.Background
