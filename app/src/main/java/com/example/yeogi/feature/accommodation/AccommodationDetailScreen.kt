@@ -11,8 +11,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -47,6 +50,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -56,6 +60,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.yeogi.SystemBarColor
 import com.example.yeogi.data.Accommodation
 import com.example.yeogi.data.Facility
 import com.example.yeogi.data.Review
@@ -67,22 +72,27 @@ fun AccommodationDetailScreen(
     accommodation: Accommodation,
     popBackStack: () -> Unit,
 ) {
+    SystemBarColor(White)
     Scaffold(
         bottomBar = { BookingBottomBar(accommodation.price) }
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
+                .statusBarsPadding()
                 .padding(bottom = paddingValues.calculateBottomPadding())
         ) {
-            item { ImageHeader(
-                accommodation = accommodation,
-                popBackStack = popBackStack
+            item {
+                ImageHeader(
+                    accommodation = accommodation,
+                    popBackStack = popBackStack
                 )
             }
             item { MainInfoSection(accommodation) }
             item { SectionDivider() }
             item { FacilityInfoSection(accommodation.facilities) }
+            item { SectionDivider() }
+            item { LocationSection() }
             item { SectionDivider() }
             item { UsageInfoSection(accommodation.checkInTime, accommodation.checkOutTime, accommodation.usageInfo) }
             item { SectionDivider() }
@@ -99,7 +109,7 @@ fun MainInfoSection(accommodation: Accommodation) {
     Column(modifier = Modifier.padding(16.dp)) {
         Text(
             text = accommodation.name,
-            style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold)
+            style = MaterialTheme.typography.headlineLarge
         )
         Spacer(modifier = Modifier.height(8.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -131,7 +141,37 @@ fun MainInfoSection(accommodation: Accommodation) {
                 color = Color.DarkGray
             )
         }
-        // TODO: 지도 API 연동 영역
+    }
+}
+
+
+@Composable
+fun FacilityInfoSection(facilities: List<Facility>) {
+    LazyRow(
+        modifier = Modifier.padding(all = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(facilities) { facility ->
+            FacilityItem(facility)
+        }
+    }
+}
+
+
+@Composable
+fun FacilityItem(facility: Facility) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Icon(facility.icon, contentDescription = facility.name, modifier = Modifier.size(20.dp), tint = Color.Black)
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(facility.name, fontSize = 12.sp)
+    }
+}
+
+
+@Composable
+fun LocationSection() {
+    Column(modifier = Modifier.padding(16.dp)) {
+        Text("위치 및 주변 정보", style = MaterialTheme.typography.titleLarge)
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -147,49 +187,9 @@ fun MainInfoSection(accommodation: Accommodation) {
 
 
 @Composable
-fun FacilityInfoSection(facilities: List<Facility>) {
-    Column(modifier = Modifier.padding(16.dp)) {
-        Text("시설 정보", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-        Spacer(modifier = Modifier.height(16.dp))
-        // FlowRow를 사용하면 화면 너비에 따라 아이템이 자동으로 다음 줄로 넘어갑니다.
-        // build.gradle에 implementation "com.google.accompanist:accompanist-flowlayout:0.28.0" 추가 필요
-        // 여기서는 간단하게 Row 2개로 구현합니다.
-        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceAround
-            ) {
-                facilities.take(4).forEach { facility ->
-                    FacilityItem(facility)
-                }
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceAround
-            ) {
-                facilities.drop(4).take(4).forEach { facility ->
-                    FacilityItem(facility)
-                }
-            }
-        }
-    }
-}
-
-
-@Composable
-fun FacilityItem(facility: Facility) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Icon(facility.icon, contentDescription = facility.name, modifier = Modifier.size(28.dp), tint = Color.Gray)
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(facility.name, fontSize = 12.sp)
-    }
-}
-
-
-@Composable
 fun UsageInfoSection(checkIn: String, checkOut: String, usageInfo: String) {
     Column(modifier = Modifier.padding(16.dp)) {
-        Text("숙소 이용 정보", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Text("숙소 소개", style = MaterialTheme.typography.titleLarge)
         Spacer(modifier = Modifier.height(16.dp))
         InfoRow("체크인", checkIn)
         HorizontalDivider(
