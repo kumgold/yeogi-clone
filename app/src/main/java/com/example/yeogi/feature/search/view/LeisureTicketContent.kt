@@ -20,6 +20,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,7 +36,6 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.yeogi.data.dummyKeywords
 import com.example.yeogi.data.dummyRegions
-import com.example.yeogi.ui.theme.Background
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -43,7 +43,7 @@ fun LeisureTicketContent() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Background)
+            .background(MaterialTheme.colorScheme.background,)
             .verticalScroll(rememberScrollState())
     ) {
         Column(
@@ -107,7 +107,10 @@ fun LeisureTicketContent() {
 fun KeywordChip(text: String, onClick: () -> Unit) {
     Box(
         modifier = Modifier
-            .background(Background, RoundedCornerShape(8.dp))
+            .background(
+                MaterialTheme.colorScheme.background,
+                RoundedCornerShape(8.dp)
+            )
             .clip(RoundedCornerShape(8.dp))
             .clickable(onClick = onClick)
             .padding(horizontal = 12.dp, vertical = 8.dp)

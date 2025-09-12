@@ -59,7 +59,6 @@ import coil.request.ImageRequest
 import com.example.yeogi.SystemBarColor
 import com.example.yeogi.data.Accommodation
 import com.example.yeogi.data.dummyAccommodations
-import com.example.yeogi.ui.theme.Background
 import com.example.yeogi.ui.theme.YeogiTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -79,7 +78,7 @@ fun FavoritesScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Background)
+            .background(MaterialTheme.colorScheme.background,)
     ) {
         CenterAlignedTopAppBar(
             navigationIcon = {

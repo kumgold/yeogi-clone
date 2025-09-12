@@ -46,7 +46,6 @@ import com.example.yeogi.feature.search.view.FlightContent
 import com.example.yeogi.feature.search.view.LeisureTicketContent
 import com.example.yeogi.feature.search.view.OverseasAccommodationContent
 import com.example.yeogi.navigation.NavItem
-import com.example.yeogi.ui.theme.Background
 import com.example.yeogi.ui.theme.YeogiTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -115,7 +114,10 @@ fun CustomSearchTabs(tabs: List<String>, selectedTabIndex: Int, onTabClick: (Int
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
-            .background(Background, shape = RoundedCornerShape(50))
+            .background(
+                MaterialTheme.colorScheme.background,
+                shape = RoundedCornerShape(50)
+            )
             .clip(RoundedCornerShape(50)),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {

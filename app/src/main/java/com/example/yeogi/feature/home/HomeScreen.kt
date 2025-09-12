@@ -48,14 +48,13 @@ import com.example.yeogi.data.dummyAccommodations
 import com.example.yeogi.navigation.BottomNavigationBar
 import com.example.yeogi.navigation.NavItem
 import com.example.yeogi.shared.RecommendationSection
-import com.example.yeogi.ui.theme.Background
 import com.example.yeogi.ui.theme.YeogiTheme
 
 data class ServiceCategory(val name: String, val icon: ImageVector)
 
 @Composable
 fun HomeScreen(navController: NavController) {
-    SystemBarColor(color = Background)
+    SystemBarColor(color = MaterialTheme.colorScheme.background,)
 
     Scaffold(
         bottomBar = { BottomNavigationBar(navController = navController) }
@@ -64,7 +63,7 @@ fun HomeScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .background(Background),
+                .background(MaterialTheme.colorScheme.background,),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             item { HomeHeader() }
@@ -100,7 +99,7 @@ fun HomeHeader() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Background)
+            .background(MaterialTheme.colorScheme.background,)
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween

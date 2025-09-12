@@ -9,13 +9,21 @@
     <string name="activity">액티비티</string>
     <string name="matzip">맛집</string>
     <string name="more">더보기</string>
+    <string name="favorite">찜</string>
 
     <string name="home">홈</string>
     <string name="search">검색</string>
     <string name="nearby">주변</string>
-    <string name="favorite">찜 목록</string>
+    <string name="favorite_list">찜 목록</string>
     <string name="my_info">내 정보</string>
 
     <string name="recent_search">최근 검색 기록</string>
     <string name="yeogi_ranking">여기어때 검색 순위</string>
+    <string name="location_and_peripheral_information">위치 및 주변 정보</string>
+    <string name="introduce_accommodation">숙소 소개</string>
+    <string name="total_rating">전체 평점</string>
+
+    <string name="notice">공지 사항</string>
+    <string name="check_in">입실</string>
+    <string name="check_out">퇴실</string>
 </resources>
