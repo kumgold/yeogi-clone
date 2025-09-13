@@ -30,11 +30,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.yeogi.SystemBarColor
 import com.example.yeogi.data.ServiceCategory
-import com.example.yeogi.data.dummyAccommodations
 import com.example.yeogi.data.dummyServiceCategory
 import com.example.yeogi.navigation.BottomNavigationBar
 import com.example.yeogi.navigation.NavItem
@@ -44,6 +44,8 @@ import com.example.yeogi.ui.theme.YeogiTheme
 
 @Composable
 fun HomeScreen(navController: NavController) {
+    val viewModel = viewModel<HomeViewModel>()
+
     SystemBarColor(color = MaterialTheme.colorScheme.background,)
 
     Scaffold(
@@ -58,12 +60,16 @@ fun HomeScreen(navController: NavController) {
         ) {
             item { HomeHeader() }
 
-            item { ServiceCategorySection() }
+            item {
+                ServiceCategorySection(
+                    serviceCategoryList = viewModel.serviceCategoryList
+                )
+            }
 
             item {
                 RecommendationSection(
                     title = "우리 동네 BEST",
-                    accommodations = dummyAccommodations.subList(0, 5),
+                    accommodations = viewModel.accommodationList.subList(0, 5),
                     onItemClick = { id ->
                         navController.navigate(NavItem.AccommodationDetail.createRoute(id))
                     }
@@ -73,7 +79,7 @@ fun HomeScreen(navController: NavController) {
             item {
                 RecommendationSection(
                     title = "이번 주 특가",
-                    accommodations = dummyAccommodations.subList(6, 10),
+                    accommodations = viewModel.accommodationList.subList(6, 10),
                     onItemClick = { id ->
                         navController.navigate(NavItem.AccommodationDetail.createRoute(id))
                     }
@@ -109,8 +115,10 @@ fun HomeHeader() {
 }
 
 @Composable
-fun ServiceCategorySection() {
-    val categories = remember { dummyServiceCategory }
+fun ServiceCategorySection(
+    serviceCategoryList: List<ServiceCategory>
+) {
+    val categories = remember { serviceCategoryList }
 
     Card(
         modifier = Modifier

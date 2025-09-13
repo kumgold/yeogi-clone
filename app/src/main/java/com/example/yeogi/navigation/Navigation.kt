@@ -14,7 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.yeogi.data.dummyAccommodations
-import com.example.yeogi.feature.accommodation.AccommodationDetailScreen
+import com.example.yeogi.feature.accommodation.AccommodationScreen
 import com.example.yeogi.feature.around.AroundMeScreen
 import com.example.yeogi.feature.favorite.FavoritesScreen
 import com.example.yeogi.feature.home.HomeScreen
@@ -63,7 +63,7 @@ fun Navigation(navController: NavHostController) {
             val accommodation = dummyAccommodations.find { it.id == accommodationId }
             requireNotNull(accommodation) { "Accommodation not found for ID: $accommodationId" }
 
-            AccommodationDetailScreen(
+            AccommodationScreen(
                 accommodation = accommodation,
                 popBackStack = {
                     navController.popBackStack()
