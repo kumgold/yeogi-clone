@@ -99,7 +99,12 @@ fun SearchScreen(navController: NavController) {
                             navController.navigate(NavItem.SearchDetail.route)
                         }
                     )
-                    1 -> OverseasAccommodationContent()
+                    1 -> OverseasAccommodationContent(
+                        viewModel = viewModel,
+                        navigateToDetail = {
+                            navController.navigate(NavItem.SearchDetail.route)
+                        }
+                    )
                     2 -> FlightContent()
                     3 -> LeisureTicketContent()
                 }

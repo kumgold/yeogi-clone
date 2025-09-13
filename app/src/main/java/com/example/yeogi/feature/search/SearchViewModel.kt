@@ -7,9 +7,11 @@ import java.time.LocalDate
 class SearchViewModel: ViewModel() {
     val repository = SharedRepository()
 
-    val recentSearches = repository.getDomesticRecentSearch().toMutableList()
-    var startDate = LocalDate.now()
-    var endDate = startDate.plusDays(1)
+    val domesticRecentSearches = repository.getDomesticRecentSearch().toMutableList()
+    val overseaRecentSearches = repository.getOverseasRecentSearch().toMutableList()
+
+    var startDate = repository.reservationStartDate
+    var endDate = repository.reservationEndDate
     var guest = 2
 
     fun setDateAndGuest(

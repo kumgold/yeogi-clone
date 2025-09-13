@@ -80,7 +80,9 @@ fun DomesticAccommodationContent(
     viewModel: SearchViewModel,
     navigateToDetail: () -> Unit,
 ) {
-    val recentSearches = remember { viewModel.recentSearches.toMutableStateList() }
+    val recentSearches = remember {
+        viewModel.domesticRecentSearches.toMutableStateList()
+    }
     val searchRankings = listOf(
         "제주도", "강릉", "부산", "여수", "경주", "속초", "서울", "가평", "해운대", "전주"
     )
@@ -336,7 +338,7 @@ fun DateAndGuestPicker(
         ) {
             Icon(Icons.Default.CalendarToday, contentDescription = "달력 아이콘", modifier = Modifier.size(20.dp), tint = Color.Gray)
             Spacer(modifier = Modifier.width(8.dp))
-            Text(dateRange, fontSize = 14.sp, fontWeight = FontWeight.Bold, maxLines = 1)
+            Text(dateRange, style = MaterialTheme.typography.bodyMedium, maxLines = 1)
         }
         Row(
             modifier = Modifier
@@ -350,7 +352,7 @@ fun DateAndGuestPicker(
         ) {
             Icon(Icons.Default.Person, contentDescription = "인원 아이콘", modifier = Modifier.size(20.dp), tint = Color.Gray)
             Spacer(modifier = Modifier.width(8.dp))
-            Text("성인 $guestCount", fontSize = 14.sp, fontWeight = FontWeight.Bold, maxLines = 1)
+            Text("성인 $guestCount", style = MaterialTheme.typography.bodyMedium, maxLines = 1)
         }
     }
 }

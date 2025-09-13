@@ -25,7 +25,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,11 +40,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.yeogi.data.model.dummyOverseasRecentSearch
+import com.example.yeogi.feature.search.SearchViewModel
 import com.example.yeogi.shared.RecentHistorySection
+import com.example.yeogi.util.getFormattedMonthDay
+import java.time.LocalDate
 
 @Composable
-fun OverseasAccommodationContent() {
-    val overseasRecentSearches = remember { dummyOverseasRecentSearch.toMutableStateList() }
+fun OverseasAccommodationContent(
+    viewModel: SearchViewModel,
+    navigateToDetail: () -> Unit,
+) {
+    val overseasRecentSearches = remember {
+        viewModel.overseaRecentSearches.toMutableStateList()
+    }
+
+    var startDate by remember { mutableStateOf(viewModel.startDate) }
+    var endDate by remember { mutableStateOf(viewModel.endDate) }
 
     Column(
         modifier = Modifier
@@ -63,10 +78,12 @@ fun OverseasAccommodationContent() {
             )
 
             // 날짜 선택 영역
+            val dateRange = "${startDate.getFormattedMonthDay()} - ${endDate.getFormattedMonthDay()}"
+
             OverseasSearchField(
                 icon = Icons.Default.CalendarToday,
                 label = "날짜",
-                value = "11월 15일 - 11월 18일",
+                value = dateRange,
                 onClick = { /* 캘린더 다이얼로그 표시 */ }
             )
 
@@ -127,6 +144,6 @@ fun OverseasSearchField(
     ) {
         Icon(icon, contentDescription = label, tint = Color.Gray)
         Spacer(modifier = Modifier.width(12.dp))
-        Text(value, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+        Text(value, style = MaterialTheme.typography.bodyMedium,)
     }
 }
