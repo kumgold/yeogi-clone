@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -30,6 +29,7 @@ import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.SmokeFree
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.StarRate
 import androidx.compose.material.icons.filled.Wifi
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.Button
@@ -38,6 +38,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -58,7 +59,6 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.yeogi.R
-import com.example.yeogi.SystemBarColor
 import com.example.yeogi.data.Accommodation
 import com.example.yeogi.data.Facility
 import com.example.yeogi.data.Review
@@ -66,18 +66,16 @@ import com.example.yeogi.ui.theme.Yellow
 
 
 @Composable
-fun AccommodationDetailScreen(
+fun AccommodationScreen(
     accommodation: Accommodation,
     popBackStack: () -> Unit,
 ) {
-    SystemBarColor(White)
     Scaffold(
         bottomBar = { BookingBottomBar(accommodation.price) }
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .statusBarsPadding()
                 .padding(bottom = paddingValues.calculateBottomPadding())
         ) {
             item {
@@ -103,6 +101,69 @@ fun AccommodationDetailScreen(
 
 
 @Composable
+fun ImageHeader(
+    accommodation: Accommodation,
+    popBackStack: () -> Unit
+) {
+    Box(modifier = Modifier.fillMaxWidth().height(300.dp)) {
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(accommodation.imageUrl).crossfade(true).build(),
+            contentDescription = accommodation.name,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth()
+                .padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                .align(Alignment.TopCenter),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            IconButton(
+                modifier = Modifier
+                    .clip(CircleShape),
+                onClick = { popBackStack() },
+                colors = IconButtonDefaults.iconButtonColors().copy(containerColor = White),
+            ) {
+                Icon(
+                    Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Back",
+                    tint = Color.Black
+                )
+            }
+            Row {
+                IconButton(
+                    modifier = Modifier
+                        .clip(CircleShape),
+                    onClick = { /* 공유하기 */ },
+                    colors = IconButtonDefaults.iconButtonColors().copy(containerColor = White),
+                ) {
+                    Icon(
+                        Icons.Default.Share,
+                        contentDescription = "Share",
+                        tint = Color.Black
+                    )
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                IconButton(
+                    modifier = Modifier
+                        .clip(CircleShape),
+                    onClick = { /* 찜하기 */ },
+                    colors = IconButtonDefaults.iconButtonColors().copy(containerColor = White),
+                ) {
+                    Icon(
+                        Icons.Default.FavoriteBorder,
+                        contentDescription = "Favorite",
+                        tint = Color.Black
+                    )
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
 fun MainInfoSection(accommodation: Accommodation) {
     Column(modifier = Modifier.padding(16.dp)) {
         Text(
@@ -110,33 +171,57 @@ fun MainInfoSection(accommodation: Accommodation) {
             style = MaterialTheme.typography.headlineLarge
         )
         Spacer(modifier = Modifier.height(8.dp))
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(Icons.Filled.Star, contentDescription = "Rating", tint = Yellow)
-            Spacer(modifier = Modifier.width(4.dp))
-            Text(
-                text = "${accommodation.rating}",
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp
-            )
-            Text(
-                text = "리뷰 ${accommodation.reviewCount}개",
-                color = Color.Gray,
-                modifier = Modifier.padding(start = 8.dp)
-            )
-        }
+        Text(
+            text = accommodation.category,
+            style = MaterialTheme.typography.bodyMedium,
+            color = Color.Gray,
+        )
         Spacer(modifier = Modifier.height(12.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
+                modifier = Modifier.size(18.dp),
                 imageVector = Icons.Outlined.LocationOn,
                 contentDescription = "Address",
-                tint = Color.Gray,
-                modifier = Modifier.size(16.dp)
+                tint = Color.Black,
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = accommodation.address,
+                style = MaterialTheme.typography.bodyLarge,
+                color = Color.Black
+            )
+        }
+        Spacer(modifier = Modifier.height(4.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(
+                modifier = Modifier
+                    .background(
+                        shape = RoundedCornerShape(50.dp),
+                        color = MaterialTheme.colorScheme.tertiaryContainer
+                    )
+                    .padding(horizontal = 4.dp, vertical = 2.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    modifier = Modifier.size(18.dp),
+                    imageVector = Icons.Default.StarRate,
+                    contentDescription = "Rating",
+                    tint = Color.Black,
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = accommodation.rating.toString(),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = Color.Black
+                )
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = "${accommodation.reviewCount}개 평가",
                 style = MaterialTheme.typography.bodyMedium,
-                color = Color.DarkGray
+                color = Color.Gray
             )
         }
     }
@@ -326,68 +411,6 @@ fun InfoRow(title: String, value: String) {
 
 
 @Composable
-fun ImageHeader(
-    accommodation: Accommodation,
-    popBackStack: () -> Unit
-) {
-    Box(modifier = Modifier.fillMaxWidth().height(300.dp)) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(accommodation.imageUrl).crossfade(true).build(),
-            contentDescription = accommodation.name,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
-        )
-        Row(
-            modifier = Modifier.fillMaxWidth()
-                .padding(top = 16.dp, start = 16.dp, end = 16.dp)
-                .align(Alignment.TopCenter),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            IconButton(
-                onClick = { popBackStack() },
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .background(Color.Black.copy(alpha = 0.3f))
-            ) {
-                Icon(
-                    Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = White
-                )
-            }
-            Row {
-                IconButton(
-                    onClick = { /* 공유하기 */ },
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .background(Color.Black.copy(alpha = 0.3f))
-                ) {
-                    Icon(
-                        Icons.Default.Share,
-                        contentDescription = "Share",
-                        tint = White
-                    )
-                }
-                Spacer(modifier = Modifier.width(8.dp))
-                IconButton(
-                    onClick = { /* 찜하기 */ },
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .background(Color.Black.copy(alpha = 0.3f))
-                ) {
-                    Icon(
-                        Icons.Default.FavoriteBorder,
-                        contentDescription = "Favorite",
-                        tint = White
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
 fun BookingBottomBar(price: String) {
     Surface(
         modifier = Modifier
@@ -457,6 +480,6 @@ fun AccommodationDetailScreenPreview() {
         )
     )
     MaterialTheme {
-        AccommodationDetailScreen(accommodation = sampleAccommodation, popBackStack = {})
+        AccommodationScreen(accommodation = sampleAccommodation, popBackStack = {})
     }
 }
