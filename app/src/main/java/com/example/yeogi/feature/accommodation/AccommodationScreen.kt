@@ -59,9 +59,10 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.yeogi.R
-import com.example.yeogi.data.Accommodation
-import com.example.yeogi.data.Facility
-import com.example.yeogi.data.Review
+import com.example.yeogi.SystemBarColor
+import com.example.yeogi.data.model.Accommodation
+import com.example.yeogi.data.model.Facility
+import com.example.yeogi.data.model.Review
 import com.example.yeogi.ui.theme.Yellow
 
 
@@ -70,6 +71,8 @@ fun AccommodationScreen(
     accommodation: Accommodation,
     popBackStack: () -> Unit,
 ) {
+    SystemBarColor(color = Color.Transparent)
+
     Scaffold(
         bottomBar = { BookingBottomBar(accommodation.price) }
     ) { paddingValues ->

@@ -34,8 +34,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.yeogi.SystemBarColor
-import com.example.yeogi.data.ServiceCategory
-import com.example.yeogi.data.dummyServiceCategory
+import com.example.yeogi.data.model.ServiceCategory
 import com.example.yeogi.navigation.BottomNavigationBar
 import com.example.yeogi.navigation.NavItem
 import com.example.yeogi.shared.RecommendationSection

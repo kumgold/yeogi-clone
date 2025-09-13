@@ -1,4 +1,4 @@
-package com.example.yeogi.data
+package com.example.yeogi.data.model
 
 data class Review(
     val userName: String,

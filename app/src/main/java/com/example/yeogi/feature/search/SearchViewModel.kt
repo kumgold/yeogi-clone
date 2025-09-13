@@ -1,7 +1,6 @@
 package com.example.yeogi.feature.search
 
 import androidx.lifecycle.ViewModel
-import com.example.yeogi.data.dummyDomesticRecentSearch
 import com.example.yeogi.data.repository.SharedRepository
 import java.time.LocalDate
 

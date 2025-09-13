@@ -1,4 +1,4 @@
-package com.example.yeogi.data
+package com.example.yeogi.data.model
 
 import androidx.compose.ui.graphics.vector.ImageVector
 

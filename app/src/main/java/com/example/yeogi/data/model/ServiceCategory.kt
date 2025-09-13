@@ -1,4 +1,4 @@
-package com.example.yeogi.data
+package com.example.yeogi.data.model
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Business

@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.yeogi.data.Accommodation
+import com.example.yeogi.data.model.Accommodation
 
 /**
  * 세로 스크롤에 사용될 숙소 아이템

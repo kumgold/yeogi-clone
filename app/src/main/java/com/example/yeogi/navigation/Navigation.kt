@@ -13,7 +13,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.yeogi.data.dummyAccommodations
+import com.example.yeogi.data.model.dummyAccommodations
 import com.example.yeogi.feature.accommodation.AccommodationScreen
 import com.example.yeogi.feature.around.AroundMeScreen
 import com.example.yeogi.feature.favorite.FavoritesScreen

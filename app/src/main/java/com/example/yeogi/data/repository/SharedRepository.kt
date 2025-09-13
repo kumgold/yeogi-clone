@@ -1,12 +1,12 @@
 package com.example.yeogi.data.repository
 
-import com.example.yeogi.data.Accommodation
-import com.example.yeogi.data.RecentSearch
-import com.example.yeogi.data.ServiceCategory
-import com.example.yeogi.data.dummyAccommodations
-import com.example.yeogi.data.dummyDomesticRecentSearch
-import com.example.yeogi.data.dummyOverseasRecentSearch
-import com.example.yeogi.data.dummyServiceCategory
+import com.example.yeogi.data.model.Accommodation
+import com.example.yeogi.data.model.RecentSearch
+import com.example.yeogi.data.model.ServiceCategory
+import com.example.yeogi.data.model.dummyAccommodations
+import com.example.yeogi.data.model.dummyDomesticRecentSearch
+import com.example.yeogi.data.model.dummyOverseasRecentSearch
+import com.example.yeogi.data.model.dummyServiceCategory
 
 class SharedRepository {
     fun getServiceCategory(): List<ServiceCategory> {

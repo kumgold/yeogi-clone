@@ -60,7 +60,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.yeogi.data.RecentSearch
+import com.example.yeogi.data.model.RecentSearch
 import com.example.yeogi.feature.search.SearchViewModel
 import com.example.yeogi.shared.RecentHistorySection
 import com.example.yeogi.shared.SearchRankingSection
