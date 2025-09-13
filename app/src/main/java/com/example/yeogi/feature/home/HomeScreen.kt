@@ -1,5 +1,6 @@
 package com.example.yeogi.feature.home
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,30 +14,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Business
-import androidx.compose.material.icons.filled.DirectionsCar
-import androidx.compose.material.icons.filled.Flight
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Kayaking
-import androidx.compose.material.icons.filled.KingBed
-import androidx.compose.material.icons.filled.MoreHoriz
-import androidx.compose.material.icons.filled.NotificationsNone
-import androidx.compose.material.icons.filled.Restaurant
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -44,13 +33,14 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.yeogi.SystemBarColor
+import com.example.yeogi.data.ServiceCategory
 import com.example.yeogi.data.dummyAccommodations
+import com.example.yeogi.data.dummyServiceCategory
 import com.example.yeogi.navigation.BottomNavigationBar
 import com.example.yeogi.navigation.NavItem
 import com.example.yeogi.shared.RecommendationSection
 import com.example.yeogi.ui.theme.YeogiTheme
 
-data class ServiceCategory(val name: String, val icon: ImageVector)
 
 @Composable
 fun HomeScreen(navController: NavController) {
@@ -105,27 +95,22 @@ fun HomeHeader() {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(text = "여기어때.", fontSize = 22.sp, fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.primary)
-        Row {
-            IconButton(onClick = { /* 검색 */ }) { Icon(Icons.Default.Search, contentDescription = "검색", tint = Color.Black) }
-            IconButton(onClick = { /* 알림 */ }) { Icon(Icons.Default.NotificationsNone, contentDescription = "알림", tint = Color.Black) }
+        TextButton(
+            shape = RoundedCornerShape(8.dp),
+            border = BorderStroke(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.primary
+            ),
+            onClick = {}
+        ) {
+            Text("로그인 / 회원가입")
         }
     }
 }
 
 @Composable
 fun ServiceCategorySection() {
-    val categories = remember {
-        listOf(
-            ServiceCategory("호텔", Icons.Default.Business),
-            ServiceCategory("펜션", Icons.Default.Home),
-            ServiceCategory("모텔", Icons.Default.KingBed),
-            ServiceCategory("항공", Icons.Default.Flight),
-            ServiceCategory("렌터카", Icons.Default.DirectionsCar),
-            ServiceCategory("액티비티", Icons.Default.Kayaking),
-            ServiceCategory("맛집", Icons.Default.Restaurant),
-            ServiceCategory("더보기", Icons.Default.MoreHoriz),
-        )
-    }
+    val categories = remember { dummyServiceCategory }
 
     Card(
         modifier = Modifier
@@ -144,7 +129,10 @@ fun ServiceCategorySection() {
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
                     rowItems.forEach { category ->
-                        CategoryIcon(category = category)
+                        CategoryIcon(
+                            modifier = Modifier.weight(1f),
+                            category = category
+                        )
                     }
                 }
             }
@@ -153,10 +141,13 @@ fun ServiceCategorySection() {
 }
 
 @Composable
-fun CategoryIcon(category: ServiceCategory) {
+fun CategoryIcon(
+    modifier: Modifier = Modifier,
+    category: ServiceCategory
+) {
     Column(
+        modifier = modifier.clickable { /* 각 카테고리 화면으로 이동 */ },
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.clickable { /* 각 카테고리 화면으로 이동 */ }
     ) {
         Icon(
             category.icon,
