@@ -1,6 +1,9 @@
 package com.example.yeogi.feature.accommodation
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -35,15 +39,28 @@ import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -53,9 +70,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.yeogi.R
@@ -63,9 +82,13 @@ import com.example.yeogi.SystemBarColor
 import com.example.yeogi.data.model.Accommodation
 import com.example.yeogi.data.model.Facility
 import com.example.yeogi.data.model.Review
+import com.example.yeogi.shared.DateGuestBottomSheetContent
 import com.example.yeogi.ui.theme.Yellow
+import com.example.yeogi.util.getFormattedMonthDay
+import kotlinx.coroutines.launch
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccommodationScreen(
     accommodation: Accommodation,
@@ -73,18 +96,63 @@ fun AccommodationScreen(
 ) {
     SystemBarColor(color = Color.Transparent)
 
+    val viewModel = viewModel<AccommodationViewModel>()
+    val listState = rememberLazyListState()
+    val isScrolled = remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
+    val dateGuestSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var isDateGuestSheetOpen by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+
+    var startDate by remember { mutableStateOf(viewModel.startDate) }
+    var endDate by remember { mutableStateOf(viewModel.endDate) }
+    var guestCount by remember { mutableIntStateOf(viewModel.guest) }
+    val dateRange = "${startDate.getFormattedMonthDay()} - ${endDate.getFormattedMonthDay()}"
+
+    if (isDateGuestSheetOpen) {
+        ModalBottomSheet(
+            onDismissRequest = { isDateGuestSheetOpen = false },
+            sheetState = dateGuestSheetState,
+            modifier = Modifier.fillMaxSize(),
+            containerColor = White
+        ) {
+            DateGuestBottomSheetContent(
+                initialStartDate = startDate,
+                initialEndDate = endDate,
+                initialGuestCount = guestCount,
+                onDismiss = {
+                    scope.launch { dateGuestSheetState.hide() }.invokeOnCompletion {
+                        if (!dateGuestSheetState.isVisible) isDateGuestSheetOpen = false
+                    }
+                },
+                onApply = { newStart, newEnd, newGuests ->
+                    viewModel.setDateAndGuest(
+                        startDate = newStart,
+                        endDate = newEnd,
+                        guest = newGuests
+                    )
+                    startDate = newStart
+                    endDate = newEnd
+                    guestCount = newGuests
+                    scope.launch { dateGuestSheetState.hide() }.invokeOnCompletion {
+                        if (!dateGuestSheetState.isVisible) isDateGuestSheetOpen = false
+                    }
+                }
+            )
+        }
+    }
+
     Scaffold(
         bottomBar = { BookingBottomBar(accommodation.price) }
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = paddingValues.calculateBottomPadding())
+                .padding(bottom = paddingValues.calculateBottomPadding()),
+            state = listState
         ) {
             item {
                 ImageHeader(
-                    accommodation = accommodation,
-                    popBackStack = popBackStack
+                    accommodation = accommodation
                 )
             }
             item { MainInfoSection(accommodation) }
@@ -99,14 +167,102 @@ fun AccommodationScreen(
             item { SectionDivider() }
             item { ReviewSection(accommodation.rating, accommodation.reviews) }
         }
+        AccommodationAppBar(
+            dateRange = dateRange,
+            isScrolled = isScrolled,
+            onDateGuestChangeListener = {
+                isDateGuestSheetOpen = true
+            },
+            popBackStack = popBackStack,
+        )
     }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AccommodationAppBar(
+    dateRange: String,
+    isScrolled: State<Boolean>,
+    onDateGuestChangeListener: () -> Unit,
+    popBackStack: () -> Unit
+) {
+    val appBarColor by animateColorAsState(
+        targetValue = if (isScrolled.value) White else Color.Transparent,
+        label = "appBarColorAnimation"
+    )
+
+    TopAppBar(
+        title = {
+            AnimatedVisibility(visible = isScrolled.value) {
+                Box(
+                    modifier = Modifier.clickable {
+                        onDateGuestChangeListener()
+                    }
+                ) {
+                    Text(
+                        text = "$dateRange ∙ 게스트 2명",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            }
+        },
+        navigationIcon = {
+            IconButton(
+                onClick = { popBackStack() },
+                colors = IconButtonDefaults.iconButtonColors(
+                    containerColor = if (isScrolled.value) Color.Transparent else White
+                ),
+                modifier = if (isScrolled.value) Modifier else Modifier.clip(CircleShape)
+            ) {
+                Icon(
+                    Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Back",
+                    tint = Color.Black
+                )
+            }
+        },
+        actions = {
+            IconButton(
+                onClick = { /* 공유하기 */ },
+                colors = IconButtonDefaults.iconButtonColors(
+                    containerColor = if (isScrolled.value) Color.Transparent else White
+                ),
+                modifier = if (isScrolled.value) Modifier else Modifier.clip(CircleShape)
+            ) {
+                Icon(
+                    Icons.Default.Share,
+                    contentDescription = "Share",
+                    tint = Color.Black
+                )
+            }
+            IconButton(
+                onClick = { /* 찜하기 */ },
+                colors = IconButtonDefaults.iconButtonColors(
+                    containerColor = if (isScrolled.value) Color.Transparent else White
+                ),
+                modifier = if (isScrolled.value) Modifier else Modifier.clip(CircleShape)
+            ) {
+                Icon(
+                    Icons.Default.FavoriteBorder,
+                    contentDescription = "Favorite",
+                    tint = Color.Black
+                )
+            }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = appBarColor
+        )
+    )
 }
 
 
 @Composable
 fun ImageHeader(
-    accommodation: Accommodation,
-    popBackStack: () -> Unit
+    accommodation: Accommodation
 ) {
     Box(modifier = Modifier.fillMaxWidth().height(300.dp)) {
         AsyncImage(
@@ -116,52 +272,6 @@ fun ImageHeader(
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
-        Row(
-            modifier = Modifier.fillMaxWidth()
-                .padding(top = 16.dp, start = 16.dp, end = 16.dp)
-                .align(Alignment.TopCenter),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            IconButton(
-                modifier = Modifier
-                    .clip(CircleShape),
-                onClick = { popBackStack() },
-                colors = IconButtonDefaults.iconButtonColors().copy(containerColor = White),
-            ) {
-                Icon(
-                    Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = Color.Black
-                )
-            }
-            Row {
-                IconButton(
-                    modifier = Modifier
-                        .clip(CircleShape),
-                    onClick = { /* 공유하기 */ },
-                    colors = IconButtonDefaults.iconButtonColors().copy(containerColor = White),
-                ) {
-                    Icon(
-                        Icons.Default.Share,
-                        contentDescription = "Share",
-                        tint = Color.Black
-                    )
-                }
-                Spacer(modifier = Modifier.width(8.dp))
-                IconButton(
-                    modifier = Modifier
-                        .clip(CircleShape),
-                    onClick = { /* 찜하기 */ },
-                    colors = IconButtonDefaults.iconButtonColors().copy(containerColor = White),
-                ) {
-                    Icon(
-                        Icons.Default.FavoriteBorder,
-                        contentDescription = "Favorite",
-                        tint = Color.Black
-                    )
-                }
-            }
-        }
     }
 }
 
@@ -194,7 +304,7 @@ fun MainInfoSection(accommodation: Accommodation) {
                 color = Color.Black
             )
         }
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(12.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -319,6 +429,7 @@ fun NoticeSection(notice: String) {
     }
 }
 
+
 @Composable
 fun ReviewSection(rating: Double, reviews: List<Review>) {
     Column(modifier = Modifier.padding(16.dp)) {
@@ -361,6 +472,7 @@ fun ReviewSection(rating: Double, reviews: List<Review>) {
         }
     }
 }
+
 
 @Composable
 fun ReviewItem(review: Review) {
