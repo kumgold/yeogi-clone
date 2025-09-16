@@ -7,11 +7,14 @@ import com.example.yeogi.data.model.dummyAccommodations
 import com.example.yeogi.data.model.dummyDomesticRecentSearch
 import com.example.yeogi.data.model.dummyOverseasRecentSearch
 import com.example.yeogi.data.model.dummyServiceCategory
+import com.example.yeogi.util.getFormattedMonthDay
 import java.time.LocalDate
 
-class SharedRepository {
-    val reservationStartDate = LocalDate.now()
-    val reservationEndDate = reservationStartDate.plusDays(1)
+object SharedRepository {
+
+    var reservationStartDate: LocalDate = LocalDate.now()
+    var reservationEndDate: LocalDate = reservationStartDate.plusDays(1)
+    var reservationGuest = 2
 
     fun getServiceCategory(): List<ServiceCategory> {
         return dummyServiceCategory
@@ -27,5 +30,17 @@ class SharedRepository {
 
     fun getOverseasRecentSearch(): List<RecentSearch> {
         return dummyOverseasRecentSearch
+    }
+
+    fun setDates(
+        startDate: LocalDate,
+        endDate: LocalDate,
+    ) {
+        reservationStartDate = startDate
+        reservationEndDate = endDate
+    }
+
+    fun setGuest(guest: Int) {
+        reservationGuest = guest
     }
 }

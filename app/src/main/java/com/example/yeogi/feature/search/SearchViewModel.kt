@@ -5,22 +5,21 @@ import com.example.yeogi.data.repository.SharedRepository
 import java.time.LocalDate
 
 class SearchViewModel: ViewModel() {
-    val repository = SharedRepository()
+    private val repository = SharedRepository
 
     val domesticRecentSearches = repository.getDomesticRecentSearch().toMutableList()
     val overseaRecentSearches = repository.getOverseasRecentSearch().toMutableList()
 
-    var startDate = repository.reservationStartDate
-    var endDate = repository.reservationEndDate
-    var guest = 2
+    var startDate: LocalDate = repository.reservationStartDate
+    var endDate: LocalDate = repository.reservationEndDate
+    var guest = repository.reservationGuest
 
     fun setDateAndGuest(
         startDate: LocalDate,
         endDate: LocalDate,
         guest: Int
     ) {
-        this.startDate = startDate
-        this.endDate = endDate
-        this.guest = guest
+        repository.setDates(startDate, endDate)
+        repository.setGuest(guest)
     }
 }
