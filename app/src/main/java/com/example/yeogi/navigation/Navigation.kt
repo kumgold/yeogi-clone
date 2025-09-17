@@ -19,6 +19,7 @@ import com.example.yeogi.feature.around.AroundMeScreen
 import com.example.yeogi.feature.favorite.FavoritesScreen
 import com.example.yeogi.feature.home.HomeScreen
 import com.example.yeogi.feature.info.MyInfoScreen
+import com.example.yeogi.feature.room.RoomSelectionScreen
 import com.example.yeogi.feature.search.SearchScreen
 import com.example.yeogi.feature.searchdetail.SearchDetailScreen
 
@@ -64,6 +65,28 @@ fun Navigation(navController: NavHostController) {
             requireNotNull(accommodation) { "Accommodation not found for ID: $accommodationId" }
 
             AccommodationScreen(
+                accommodation = accommodation,
+                navigateToRoomSelection = { id ->
+                    navController.navigate(NavItem.RoomSelection.createRoute(id))
+                },
+                popBackStack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+        horizontalSlideComposable(
+            route = NavItem.RoomSelection.route,
+            arguments = listOf(
+                navArgument("accommodationId") { type = NavType.IntType }
+            )
+        ) { backStackEntry ->
+            val accommodationId = backStackEntry.arguments?.getInt("accommodationId")
+
+            requireNotNull(accommodationId) { "Accommodation ID is required as an argument" }
+            val accommodation = dummyAccommodations.find { it.id == accommodationId }
+            requireNotNull(accommodation) { "Accommodation not found for ID: $accommodationId" }
+
+            RoomSelectionScreen(
                 accommodation = accommodation,
                 popBackStack = {
                     navController.popBackStack()
