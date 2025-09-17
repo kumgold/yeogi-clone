@@ -27,7 +27,7 @@ object SharedRepository {
     fun getDomesticRecentSearch(): List<RecentSearch> {
         return dummyDomesticRecentSearch
     }
-
+ 
     fun getOverseasRecentSearch(): List<RecentSearch> {
         return dummyOverseasRecentSearch
     }

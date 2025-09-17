@@ -74,6 +74,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -92,36 +93,30 @@ import kotlinx.coroutines.launch
 @Composable
 fun AccommodationScreen(
     accommodation: Accommodation,
+    viewModel: AccommodationViewModel = viewModel(),
+    navigateToRoomSelection: (Int) -> Unit,
     popBackStack: () -> Unit,
 ) {
-    SystemBarColor(color = Color.Transparent)
-
-    val viewModel = viewModel<AccommodationViewModel>()
     val listState = rememberLazyListState()
     val isScrolled = remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
     val dateGuestSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    var isDateGuestSheetOpen by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    var startDate by remember { mutableStateOf(viewModel.startDate) }
-    var endDate by remember { mutableStateOf(viewModel.endDate) }
-    var guestCount by remember { mutableIntStateOf(viewModel.guest) }
-    val dateRange = "${startDate.getFormattedMonthDay()} - ${endDate.getFormattedMonthDay()}"
-
-    if (isDateGuestSheetOpen) {
+    if (uiState.isDateGuestSheetOpen) {
         ModalBottomSheet(
-            onDismissRequest = { isDateGuestSheetOpen = false },
+            onDismissRequest = { viewModel.closeDateGuestSheet() },
             sheetState = dateGuestSheetState,
             modifier = Modifier.fillMaxSize(),
             containerColor = White
         ) {
             DateGuestBottomSheetContent(
-                initialStartDate = startDate,
-                initialEndDate = endDate,
-                initialGuestCount = guestCount,
+                initialStartDate = uiState.startDate,
+                initialEndDate = uiState.endDate,
+                initialGuestCount = uiState.guestCount,
                 onDismiss = {
                     scope.launch { dateGuestSheetState.hide() }.invokeOnCompletion {
-                        if (!dateGuestSheetState.isVisible) isDateGuestSheetOpen = false
+                        if (!dateGuestSheetState.isVisible) viewModel.closeDateGuestSheet()
                     }
                 },
                 onApply = { newStart, newEnd, newGuests ->
@@ -130,11 +125,8 @@ fun AccommodationScreen(
                         endDate = newEnd,
                         guest = newGuests
                     )
-                    startDate = newStart
-                    endDate = newEnd
-                    guestCount = newGuests
                     scope.launch { dateGuestSheetState.hide() }.invokeOnCompletion {
-                        if (!dateGuestSheetState.isVisible) isDateGuestSheetOpen = false
+                        if (!dateGuestSheetState.isVisible) viewModel.closeDateGuestSheet()
                     }
                 }
             )
@@ -142,7 +134,14 @@ fun AccommodationScreen(
     }
 
     Scaffold(
-        bottomBar = { BookingBottomBar(accommodation.price) }
+        bottomBar = {
+            BookingBottomBar(
+                price = accommodation.price,
+                navigateToRoomSelection = {
+                    navigateToRoomSelection(accommodation.id)
+                }
+            )
+        }
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
@@ -168,10 +167,10 @@ fun AccommodationScreen(
             item { ReviewSection(accommodation.rating, accommodation.reviews) }
         }
         AccommodationAppBar(
-            dateRange = dateRange,
+            dateRange = uiState.dateRangeString,
             isScrolled = isScrolled,
             onDateGuestChangeListener = {
-                isDateGuestSheetOpen = true
+                viewModel.openDateGuestSheet()
             },
             popBackStack = popBackStack,
         )
@@ -201,7 +200,7 @@ fun AccommodationAppBar(
                     }
                 ) {
                     Text(
-                        text = "$dateRange ∙ 게스트 2명",
+                        text = dateRange,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         maxLines = 1,
@@ -433,36 +432,33 @@ fun NoticeSection(notice: String) {
 @Composable
 fun ReviewSection(rating: Double, reviews: List<Review>) {
     Column(modifier = Modifier.padding(16.dp)) {
-        Text(
-            "리뷰 ${reviews.size}개",
-            style = MaterialTheme.typography.titleLarge
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                modifier = Modifier.size(24.dp),
+                imageVector = Icons.Default.StarRate,
+                contentDescription = "Rating",
+                tint = Yellow,
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = "$rating",
+                style = MaterialTheme.typography.titleLarge,
+                color = Color.Black
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                "${reviews.size}개 평가",
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+
         Spacer(modifier = Modifier.height(16.dp))
 
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(12.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background)
-        ) {
-            Row(
-                modifier = Modifier.padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceAround
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        stringResource(R.string.total_rating),
-                        style = MaterialTheme.typography.titleLarge
-                    )
-                    Text(
-                        text = "$rating",
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-            }
-        }
-        Spacer(modifier = Modifier.height(16.dp))
+        HorizontalDivider(
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
 
         reviews.forEach { review ->
             ReviewItem(review)
@@ -526,7 +522,10 @@ fun InfoRow(title: String, value: String) {
 
 
 @Composable
-fun BookingBottomBar(price: String) {
+fun BookingBottomBar(
+    price: String,
+    navigateToRoomSelection: () -> Unit
+) {
     Surface(
         modifier = Modifier
             .fillMaxWidth(),
@@ -551,7 +550,7 @@ fun BookingBottomBar(price: String) {
                 )
             }
             Button(
-                onClick = { /* 객실 선택 페이지로 이동 */ },
+                onClick = { navigateToRoomSelection() },
                 modifier = Modifier.height(50.dp),
                 shape = RoundedCornerShape(12.dp)
             ) {
@@ -595,6 +594,10 @@ fun AccommodationDetailScreenPreview() {
         )
     )
     MaterialTheme {
-        AccommodationScreen(accommodation = sampleAccommodation, popBackStack = {})
+        AccommodationScreen(
+            accommodation = sampleAccommodation,
+            navigateToRoomSelection = {},
+            popBackStack = {}
+        )
     }
 }
