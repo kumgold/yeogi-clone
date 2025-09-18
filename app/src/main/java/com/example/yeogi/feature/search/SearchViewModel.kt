@@ -1,7 +1,7 @@
 package com.example.yeogi.feature.search
 
 import androidx.lifecycle.ViewModel
-import com.example.yeogi.data.repository.SharedRepository
+import com.example.yeogi.core.repository.SharedRepository
 import java.time.LocalDate
 
 class SearchViewModel: ViewModel() {

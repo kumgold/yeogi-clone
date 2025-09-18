@@ -1,7 +1,9 @@
-package com.example.yeogi.data.model
+package com.example.yeogi.core.model
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import com.example.yeogi.feature.accommodation.data.remote.Facility
+import com.example.yeogi.feature.accommodation.data.remote.Review
 
 data class Accommodation(
     val id: Int,

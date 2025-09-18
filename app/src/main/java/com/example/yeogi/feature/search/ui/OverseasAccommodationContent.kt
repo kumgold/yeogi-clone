@@ -1,4 +1,4 @@
-package com.example.yeogi.feature.search.view
+package com.example.yeogi.feature.search.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -26,7 +26,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -39,11 +38,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.yeogi.data.model.dummyOverseasRecentSearch
 import com.example.yeogi.feature.search.SearchViewModel
-import com.example.yeogi.shared.RecentHistorySection
+import com.example.yeogi.shared.ui.RecentHistorySection
 import com.example.yeogi.util.getFormattedMonthDay
-import java.time.LocalDate
 
 @Composable
 fun OverseasAccommodationContent(

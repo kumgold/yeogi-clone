@@ -41,10 +41,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.yeogi.SystemBarColor
-import com.example.yeogi.feature.search.view.DomesticAccommodationContent
-import com.example.yeogi.feature.search.view.FlightContent
-import com.example.yeogi.feature.search.view.LeisureTicketContent
-import com.example.yeogi.feature.search.view.OverseasAccommodationContent
+import com.example.yeogi.feature.search.ui.DomesticAccommodationContent
+import com.example.yeogi.feature.search.ui.FlightContent
+import com.example.yeogi.feature.search.ui.LeisureTicketContent
+import com.example.yeogi.feature.search.ui.OverseasAccommodationContent
 import com.example.yeogi.navigation.NavItem
 import com.example.yeogi.ui.theme.YeogiTheme
 

@@ -1,13 +1,10 @@
-package com.example.yeogi.data.repository
+package com.example.yeogi.core.repository
 
-import com.example.yeogi.data.model.Accommodation
-import com.example.yeogi.data.model.RecentSearch
-import com.example.yeogi.data.model.ServiceCategory
-import com.example.yeogi.data.model.dummyAccommodations
-import com.example.yeogi.data.model.dummyDomesticRecentSearch
-import com.example.yeogi.data.model.dummyOverseasRecentSearch
-import com.example.yeogi.data.model.dummyServiceCategory
-import com.example.yeogi.util.getFormattedMonthDay
+import com.example.yeogi.core.model.Accommodation
+import com.example.yeogi.core.model.RecentSearch
+import com.example.yeogi.core.model.dummyAccommodations
+import com.example.yeogi.core.model.dummyDomesticRecentSearch
+import com.example.yeogi.core.model.dummyOverseasRecentSearch
 import java.time.LocalDate
 
 object SharedRepository {
@@ -15,10 +12,6 @@ object SharedRepository {
     var reservationStartDate: LocalDate = LocalDate.now()
     var reservationEndDate: LocalDate = reservationStartDate.plusDays(1)
     var reservationGuest = 2
-
-    fun getServiceCategory(): List<ServiceCategory> {
-        return dummyServiceCategory
-    }
 
     fun getAccommodations(): List<Accommodation> {
         return dummyAccommodations

@@ -37,8 +37,6 @@ import androidx.compose.material.icons.filled.StarRate
 import androidx.compose.material.icons.filled.Wifi
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -56,11 +54,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -79,13 +74,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.yeogi.R
-import com.example.yeogi.SystemBarColor
-import com.example.yeogi.data.model.Accommodation
-import com.example.yeogi.data.model.Facility
-import com.example.yeogi.data.model.Review
-import com.example.yeogi.shared.DateGuestBottomSheetContent
+import com.example.yeogi.core.model.Accommodation
+import com.example.yeogi.feature.accommodation.data.remote.Facility
+import com.example.yeogi.feature.accommodation.data.remote.Review
+import com.example.yeogi.shared.ui.DateGuestBottomSheet
 import com.example.yeogi.ui.theme.Yellow
-import com.example.yeogi.util.getFormattedMonthDay
 import kotlinx.coroutines.launch
 
 
@@ -110,7 +103,7 @@ fun AccommodationScreen(
             modifier = Modifier.fillMaxSize(),
             containerColor = White
         ) {
-            DateGuestBottomSheetContent(
+            DateGuestBottomSheet(
                 initialStartDate = uiState.startDate,
                 initialEndDate = uiState.endDate,
                 initialGuestCount = uiState.guestCount,

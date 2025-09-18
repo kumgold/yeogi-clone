@@ -1,4 +1,4 @@
-package com.example.yeogi.data.model
+package com.example.yeogi.core.model
 
 import java.time.LocalDate
 

@@ -1,4 +1,4 @@
-package com.example.yeogi.data.model
+package com.example.yeogi.feature.room.data.remote
 
 data class Room(
     val id: Int,

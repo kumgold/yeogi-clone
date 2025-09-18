@@ -1,4 +1,4 @@
-package com.example.yeogi.shared
+package com.example.yeogi.shared.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.yeogi.data.model.Accommodation
+import com.example.yeogi.core.model.Accommodation
 
 @Composable
 fun RecommendationSection(

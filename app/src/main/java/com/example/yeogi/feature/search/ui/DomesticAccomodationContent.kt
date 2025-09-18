@@ -1,4 +1,4 @@
-package com.example.yeogi.feature.search.view
+package com.example.yeogi.feature.search.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -51,11 +51,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.yeogi.data.model.RecentSearch
+import com.example.yeogi.core.model.RecentSearch
 import com.example.yeogi.feature.search.SearchViewModel
-import com.example.yeogi.shared.DateGuestBottomSheetContent
-import com.example.yeogi.shared.RecentHistorySection
-import com.example.yeogi.shared.SearchRankingSection
+import com.example.yeogi.shared.ui.DateGuestBottomSheet
+import com.example.yeogi.shared.ui.RecentHistorySection
 import com.example.yeogi.util.getFormattedMonthDay
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -116,7 +115,7 @@ fun DomesticAccommodationContent(
             modifier = Modifier.fillMaxSize(),
             containerColor = Color.White
         ) {
-            DateGuestBottomSheetContent(
+            DateGuestBottomSheet(
                 initialStartDate = startDate,
                 initialEndDate = endDate,
                 initialGuestCount = guestCount,

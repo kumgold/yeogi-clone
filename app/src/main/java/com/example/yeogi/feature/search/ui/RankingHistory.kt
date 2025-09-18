@@ -1,4 +1,4 @@
-package com.example.yeogi.shared
+package com.example.yeogi.feature.search.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

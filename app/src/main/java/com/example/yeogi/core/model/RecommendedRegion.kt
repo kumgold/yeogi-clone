@@ -1,4 +1,4 @@
-package com.example.yeogi.data.model
+package com.example.yeogi.core.model
 
 data class RecommendedRegion(
     val name: String,

@@ -44,9 +44,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.yeogi.data.model.dummyAccommodations
-import com.example.yeogi.shared.RecommendationSection
-import com.example.yeogi.shared.VerticalAccommodationItem
+import com.example.yeogi.core.model.dummyAccommodations
+import com.example.yeogi.shared.ui.RecommendationSection
+import com.example.yeogi.feature.searchdetail.ui.VerticalAccommodationItem
 import java.time.LocalDate
 
 

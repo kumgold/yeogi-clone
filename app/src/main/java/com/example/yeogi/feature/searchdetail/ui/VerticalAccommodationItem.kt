@@ -1,4 +1,4 @@
-package com.example.yeogi.shared
+package com.example.yeogi.feature.searchdetail.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.yeogi.data.model.Accommodation
+import com.example.yeogi.core.model.Accommodation
 
 /**
  * 세로 스크롤에 사용될 숙소 아이템

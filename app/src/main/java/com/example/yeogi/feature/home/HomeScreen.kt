@@ -34,10 +34,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.yeogi.SystemBarColor
-import com.example.yeogi.data.model.ServiceCategory
+import com.example.yeogi.feature.home.data.local.ServiceCategory
 import com.example.yeogi.navigation.BottomNavigationBar
 import com.example.yeogi.navigation.NavItem
-import com.example.yeogi.shared.RecommendationSection
+import com.example.yeogi.shared.ui.RecommendationSection
 import com.example.yeogi.ui.theme.YeogiTheme
 
 
@@ -89,6 +89,7 @@ fun HomeScreen(navController: NavController) {
     }
 }
 
+
 @Composable
 fun HomeHeader() {
     Row(
@@ -112,6 +113,7 @@ fun HomeHeader() {
         }
     }
 }
+
 
 @Composable
 fun ServiceCategorySection(
@@ -146,6 +148,7 @@ fun ServiceCategorySection(
         }
     }
 }
+
 
 @Composable
 fun CategoryIcon(

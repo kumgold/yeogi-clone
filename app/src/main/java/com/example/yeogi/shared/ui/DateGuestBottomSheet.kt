@@ -1,4 +1,4 @@
-package com.example.yeogi.shared
+package com.example.yeogi.shared.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -57,7 +57,7 @@ import java.util.Locale
  * 날짜, 인원 설정 바텀 시트
  */
 @Composable
-fun DateGuestBottomSheetContent(
+fun DateGuestBottomSheet(
     initialStartDate: LocalDate,
     initialEndDate: LocalDate,
     initialGuestCount: Int,

@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,8 +39,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import com.example.yeogi.data.model.Accommodation
-import com.example.yeogi.data.model.Room
+import com.example.yeogi.core.model.Accommodation
+import com.example.yeogi.feature.room.data.remote.Room
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,6 +50,10 @@ fun RoomSelectionScreen(
     popBackStack: () -> Unit
 ) {
     val rooms by viewModel.rooms.collectAsStateWithLifecycle()
+
+    LaunchedEffect(key1 = accommodation.id) {
+        viewModel.loadRooms(accommodation.id)
+    }
 
     Scaffold(
         topBar = {

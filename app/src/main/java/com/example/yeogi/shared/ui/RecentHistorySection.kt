@@ -1,4 +1,4 @@
-package com.example.yeogi.shared
+package com.example.yeogi.shared.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,7 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.yeogi.data.model.RecentSearch
+import com.example.yeogi.core.model.RecentSearch
 import com.example.yeogi.util.getFormattedMonthDay
 
 @Composable
