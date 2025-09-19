@@ -1,14 +1,17 @@
 package com.example.yeogi.feature.accommodation
 
 import androidx.lifecycle.ViewModel
+import com.example.yeogi.core.model.Accommodation
+import com.example.yeogi.core.presentation.SharedViewModel
 import com.example.yeogi.core.repository.SharedRepository
-import com.example.yeogi.util.getFormattedMonthDay
+import com.example.yeogi.core.util.getFormattedMonthDay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.time.LocalDate
 
 data class AccommodationUiState(
+    val accommodation: Accommodation? = null,
     val startDate: LocalDate = LocalDate.now(),
     val endDate: LocalDate = LocalDate.now().plusDays(1),
     val guestCount: Int = 2,
@@ -18,13 +21,7 @@ data class AccommodationUiState(
         get() = "${startDate.getFormattedMonthDay()} - ${endDate.getFormattedMonthDay()} ∙ 인원 ${guestCount}명"
 }
 
-class AccommodationViewModel : ViewModel() {
-    private val repository = SharedRepository
-
-    val startDate = repository.reservationStartDate
-    val endDate = repository.reservationEndDate
-    val guest = repository.reservationGuest
-
+class AccommodationViewModel : SharedViewModel() {
     private val _uiState = MutableStateFlow(
         AccommodationUiState(
             startDate = startDate,
@@ -34,6 +31,14 @@ class AccommodationViewModel : ViewModel() {
     )
     val uiState = _uiState.asStateFlow()
 
+    fun getAccommodation(accommodationId: Int) {
+        val accommodation = super.getAccommodations().find { it.id == accommodationId }
+
+        _uiState.update {
+            it.copy(accommodation = accommodation)
+        }
+    }
+
     fun openDateGuestSheet() {
         _uiState.update { it.copy(isDateGuestSheetOpen = true) }
     }
@@ -42,7 +47,7 @@ class AccommodationViewModel : ViewModel() {
         _uiState.update { it.copy(isDateGuestSheetOpen = false) }
     }
 
-    fun setDateAndGuest(startDate: LocalDate, endDate: LocalDate, guest: Int) {
+    override fun setDateAndGuest(startDate: LocalDate, endDate: LocalDate, guest: Int) {
         _uiState.update {
             it.copy(
                 startDate = startDate,
@@ -51,7 +56,6 @@ class AccommodationViewModel : ViewModel() {
             )
         }
 
-        repository.setDates(startDate, endDate)
-        repository.setGuest(guest)
+        super.setDateAndGuest(startDate, endDate, guest)
     }
 }

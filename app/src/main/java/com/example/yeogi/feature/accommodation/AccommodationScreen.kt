@@ -12,8 +12,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -43,7 +45,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -51,6 +52,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -75,58 +77,185 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.yeogi.R
 import com.example.yeogi.core.model.Accommodation
-import com.example.yeogi.feature.accommodation.data.remote.Facility
-import com.example.yeogi.feature.accommodation.data.remote.Review
-import com.example.yeogi.shared.ui.DateGuestBottomSheet
+import com.example.yeogi.core.model.Facility
+import com.example.yeogi.core.model.Review
+import com.example.yeogi.core.util.skeletonBackground
+import com.example.yeogi.shared.ui.DateGuestSelectionBottomSheet
 import com.example.yeogi.ui.theme.Yellow
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccommodationScreen(
-    accommodation: Accommodation,
+    accommodationId: Int,
     viewModel: AccommodationViewModel = viewModel(),
     navigateToRoomSelection: (Int) -> Unit,
     popBackStack: () -> Unit,
 ) {
-    val listState = rememberLazyListState()
-    val isScrolled = remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
-    val dateGuestSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val scope = rememberCoroutineScope()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    if (uiState.isDateGuestSheetOpen) {
-        ModalBottomSheet(
-            onDismissRequest = { viewModel.closeDateGuestSheet() },
-            sheetState = dateGuestSheetState,
-            modifier = Modifier.fillMaxSize(),
-            containerColor = White
-        ) {
-            DateGuestBottomSheet(
-                initialStartDate = uiState.startDate,
-                initialEndDate = uiState.endDate,
-                initialGuestCount = uiState.guestCount,
-                onDismiss = {
-                    scope.launch { dateGuestSheetState.hide() }.invokeOnCompletion {
-                        if (!dateGuestSheetState.isVisible) viewModel.closeDateGuestSheet()
-                    }
-                },
-                onApply = { newStart, newEnd, newGuests ->
-                    viewModel.setDateAndGuest(
-                        startDate = newStart,
-                        endDate = newEnd,
-                        guest = newGuests
-                    )
-                    scope.launch { dateGuestSheetState.hide() }.invokeOnCompletion {
-                        if (!dateGuestSheetState.isVisible) viewModel.closeDateGuestSheet()
-                    }
-                }
-            )
+    val dateGuestSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(accommodationId) {
+        scope.launch {
+            delay(1500)
+            viewModel.getAccommodation(accommodationId)
         }
     }
 
+    if (uiState.isDateGuestSheetOpen) {
+        DateGuestSelectionBottomSheet(
+            initialStartDate = uiState.startDate,
+            initialEndDate = uiState.endDate,
+            initialGuestCount = uiState.guestCount,
+            sheetState = dateGuestSheetState,
+            onDismiss = {
+                scope.launch { dateGuestSheetState.hide() }.invokeOnCompletion {
+                    if (!dateGuestSheetState.isVisible) viewModel.closeDateGuestSheet()
+                }
+            },
+            onApply = { newStart, newEnd, newGuests ->
+                viewModel.setDateAndGuest(
+                    startDate = newStart,
+                    endDate = newEnd,
+                    guest = newGuests
+                )
+            },
+        )
+    }
+
+    if (uiState.accommodation == null) {
+        AccommodationSkeletonScreen(
+            popBackStack = popBackStack
+        )
+    } else {
+        AccommodationScreenContent(
+            accommodation = uiState.accommodation!!,
+            dateRangeString = uiState.dateRangeString,
+            onDateGuestChangeListener = {
+                viewModel.openDateGuestSheet()
+            },
+            navigateToRoomSelection = { id ->
+                navigateToRoomSelection(id)
+            },
+            popBackStack = popBackStack
+        )
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun AccommodationSkeletonScreen(
+    popBackStack: () -> Unit
+) {
+    Column(
+        modifier = Modifier.statusBarsPadding()
+    ) {
+        TopAppBar(
+            title = {},
+            navigationIcon = {
+                IconButton(
+                    modifier = Modifier,
+                    onClick = { popBackStack() },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        containerColor = White
+                    )
+                ) {
+                    Icon(
+                        Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = Color.Black
+                    )
+                }
+            }
+        )
+        Column(modifier = Modifier.fillMaxSize()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(300.dp)
+                    .skeletonBackground()
+            )
+            Column(modifier = Modifier.padding(16.dp)) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(0.7f)
+                        .height(32.dp)
+                        .skeletonBackground()
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(0.3f)
+                        .height(20.dp)
+                        .skeletonBackground()
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(0.5f)
+                        .height(24.dp)
+                        .skeletonBackground()
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(0.4f)
+                        .height(24.dp)
+                        .skeletonBackground()
+                )
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(8.dp)
+                    .background(Color.LightGray.copy(alpha = 0.3f))
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                modifier = Modifier.padding(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                repeat(5) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Box(
+                            modifier = Modifier
+                                .size(24.dp)
+                                .skeletonBackground(shape = CircleShape)
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Box(
+                            modifier = Modifier
+                                .width(50.dp)
+                                .height(16.dp)
+                                .skeletonBackground()
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+private fun AccommodationScreenContent(
+    accommodation: Accommodation,
+    dateRangeString: String,
+    onDateGuestChangeListener: () -> Unit,
+    navigateToRoomSelection: (Int) -> Unit,
+    popBackStack: () -> Unit
+) {
+    val listState = rememberLazyListState()
+    val isScrolled = remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
+
     Scaffold(
+        modifier = Modifier.navigationBarsPadding(),
         bottomBar = {
             BookingBottomBar(
                 price = accommodation.price,
@@ -139,6 +268,7 @@ fun AccommodationScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
+
                 .padding(bottom = paddingValues.calculateBottomPadding()),
             state = listState
         ) {
@@ -153,17 +283,23 @@ fun AccommodationScreen(
             item { SectionDivider() }
             item { LocationSection() }
             item { SectionDivider() }
-            item { UsageInfoSection(accommodation.checkInTime, accommodation.checkOutTime, accommodation.usageInfo) }
+            item {
+                UsageInfoSection(
+                    checkIn = accommodation.checkInTime,
+                    checkOut = accommodation.checkOutTime,
+                    usageInfo = accommodation.usageInfo
+                )
+            }
             item { SectionDivider() }
             item { NoticeSection(accommodation.notice) }
             item { SectionDivider() }
             item { ReviewSection(accommodation.rating, accommodation.reviews) }
         }
         AccommodationAppBar(
-            dateRange = uiState.dateRangeString,
+            dateRange = dateRangeString,
             isScrolled = isScrolled,
             onDateGuestChangeListener = {
-                viewModel.openDateGuestSheet()
+                onDateGuestChangeListener()
             },
             popBackStack = popBackStack,
         )
@@ -588,7 +724,7 @@ fun AccommodationDetailScreenPreview() {
     )
     MaterialTheme {
         AccommodationScreen(
-            accommodation = sampleAccommodation,
+            accommodationId = 1,
             navigateToRoomSelection = {},
             popBackStack = {}
         )
