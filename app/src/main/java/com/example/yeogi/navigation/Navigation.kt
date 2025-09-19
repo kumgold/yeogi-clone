@@ -13,12 +13,13 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.yeogi.core.model.dummyAccommodations
 import com.example.yeogi.feature.accommodation.AccommodationScreen
 import com.example.yeogi.feature.around.AroundMeScreen
 import com.example.yeogi.feature.favorite.FavoritesScreen
 import com.example.yeogi.feature.home.HomeScreen
+import com.example.yeogi.feature.hotel.HotelScreen
 import com.example.yeogi.feature.info.MyInfoScreen
+import com.example.yeogi.feature.payment.PaymentScreen
 import com.example.yeogi.feature.room.RoomSelectionScreen
 import com.example.yeogi.feature.search.SearchScreen
 import com.example.yeogi.feature.searchdetail.SearchDetailScreen
@@ -61,11 +62,9 @@ fun Navigation(navController: NavHostController) {
             val accommodationId = backStackEntry.arguments?.getInt("accommodationId")
 
             requireNotNull(accommodationId) { "Accommodation ID is required as an argument" }
-            val accommodation = dummyAccommodations.find { it.id == accommodationId }
-            requireNotNull(accommodation) { "Accommodation not found for ID: $accommodationId" }
 
             AccommodationScreen(
-                accommodation = accommodation,
+                accommodationId = accommodationId,
                 navigateToRoomSelection = { id ->
                     navController.navigate(NavItem.RoomSelection.createRoute(id))
                 },
@@ -83,11 +82,30 @@ fun Navigation(navController: NavHostController) {
             val accommodationId = backStackEntry.arguments?.getInt("accommodationId")
 
             requireNotNull(accommodationId) { "Accommodation ID is required as an argument" }
-            val accommodation = dummyAccommodations.find { it.id == accommodationId }
-            requireNotNull(accommodation) { "Accommodation not found for ID: $accommodationId" }
 
             RoomSelectionScreen(
-                accommodation = accommodation,
+                accommodationId = accommodationId,
+                navigateToPayment = {
+                    navController.navigate(NavItem.Payment.route)
+                },
+                popBackStack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+        horizontalSlideComposable(
+            route = NavItem.Payment.route
+        ) {
+            PaymentScreen(
+                popBackStack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+        horizontalSlideComposable(
+            route = NavItem.Hotel.route
+        ) {
+            HotelScreen(
                 popBackStack = {
                     navController.popBackStack()
                 }
