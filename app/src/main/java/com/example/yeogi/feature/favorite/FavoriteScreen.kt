@@ -52,25 +52,26 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.yeogi.SystemBarColor
 import com.example.yeogi.core.model.Accommodation
-import com.example.yeogi.core.model.dummyAccommodations
 import com.example.yeogi.ui.theme.YeogiTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoritesScreen(
+    viewModel: FavoriteViewModel = viewModel(),
     navController: NavController
 ) {
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     val tabs = listOf("숙소", "공간대여", "레저·티켓")
 
     val favoriteAccommodations = remember {
-        dummyAccommodations.subList(0, 10)
+        viewModel.getAccommodations().subList(0, 10)
     }
 
     SystemBarColor(color = Color.White)

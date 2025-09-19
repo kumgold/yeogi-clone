@@ -53,9 +53,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.yeogi.core.model.RecentSearch
 import com.example.yeogi.feature.search.SearchViewModel
-import com.example.yeogi.shared.ui.DateGuestBottomSheet
+import com.example.yeogi.shared.ui.DateGuestSelectionBottomSheet
 import com.example.yeogi.shared.ui.RecentHistorySection
-import com.example.yeogi.util.getFormattedMonthDay
+import com.example.yeogi.core.util.getFormattedMonthDay
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -80,9 +80,9 @@ fun DomesticAccommodationContent(
     val dateGuestSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var isDateGuestSheetOpen by remember { mutableStateOf(false) }
 
-    var startDate by remember { mutableStateOf(viewModel.startDate) }
-    var endDate by remember { mutableStateOf(viewModel.endDate) }
-    var guestCount by remember { mutableIntStateOf(viewModel.guest) }
+    val startDate by remember { mutableStateOf(viewModel.startDate) }
+    val endDate by remember { mutableStateOf(viewModel.endDate) }
+    val guestCount by remember { mutableIntStateOf(viewModel.guest) }
 
     if (isSearchSheetOpen) {
         ModalBottomSheet(
@@ -109,36 +109,24 @@ fun DomesticAccommodationContent(
     }
 
     if (isDateGuestSheetOpen) {
-        ModalBottomSheet(
-            onDismissRequest = { isDateGuestSheetOpen = false },
+        DateGuestSelectionBottomSheet(
+            initialStartDate = startDate,
+            initialEndDate = endDate,
+            initialGuestCount = guestCount,
             sheetState = dateGuestSheetState,
-            modifier = Modifier.fillMaxSize(),
-            containerColor = Color.White
-        ) {
-            DateGuestBottomSheet(
-                initialStartDate = startDate,
-                initialEndDate = endDate,
-                initialGuestCount = guestCount,
-                onDismiss = {
-                    scope.launch { dateGuestSheetState.hide() }.invokeOnCompletion {
-                        if (!dateGuestSheetState.isVisible) isDateGuestSheetOpen = false
-                    }
-                },
-                onApply = { newStart, newEnd, newGuests ->
-                    viewModel.setDateAndGuest(
-                        startDate = newStart,
-                        endDate = newEnd,
-                        guest = newGuests
-                    )
-                    startDate = newStart
-                    endDate = newEnd
-                    guestCount = newGuests
-                    scope.launch { dateGuestSheetState.hide() }.invokeOnCompletion {
-                        if (!dateGuestSheetState.isVisible) isDateGuestSheetOpen = false
-                    }
+            onDismiss = {
+                scope.launch { dateGuestSheetState.hide() }.invokeOnCompletion {
+                    if (!dateGuestSheetState.isVisible) isDateGuestSheetOpen = false
                 }
-            )
-        }
+            },
+            onApply = { newStart, newEnd, newGuests ->
+                viewModel.setDateAndGuest(
+                    startDate = newStart,
+                    endDate = newEnd,
+                    guest = newGuests
+                )
+            },
+        )
     }
 
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {

@@ -1,7 +1,5 @@
 package com.example.yeogi.feature.favorite
 
-import androidx.lifecycle.ViewModel
+import com.example.yeogi.core.presentation.SharedViewModel
 
-class FavoriteViewModel : ViewModel() {
-
-}
+class FavoriteViewModel : SharedViewModel()

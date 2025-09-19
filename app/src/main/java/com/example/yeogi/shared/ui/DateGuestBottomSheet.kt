@@ -26,10 +26,13 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,11 +44,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.yeogi.util.getFormattedMonthDay
+import com.example.yeogi.core.util.getFormattedMonthDay
+import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
@@ -56,8 +61,40 @@ import java.util.Locale
 /**
  * 날짜, 인원 설정 바텀 시트
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DateGuestBottomSheet(
+fun DateGuestSelectionBottomSheet(
+    initialStartDate: LocalDate,
+    initialEndDate: LocalDate,
+    initialGuestCount: Int,
+    sheetState: SheetState,
+    onDismiss: () -> Unit,
+    onApply: (LocalDate, LocalDate, Int) -> Unit,
+) {
+    ModalBottomSheet(
+        onDismissRequest = { onDismiss() },
+        sheetState = sheetState,
+        modifier = Modifier.fillMaxSize(),
+        containerColor = White
+    ) {
+        DateGuestBottomSheetContent(
+            initialStartDate = initialStartDate,
+            initialEndDate = initialEndDate,
+            initialGuestCount = initialGuestCount,
+            onDismiss = {
+                onDismiss()
+            },
+            onApply = { newStart, newEnd, newGuests ->
+                onApply(newStart, newEnd, newGuests)
+                onDismiss()
+            }
+        )
+    }
+}
+
+
+@Composable
+private fun DateGuestBottomSheetContent(
     initialStartDate: LocalDate,
     initialEndDate: LocalDate,
     initialGuestCount: Int,

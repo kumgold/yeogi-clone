@@ -23,7 +23,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -44,27 +43,26 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.yeogi.core.model.dummyAccommodations
-import com.example.yeogi.shared.ui.RecommendationSection
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.yeogi.feature.searchdetail.ui.VerticalAccommodationItem
+import com.example.yeogi.shared.ui.RecommendationSection
 import java.time.LocalDate
-
 
 /**
  * 숙소 검색 결과 메인 화면
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchDetailScreen(
+    viewModel: SearchDetailViewModel = viewModel(),
     navigateToAccommodation: (Int) -> Unit,
     popBackStack: () -> Unit,
 ) {
-    val recommendedAccommodation = dummyAccommodations.first()
+    val recommendedAccommodation = viewModel.getAccommodations().first()
     val horizontalAccommodations = remember {
-        dummyAccommodations.subList(1, 6)
+        viewModel.getAccommodations().subList(1, 6)
     }
     val verticalAccommodations = remember {
-        dummyAccommodations.toList()
+        viewModel.getAccommodations().toList()
     }
 
     Scaffold(
@@ -126,6 +124,7 @@ fun SearchDetailScreen(
         }
     }
 }
+
 
 @Composable
 fun SearchResultTopBar(
@@ -233,7 +232,7 @@ fun AccommodationTypeFilter() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun FilterChips() {
     val filters = listOf("예약가능", "쿠폰", "포인트 적립", "조식포함", "반려견")

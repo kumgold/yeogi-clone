@@ -25,7 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.yeogi.core.model.RecentSearch
-import com.example.yeogi.util.getFormattedMonthDay
+import com.example.yeogi.core.util.getFormattedMonthDay
 
 @Composable
 fun RecentHistorySection(

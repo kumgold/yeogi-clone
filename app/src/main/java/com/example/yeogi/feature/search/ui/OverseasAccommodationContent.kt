@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.yeogi.feature.search.SearchViewModel
 import com.example.yeogi.shared.ui.RecentHistorySection
-import com.example.yeogi.util.getFormattedMonthDay
+import com.example.yeogi.core.util.getFormattedMonthDay
 
 @Composable
 fun OverseasAccommodationContent(

@@ -61,19 +61,23 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.yeogi.SystemBarColor
 import com.example.yeogi.core.model.Accommodation
-import com.example.yeogi.core.model.dummyAccommodations
 import com.example.yeogi.ui.theme.YeogiTheme
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AroundMeScreen(navController: NavController) {
+fun AroundMeScreen(
+    navController: NavController,
+    viewModel: AroundViewModel = viewModel()
+) {
+    val accommodations = viewModel.getAccommodations()
     val sheetState = rememberStandardBottomSheetState(
         skipHiddenState = false
     )
@@ -88,6 +92,7 @@ fun AroundMeScreen(navController: NavController) {
         scaffoldState = scaffoldState,
         sheetContent = {
             BottomSheetContent(
+                accommodations = accommodations,
                 onClose = {
                     scope.launch { sheetState.hide() }
                 }
@@ -227,10 +232,13 @@ fun MapBackground() {
  * Bottom Sheet에 들어갈 콘텐츠 (현재는 Placeholder)
  */
 @Composable
-fun BottomSheetContent(onClose: () -> Unit) {
+fun BottomSheetContent(
+    accommodations: List<Accommodation>,
+    onClose: () -> Unit
+) {
     var selectedFilterIndex by remember { mutableStateOf(0) }
     val filters = listOf("추천순", "거리순", "가격순", "인기순", "평점순")
-    val nearbyAccommodations = remember { dummyAccommodations.shuffled().take(15) }
+    val nearbyAccommodations = remember { accommodations.shuffled().take(15) }
 
     Column(modifier = Modifier.fillMaxSize()) {
         BottomSheetHeader(

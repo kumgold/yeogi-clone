@@ -1,4 +1,4 @@
-package com.example.yeogi.feature.accommodation.data.remote
+package com.example.yeogi.core.model
 
 import androidx.compose.ui.graphics.vector.ImageVector
 
