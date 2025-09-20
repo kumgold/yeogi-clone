@@ -66,7 +66,7 @@ fun RoomSelectionScreen(
 
     LaunchedEffect(accommodationId) {
         scope.launch {
-            delay(1500)
+            delay(500)
             viewModel.loadRooms(accommodationId)
         }
     }

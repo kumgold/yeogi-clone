@@ -101,7 +101,7 @@ fun AccommodationScreen(
 
     LaunchedEffect(accommodationId) {
         scope.launch {
-            delay(1500)
+            delay(500)
             viewModel.getAccommodation(accommodationId)
         }
     }
