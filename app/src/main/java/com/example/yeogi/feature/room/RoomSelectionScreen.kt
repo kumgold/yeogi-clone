@@ -44,7 +44,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.yeogi.core.model.Accommodation
+import com.example.yeogi.core.presentation.SharedPaymentViewModel
 import com.example.yeogi.core.util.skeletonBackground
+import com.example.yeogi.core.util.toKRWString
 import com.example.yeogi.feature.room.data.remote.Room
 import com.example.yeogi.shared.ui.DateGuestSelectionBottomSheet
 import com.example.yeogi.shared.ui.DateGuestSelectionTopAppBar
@@ -56,6 +58,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun RoomSelectionScreen(
     accommodationId: Int,
+    sharedPaymentViewModel: SharedPaymentViewModel,
     viewModel: RoomSelectionViewModel = viewModel(),
     navigateToPayment: (Int) -> Unit,
     popBackStack: () -> Unit
@@ -67,7 +70,7 @@ fun RoomSelectionScreen(
     LaunchedEffect(accommodationId) {
         scope.launch {
             delay(500)
-            viewModel.loadRooms(accommodationId)
+            viewModel.loadRooms()
         }
     }
 
@@ -102,6 +105,7 @@ fun RoomSelectionScreen(
             rooms = uiState.rooms,
             onDateGuestChangeListener = { viewModel.openDateGuestSheet() },
             navigateToPayment = { roomId ->
+                sharedPaymentViewModel.selectedRoom = uiState.rooms.find { it.id == roomId }
                 navigateToPayment(roomId)
             },
             popBackStack = popBackStack
@@ -296,11 +300,14 @@ private fun RoomItem(
                             )
                             Spacer(Modifier.width(4.dp))
                             Text(
-                                text = room.originalPrice,
+                                text = room.originalPrice.toKRWString(),
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         }
-                        Text(room.price, style = MaterialTheme.typography.bodyLarge)
+                        Text(
+                            text = room.price.toKRWString(),
+                            style = MaterialTheme.typography.bodyLarge
+                        )
                     }
                     Button(onClick = { onBookingClick(room.id) }) {
                         Text(room.bookingStatus)

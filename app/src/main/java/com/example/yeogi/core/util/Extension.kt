@@ -41,3 +41,10 @@ fun Modifier.skeletonBackground(shape: Shape = RoundedCornerShape(4.dp)): Modifi
 
     background(brush, shape)
 }
+
+fun Int?.toKRWString(): String {
+    if (this == null) return "0"
+
+    val formatter = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.KOREA)
+    return formatter.format(this)
+}

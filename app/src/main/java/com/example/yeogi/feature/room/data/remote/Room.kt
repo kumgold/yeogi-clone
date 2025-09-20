@@ -4,8 +4,8 @@ data class Room(
     val id: Int,
     val accommodationId: Int,
     val name: String,
-    val price: String,
-    val originalPrice: String, // 할인 전 가격
+    val price: Int,
+    val originalPrice: Int, // 할인 전 가격
     val discountRate: String, // 할인율
     val imageUrl: String,
     val capacity: String, // ex) "기준 2인 / 최대 3인"

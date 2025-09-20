@@ -29,6 +29,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,95 +37,117 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.yeogi.feature.payment.data.PaymentDetails
+import com.example.yeogi.R
+import com.example.yeogi.core.presentation.SharedPaymentViewModel
+import com.example.yeogi.core.util.getFormattedMonthDay
+import com.example.yeogi.core.util.toKRWString
+import java.time.LocalDate
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PaymentScreen(
+    sharedPaymentViewModel: SharedPaymentViewModel,
     viewModel: PaymentViewModel = viewModel(),
     accommodationId: Int,
     roomId: Int,
     popBackStack: () -> Unit
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var bookerName by remember { mutableStateOf("") }
     var bookerPhone by remember { mutableStateOf("") }
-    var paymentMethod by remember { mutableStateOf("신용/체크카드") }
-    var allAgreed by remember { mutableStateOf(false) }
+    var paymentMethod by remember { mutableStateOf("신용카드") }
+    var allAgreed by remember { mutableStateOf(uiState.agreed) }
 
-    val paymentDetails = remember { PaymentDetails() }
+    LaunchedEffect(null) {
+        viewModel.setUiState(
+            accommodation = sharedPaymentViewModel.accommodation,
+            room = sharedPaymentViewModel.selectedRoom
+        )
+    }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("결제하기") },
-                navigationIcon = {
-                    IconButton(onClick = { popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+    if (uiState.accommodation == null) {
+
+    } else {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text(stringResource(R.string.reservation)) },
+                    navigationIcon = {
+                        IconButton(onClick = { popBackStack() }) {
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        }
                     }
+                )
+            },
+            bottomBar = {
+                PaymentBottomBar(
+                    price = "${uiState.room?.price.toKRWString()}원",
+                    isButtonEnabled = bookerName.isNotBlank() && bookerPhone.isNotBlank() && allAgreed,
+                    onPaymentClick = {
+                        // 결제 로직 실행
+                    }
+                )
+            }
+        ) { paddingValues ->
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            ) {
+                item {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    ReservationInfo(
+                        accommodationName = uiState.accommodation?.name,
+                        roomName = uiState.room?.name,
+                        startDate = uiState.startDate,
+                        endDate = uiState.endDate
+                    )
+                    SectionDivider()
                 }
-            )
-        },
-        bottomBar = {
-            PaymentBottomBar(
-                price = "${paymentDetails.totalPrice}원",
-                isButtonEnabled = bookerName.isNotBlank() && bookerPhone.isNotBlank() && allAgreed,
-                onPaymentClick = {
-                    // 결제 로직 실행
+
+                item {
+                    SectionTitle(title = stringResource(R.string.reservation_user_info))
+                    BookerInfoSection(
+                        name = bookerName,
+                        onNameChange = { bookerName = it },
+                        phone = bookerPhone,
+                        onPhoneChange = { bookerPhone = it }
+                    )
+                    SectionDivider()
                 }
-            )
-        }
-    ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(horizontal = 16.dp)
-        ) {
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
-                SectionTitle(title = "예약 정보")
-                ReservationInfo(details = paymentDetails)
-                SectionDivider()
-            }
 
-            item {
-                SectionTitle(title = "예약자 정보")
-                BookerInfoSection(
-                    name = bookerName,
-                    onNameChange = { bookerName = it },
-                    phone = bookerPhone,
-                    onPhoneChange = { bookerPhone = it }
-                )
-                SectionDivider()
-            }
+                item {
+                    SectionTitle(title = stringResource(R.string.mean_of_payment))
+                    PaymentMethodSection(
+                        selectedMethod = paymentMethod,
+                        onMethodSelected = { paymentMethod = it }
+                    )
+                    SectionDivider()
+                }
 
-            item {
-                SectionTitle(title = "결제 수단")
-                PaymentMethodSection(
-                    selectedMethod = paymentMethod,
-                    onMethodSelected = { paymentMethod = it }
-                )
-                SectionDivider()
-            }
+                item {
+                    SectionTitle(title = "할인 및 결제 정보")
+                    PriceSummarySection(
+                        price = uiState.room?.price!!
+                    )
+                    SectionDivider()
+                }
 
-            item {
-                SectionTitle(title = "최종 결제 금액")
-                PriceSummarySection(details = paymentDetails)
-                SectionDivider()
-            }
-
-            item {
-                TermsAgreementSection(
-                    isChecked = allAgreed,
-                    onCheckedChange = { allAgreed = it }
-                )
-                Spacer(modifier = Modifier.height(24.dp))
+                item {
+                    TermsAgreementSection(
+                        isChecked = allAgreed,
+                        onCheckedChange = { allAgreed = it }
+                    )
+                    Spacer(modifier = Modifier.height(24.dp))
+                }
             }
         }
     }
@@ -134,28 +157,40 @@ fun PaymentScreen(
 @Composable
 fun SectionTitle(title: String) {
     Text(
+        modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
         text = title,
         style = MaterialTheme.typography.titleLarge,
-        modifier = Modifier.padding(vertical = 12.dp)
     )
 }
 
 
 @Composable
-fun ReservationInfo(details: PaymentDetails) {
+fun ReservationInfo(
+    accommodationName: String?,
+    roomName: String?,
+    startDate: LocalDate,
+    endDate: LocalDate
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(horizontal = 16.dp)
             .border(1.dp, Color.LightGray, RoundedCornerShape(8.dp))
             .padding(16.dp)
     ) {
-        Text(details.accommodationName, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+        Text("$accommodationName", fontWeight = FontWeight.Bold, fontSize = 18.sp)
         Spacer(modifier = Modifier.height(4.dp))
-        Text(details.roomName, color = Color.Gray)
+        Text("$roomName", color = Color.Gray)
         HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
-        InfoRow(title = "체크인", value = details.checkInDate)
+        InfoRow(
+            title = stringResource(R.string.check_in),
+            value = startDate.getFormattedMonthDay()
+        )
         Spacer(modifier = Modifier.height(8.dp))
-        InfoRow(title = "체크아웃", value = details.checkOutDate)
+        InfoRow(
+            title = stringResource(R.string.check_out),
+            value = endDate.getFormattedMonthDay()
+        )
     }
 }
 
@@ -167,17 +202,20 @@ fun BookerInfoSection(
     phone: String,
     onPhoneChange: (String) -> Unit
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
         OutlinedTextField(
             value = name,
             onValueChange = onNameChange,
-            label = { Text("이름") },
+            label = { Text(stringResource(R.string.name)) },
             modifier = Modifier.fillMaxWidth()
         )
         OutlinedTextField(
             value = phone,
             onValueChange = onPhoneChange,
-            label = { Text("휴대폰 번호") },
+            label = { Text(stringResource(R.string.phone_number)) },
             modifier = Modifier.fillMaxWidth()
         )
     }
@@ -186,9 +224,9 @@ fun BookerInfoSection(
 
 @Composable
 fun PaymentMethodSection(selectedMethod: String, onMethodSelected: (String) -> Unit) {
-    val methods = listOf("신용/체크카드", "네이버페이", "카카오페이", "토스페이")
+    val methods = listOf("신용카드", "네이버페이", "카카오페이", "토스페이")
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         methods.forEach { method ->
@@ -222,10 +260,17 @@ fun PaymentMethodSection(selectedMethod: String, onMethodSelected: (String) -> U
 
 
 @Composable
-fun PriceSummarySection(details: PaymentDetails) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        InfoRow(title = "객실 요금", value = "${details.roomPrice}원")
-        InfoRow(title = "수수료", value = "${details.fees}원")
+fun PriceSummarySection(
+    price: Int
+) {
+    Column(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        val fee = price / 10
+
+        InfoRow(title = "객실 요금", value = "${price.toKRWString()}원")
+        InfoRow(title = "수수료", value = "${fee.toKRWString()}원")
         HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -234,7 +279,7 @@ fun PriceSummarySection(details: PaymentDetails) {
         ) {
             Text("총 결제 금액", fontWeight = FontWeight.Bold, fontSize = 16.sp)
             Text(
-                "${details.totalPrice}원",
+                "${(price + fee).toKRWString()}원",
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 color = MaterialTheme.colorScheme.primary
@@ -249,6 +294,7 @@ fun TermsAgreementSection(isChecked: Boolean, onCheckedChange: (Boolean) -> Unit
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(horizontal = 16.dp)
             .clickable { onCheckedChange(!isChecked) },
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -261,7 +307,7 @@ fun TermsAgreementSection(isChecked: Boolean, onCheckedChange: (Boolean) -> Unit
 @Composable
 fun InfoRow(title: String, value: String) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(title, color = Color.Gray)
@@ -282,7 +328,10 @@ fun SectionDivider() {
 
 @Composable
 fun PaymentBottomBar(price: String, isButtonEnabled: Boolean, onPaymentClick: () -> Unit) {
-    Surface(shadowElevation = 8.dp) {
+    Surface(
+        modifier = Modifier.padding(16.dp),
+        shadowElevation = 8.dp
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -315,6 +364,7 @@ fun PaymentBottomBar(price: String, isButtonEnabled: Boolean, onPaymentClick: ()
 fun PaymentScreenPreview() {
     MaterialTheme {
         PaymentScreen(
+            sharedPaymentViewModel = SharedPaymentViewModel(),
             accommodationId = 0,
             roomId = 0,
             popBackStack = {}

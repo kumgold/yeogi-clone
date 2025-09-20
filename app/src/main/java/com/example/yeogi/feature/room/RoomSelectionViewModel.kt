@@ -1,5 +1,6 @@
 package com.example.yeogi.feature.room
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.example.yeogi.core.presentation.SharedViewModel
 import com.example.yeogi.feature.room.data.remote.Room
@@ -22,8 +23,9 @@ data class RoomSelectionUiState(
         get() = "${startDate.getFormattedMonthDay()} - ${endDate.getFormattedMonthDay()} ∙ 인원 ${guestCount}명"
 }
 
-class RoomSelectionViewModel : SharedViewModel() {
+class RoomSelectionViewModel(savedStateHandle: SavedStateHandle) : SharedViewModel() {
     private val repository = RoomRepository()
+    private val accommodationId: Int? = savedStateHandle.get<Int>("accommodationId")
 
     private val _uiState = MutableStateFlow(
         RoomSelectionUiState(
@@ -54,9 +56,11 @@ class RoomSelectionViewModel : SharedViewModel() {
         super.setDateAndGuest(startDate, endDate, guest)
     }
 
-    fun loadRooms(accommodationId: Int) {
+    fun loadRooms() {
         viewModelScope.launch {
-            val rooms = repository.getRoomList(accommodationId)
+            val rooms = accommodationId?.let {
+                repository.getRoomList(it)
+            } ?: emptyList()
 
             _uiState.update {
                 it.copy(rooms = rooms)

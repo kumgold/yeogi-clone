@@ -1,9 +1,7 @@
 package com.example.yeogi.feature.accommodation
 
-import androidx.lifecycle.ViewModel
 import com.example.yeogi.core.model.Accommodation
 import com.example.yeogi.core.presentation.SharedViewModel
-import com.example.yeogi.core.repository.SharedRepository
 import com.example.yeogi.core.util.getFormattedMonthDay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
