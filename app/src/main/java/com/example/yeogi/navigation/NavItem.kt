@@ -12,5 +12,5 @@ sealed class NavItem(
         fun createRoute(accommodationId: Int) = "roomSelection/$accommodationId"
     }
     data object Payment: NavItem("payment", "결제")
-    data object Hotel: NavItem("hotel", "호텔 검색")
+    data object Hotel: NavItem("hotel", "호텔•리조트")
 }

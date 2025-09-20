@@ -61,7 +61,10 @@ fun HomeScreen(navController: NavController) {
 
             item {
                 ServiceCategorySection(
-                    serviceCategoryList = viewModel.serviceCategoryList
+                    serviceCategoryList = viewModel.serviceCategoryList,
+                    navigateToHotel = {
+                        navController.navigate(NavItem.Hotel.route)
+                    }
                 )
             }
 
@@ -117,7 +120,8 @@ fun HomeHeader() {
 
 @Composable
 fun ServiceCategorySection(
-    serviceCategoryList: List<ServiceCategory>
+    serviceCategoryList: List<ServiceCategory>,
+    navigateToHotel: () -> Unit,
 ) {
     val categories = remember { serviceCategoryList }
 
@@ -140,7 +144,13 @@ fun ServiceCategorySection(
                     rowItems.forEach { category ->
                         CategoryIcon(
                             modifier = Modifier.weight(1f),
-                            category = category
+                            category = category,
+                            onClick = { name ->
+                                when (name) {
+                                    "호텔•리조트" -> navigateToHotel()
+                                    else -> {}
+                                }
+                            }
                         )
                     }
                 }
@@ -153,10 +163,11 @@ fun ServiceCategorySection(
 @Composable
 fun CategoryIcon(
     modifier: Modifier = Modifier,
-    category: ServiceCategory
+    category: ServiceCategory,
+    onClick: (String) -> Unit
 ) {
     Column(
-        modifier = modifier.clickable { /* 각 카테고리 화면으로 이동 */ },
+        modifier = modifier.clickable { onClick(category.name) },
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Icon(

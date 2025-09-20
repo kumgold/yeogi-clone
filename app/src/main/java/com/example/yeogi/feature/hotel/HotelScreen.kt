@@ -90,7 +90,7 @@ fun HotelScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("호텔") },
+                title = { Text("호텔•리조트") },
                 navigationIcon = {
                     IconButton(onClick = { popBackStack() }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "뒤로가기")
