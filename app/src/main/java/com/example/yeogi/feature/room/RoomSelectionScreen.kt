@@ -57,7 +57,7 @@ import kotlinx.coroutines.launch
 fun RoomSelectionScreen(
     accommodationId: Int,
     viewModel: RoomSelectionViewModel = viewModel(),
-    navigateToPayment: () -> Unit,
+    navigateToPayment: (Int) -> Unit,
     popBackStack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -101,7 +101,9 @@ fun RoomSelectionScreen(
             dateRangeString = uiState.dateRangeString,
             rooms = uiState.rooms,
             onDateGuestChangeListener = { viewModel.openDateGuestSheet() },
-            navigateToPayment = navigateToPayment,
+            navigateToPayment = { roomId ->
+                navigateToPayment(roomId)
+            },
             popBackStack = popBackStack
         )
     }
@@ -213,7 +215,7 @@ private fun RoomSelectionContent(
     dateRangeString: String,
     rooms: List<Room>,
     onDateGuestChangeListener: () -> Unit,
-    navigateToPayment: () -> Unit,
+    navigateToPayment: (Int) -> Unit,
     popBackStack: () -> Unit
 ) {
     Scaffold(
@@ -235,7 +237,7 @@ private fun RoomSelectionContent(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(rooms) { room ->
-                RoomItem(room = room, onBookingClick = { navigateToPayment() })
+                RoomItem(room = room, onBookingClick = { navigateToPayment(room.id) })
             }
         }
     }

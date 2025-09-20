@@ -85,8 +85,11 @@ fun Navigation(navController: NavHostController) {
 
             RoomSelectionScreen(
                 accommodationId = accommodationId,
-                navigateToPayment = {
-                    navController.navigate(NavItem.Payment.route)
+                navigateToPayment = { roomId ->
+                    navController.navigate(NavItem.Payment.createRoute(
+                        accommodationId = accommodationId,
+                        roomId = roomId
+                    ))
                 },
                 popBackStack = {
                     navController.popBackStack()
@@ -94,9 +97,21 @@ fun Navigation(navController: NavHostController) {
             )
         }
         horizontalSlideComposable(
-            route = NavItem.Payment.route
-        ) {
+            route = NavItem.Payment.route,
+            arguments = listOf(
+                navArgument("accommodationId") { type = NavType.IntType },
+                navArgument("roomId") { type = NavType.IntType }
+            )
+        ) { backStackEntry ->
+            val accommodationId = backStackEntry.arguments?.getInt("accommodationId")
+            val roomId = backStackEntry.arguments?.getInt("roomId")
+
+            requireNotNull(accommodationId) { "Accommodation ID is required as an argument" }
+            requireNotNull(roomId) { "room ID is required as an argument" }
+
             PaymentScreen(
+                accommodationId = accommodationId,
+                roomId = roomId,
                 popBackStack = {
                     navController.popBackStack()
                 }

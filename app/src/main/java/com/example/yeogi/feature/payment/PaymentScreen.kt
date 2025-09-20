@@ -48,6 +48,8 @@ import com.example.yeogi.feature.payment.data.PaymentDetails
 @Composable
 fun PaymentScreen(
     viewModel: PaymentViewModel = viewModel(),
+    accommodationId: Int,
+    roomId: Int,
     popBackStack: () -> Unit
 ) {
     var bookerName by remember { mutableStateOf("") }
@@ -312,6 +314,10 @@ fun PaymentBottomBar(price: String, isButtonEnabled: Boolean, onPaymentClick: ()
 @Composable
 fun PaymentScreenPreview() {
     MaterialTheme {
-        PaymentScreen(popBackStack = {})
+        PaymentScreen(
+            accommodationId = 0,
+            roomId = 0,
+            popBackStack = {}
+        )
     }
 }
