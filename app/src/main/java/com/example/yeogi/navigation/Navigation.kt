@@ -23,27 +23,14 @@ import com.example.yeogi.feature.payment.PaymentScreen
 import com.example.yeogi.feature.room.RoomSelectionScreen
 import com.example.yeogi.feature.search.SearchScreen
 import com.example.yeogi.feature.searchdetail.SearchDetailScreen
+import com.example.yeogi.navigation.graph.homeGraph
 import com.example.yeogi.navigation.graph.paymentGraph
 
 @Composable
 fun Navigation(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = BottomNavItem.Home.route) {
-        composable(BottomNavItem.Home.route) {
-            HomeScreen(navController = navController)
-        }
+    NavHost(navController = navController, startDestination = Graph.HOME) {
+        homeGraph(navController = navController)
 
-        horizontalSlideComposable(BottomNavItem.AroundMe.route) {
-            AroundMeScreen(navController = navController)
-        }
-        horizontalSlideComposable(BottomNavItem.Favorites.route) {
-            FavoritesScreen(navController = navController)
-        }
-        horizontalSlideComposable(BottomNavItem.MyInfo.route) {
-            MyInfoScreen()
-        }
-        horizontalSlideComposable(BottomNavItem.Search.route) {
-            SearchScreen(navController = navController)
-        }
         horizontalSlideComposable(NavItem.SearchDetail.route) {
             SearchDetailScreen(
                 navigateToAccommodation = { id ->
@@ -54,6 +41,7 @@ fun Navigation(navController: NavHostController) {
                 }
             )
         }
+
         horizontalSlideComposable(
             route = NavItem.AccommodationDetail.route,
             arguments = listOf(
