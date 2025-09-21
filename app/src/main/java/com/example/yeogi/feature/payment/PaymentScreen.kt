@@ -16,7 +16,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -96,10 +98,25 @@ private fun PaymentContent(
     agreed: Boolean,
     popBackStack: () -> Unit
 ) {
+    var isOpenPaymentPopup by remember { mutableStateOf(false) }
     var bookerName by remember { mutableStateOf("") }
     var bookerPhone by remember { mutableStateOf("") }
     var paymentMethod by remember { mutableStateOf("신용카드") }
     var allAgreed by remember { mutableStateOf(agreed) }
+
+    if (isOpenPaymentPopup) {
+        PaymentConfirmationPopup(
+            accommodationName = accommodation.name,
+            roomName = room.name,
+            startDate = startDate,
+            endDate = endDate,
+            onDismissRequest = { isOpenPaymentPopup = false }, // 팝업 닫기
+            onConfirmClick = {
+                // TODO: 실제 결제 로직 실행
+                isOpenPaymentPopup = false // 결제 후 팝업 닫기
+            }
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -170,11 +187,112 @@ private fun PaymentContent(
                     price = room.price,
                     isButtonEnabled = bookerName.isNotBlank() && bookerPhone.isNotBlank() && allAgreed,
                     onPaymentClick = {
-                        // 결제 로직 실행
+                        isOpenPaymentPopup = true
                     }
                 )
             }
         }
+    }
+}
+
+
+@Composable
+fun PaymentConfirmationPopup(
+    accommodationName: String,
+    roomName: String,
+    startDate: LocalDate,
+    endDate: LocalDate,
+    onDismissRequest: () -> Unit,
+    onConfirmClick: () -> Unit
+) {
+    var agreedToCancellation by remember { mutableStateOf(false) }
+
+    AlertDialog(
+        containerColor = MaterialTheme.colorScheme.background,
+        onDismissRequest = onDismissRequest,
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    text = "예약 내역 확인",
+                    style = MaterialTheme.typography.titleLarge
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                PopupInfoRow(
+                    title = stringResource(R.string.accommodation),
+                    value = accommodationName
+                )
+                PopupInfoRow(
+                    title = stringResource(R.string.room),
+                    value = roomName
+                )
+                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                PopupInfoRow(
+                    title = stringResource(R.string.check_in),
+                    value = "${startDate.getFormattedMonthDay()} 15:00"
+                )
+                PopupInfoRow(
+                    title = stringResource(R.string.check_out),
+                    value = "${endDate.getFormattedMonthDay()} 11:00"
+                )
+                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+
+                // 경고 문구
+                Text(
+                    text = "예약 내용을 반드시 확인해주세요.\n취소 및 변경이 어려울 수 있습니다.",
+                    fontSize = 13.sp,
+                    color = MaterialTheme.colorScheme.error,
+                    lineHeight = 18.sp
+                )
+
+                // 취소 동의
+                Row(
+                    modifier = Modifier.clickable { agreedToCancellation = !agreedToCancellation },
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Checkbox(
+                        checked = agreedToCancellation,
+                        onCheckedChange = { agreedToCancellation = it }
+                    )
+                    Text(text = "취소 규정 동의 (필수)", fontSize = 14.sp)
+                }
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = onConfirmClick,
+                enabled = agreedToCancellation
+            ) {
+                Text(stringResource(R.string.payment))
+            }
+        },
+        dismissButton = {
+            Button(
+                onClick = onDismissRequest,
+                colors = ButtonDefaults.outlinedButtonColors()
+            ) {
+                Text(stringResource(R.string.cancel))
+            }
+        }
+    )
+}
+
+@Composable
+private fun PopupInfoRow(title: String, value: String) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = title,
+            modifier = Modifier.weight(0.3f),
+            color = Color.Gray,
+            style = MaterialTheme.typography.bodyMedium
+        )
+        Text(
+            text = value,
+            modifier = Modifier.weight(0.7f),
+            style = MaterialTheme.typography.bodyLarge
+        )
     }
 }
 
