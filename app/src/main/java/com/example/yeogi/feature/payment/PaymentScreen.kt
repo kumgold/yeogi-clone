@@ -111,15 +111,6 @@ private fun PaymentContent(
                     }
                 }
             )
-        },
-        bottomBar = {
-            PaymentBottomBar(
-                price = "${room.price.toKRWString()}원",
-                isButtonEnabled = bookerName.isNotBlank() && bookerPhone.isNotBlank() && allAgreed,
-                onPaymentClick = {
-                    // 결제 로직 실행
-                }
-            )
         }
     ) { paddingValues ->
         LazyColumn(
@@ -172,6 +163,16 @@ private fun PaymentContent(
                     onCheckedChange = { allAgreed = it }
                 )
                 Spacer(modifier = Modifier.height(24.dp))
+            }
+
+            item {
+                PaymentBottomBar(
+                    price = room.price,
+                    isButtonEnabled = bookerName.isNotBlank() && bookerPhone.isNotBlank() && allAgreed,
+                    onPaymentClick = {
+                        // 결제 로직 실행
+                    }
+                )
             }
         }
     }
@@ -351,32 +352,28 @@ fun SectionDivider() {
 
 
 @Composable
-fun PaymentBottomBar(price: String, isButtonEnabled: Boolean, onPaymentClick: () -> Unit) {
+fun PaymentBottomBar(
+    price: Int,
+    isButtonEnabled: Boolean,
+    onPaymentClick: () -> Unit
+) {
     Surface(
-        modifier = Modifier.padding(16.dp),
-        shadowElevation = 8.dp
+        modifier = Modifier.padding(vertical = 16.dp),
+        shadowElevation = 4.dp
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+        Box(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+            contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = price,
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold
-            )
             Button(
                 onClick = onPaymentClick,
                 enabled = isButtonEnabled,
                 modifier = Modifier
-                    .height(50.dp)
-                    .fillMaxWidth(0.6f),
+                    .fillMaxWidth()
+                    .height(50.dp),
                 shape = RoundedCornerShape(12.dp)
             ) {
-                Text("결제하기", fontSize = 16.sp)
+                Text("${price.toKRWString()}원 결제하기", fontSize = 16.sp)
             }
         }
     }

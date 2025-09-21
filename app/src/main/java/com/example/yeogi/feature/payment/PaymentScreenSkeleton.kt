@@ -20,7 +20,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -42,9 +41,6 @@ fun PaymentScreenSkeleton() {
                     }
                 }
             )
-        },
-        bottomBar = {
-            PaymentBottomBarSkeleton()
         }
     ) { paddingValues ->
         LazyColumn(
@@ -206,36 +202,5 @@ private fun TermsAgreementSectionSkeleton() {
         Spacer(modifier = Modifier.size(24.dp).skeletonBackground(RoundedCornerShape(2.dp)))
         Spacer(modifier = Modifier.width(12.dp))
         Spacer(modifier = Modifier.height(20.dp).fillMaxWidth(0.4f).skeletonBackground())
-    }
-}
-
-
-@Composable
-private fun PaymentBottomBarSkeleton() {
-    Surface(
-        modifier = Modifier.padding(16.dp),
-        shadowElevation = 8.dp,
-        shape = RoundedCornerShape(16.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Spacer(
-                modifier = Modifier
-                    .height(32.dp)
-                    .fillMaxWidth(0.3f)
-                    .skeletonBackground()
-            )
-            Spacer(
-                modifier = Modifier
-                    .height(50.dp)
-                    .fillMaxWidth(0.6f)
-                    .skeletonBackground(RoundedCornerShape(12.dp))
-            )
-        }
     }
 }
