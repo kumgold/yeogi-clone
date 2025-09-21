@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -79,7 +78,6 @@ import com.example.yeogi.R
 import com.example.yeogi.core.model.Accommodation
 import com.example.yeogi.core.model.Facility
 import com.example.yeogi.core.model.Review
-import com.example.yeogi.core.util.skeletonBackground
 import com.example.yeogi.shared.ui.DateGuestSelectionBottomSheet
 import com.example.yeogi.ui.theme.Yellow
 import kotlinx.coroutines.delay
@@ -128,7 +126,7 @@ fun AccommodationScreen(
     }
 
     if (uiState.accommodation == null) {
-        AccommodationSkeletonScreen(
+        AccommodationScreenSkeleton(
             popBackStack = popBackStack
         )
     } else {
@@ -143,102 +141,6 @@ fun AccommodationScreen(
             },
             popBackStack = popBackStack
         )
-    }
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun AccommodationSkeletonScreen(
-    popBackStack: () -> Unit
-) {
-    Column(
-        modifier = Modifier.statusBarsPadding()
-    ) {
-        TopAppBar(
-            title = {},
-            navigationIcon = {
-                IconButton(
-                    modifier = Modifier,
-                    onClick = { popBackStack() },
-                    colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = White
-                    )
-                ) {
-                    Icon(
-                        Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
-                        tint = Color.Black
-                    )
-                }
-            }
-        )
-        Column(modifier = Modifier.fillMaxSize()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(300.dp)
-                    .skeletonBackground()
-            )
-            Column(modifier = Modifier.padding(16.dp)) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(0.7f)
-                        .height(32.dp)
-                        .skeletonBackground()
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(0.3f)
-                        .height(20.dp)
-                        .skeletonBackground()
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(0.5f)
-                        .height(24.dp)
-                        .skeletonBackground()
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(0.4f)
-                        .height(24.dp)
-                        .skeletonBackground()
-                )
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(8.dp)
-                    .background(Color.LightGray.copy(alpha = 0.3f))
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(
-                modifier = Modifier.padding(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                repeat(5) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Box(
-                            modifier = Modifier
-                                .size(24.dp)
-                                .skeletonBackground(shape = CircleShape)
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Box(
-                            modifier = Modifier
-                                .width(50.dp)
-                                .height(16.dp)
-                                .skeletonBackground()
-                        )
-                    }
-                }
-            }
-        }
     }
 }
 

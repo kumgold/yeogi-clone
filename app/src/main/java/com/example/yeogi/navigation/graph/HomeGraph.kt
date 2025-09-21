@@ -10,7 +10,7 @@ import com.example.yeogi.feature.home.HomeScreen
 import com.example.yeogi.feature.info.MyInfoScreen
 import com.example.yeogi.feature.search.SearchScreen
 import com.example.yeogi.navigation.BottomNavItem
-import com.example.yeogi.navigation.Graph
+import com.example.yeogi.navigation.graph.Graph
 import com.example.yeogi.navigation.horizontalSlideComposable
 
 fun NavGraphBuilder.homeGraph(navController: NavHostController) {

@@ -1,7 +1,6 @@
 package com.example.yeogi.feature.room
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -14,19 +13,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -43,9 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import com.example.yeogi.core.model.Accommodation
 import com.example.yeogi.core.presentation.SharedPaymentViewModel
-import com.example.yeogi.core.util.skeletonBackground
 import com.example.yeogi.core.util.toKRWString
 import com.example.yeogi.feature.room.data.remote.Room
 import com.example.yeogi.shared.ui.DateGuestSelectionBottomSheet
@@ -96,7 +87,7 @@ fun RoomSelectionScreen(
     }
 
     if (uiState.rooms.isEmpty()) {
-        RoomItemSkeleton(
+        RoomScreenSkeleton(
             popBackStack = popBackStack
         )
     } else {
@@ -110,106 +101,6 @@ fun RoomSelectionScreen(
             },
             popBackStack = popBackStack
         )
-    }
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun RoomItemSkeleton(
-    popBackStack: () -> Unit
-) {
-    Column {
-        TopAppBar(
-            title = {},
-            navigationIcon = {
-                IconButton(
-                    modifier = Modifier,
-                    onClick = { popBackStack() },
-                    colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = White
-                    )
-                ) {
-                    Icon(
-                        Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
-                        tint = Color.Black
-                    )
-                }
-            }
-        )
-        Card(
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
-            shape = RoundedCornerShape(12.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-            colors = CardDefaults.cardColors(containerColor = White)
-        ) {
-            Column {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(180.dp)
-                        .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
-                        .skeletonBackground(),
-                )
-                Column(Modifier.padding(16.dp)) {
-                    Box(
-                        modifier = Modifier
-                            .height(20.dp)
-                            .width(50.dp)
-                            .skeletonBackground()
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Box(
-                        modifier = Modifier
-                            .height(20.dp)
-                            .width(50.dp)
-                            .skeletonBackground()
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                        repeat(5) {
-                            Box(
-                                modifier = Modifier
-                                    .height(12.dp)
-                                    .width(30.dp)
-                                    .skeletonBackground()
-                            )
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Column(horizontalAlignment = Alignment.End) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Box(
-                                    modifier = Modifier
-                                        .height(12.dp)
-                                        .width(30.dp)
-                                        .skeletonBackground()
-                                )
-                                Spacer(Modifier.width(4.dp))
-                                Box(
-                                    modifier = Modifier
-                                        .height(16.dp)
-                                        .width(40.dp)
-                                        .skeletonBackground()
-                                )
-                            }
-                        }
-                        Box(
-                            modifier = Modifier
-                                .height(24.dp)
-                                .width(80.dp)
-                                .skeletonBackground()
-                        )
-                    }
-                }
-            }
-        }
     }
 }
 

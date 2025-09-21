@@ -1,4 +1,4 @@
-package com.example.yeogi.navigation
+package com.example.yeogi.navigation.graph
 
 object Graph {
     const val HOME = "home_graph"

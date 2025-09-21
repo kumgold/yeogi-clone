@@ -23,6 +23,7 @@ import com.example.yeogi.feature.payment.PaymentScreen
 import com.example.yeogi.feature.room.RoomSelectionScreen
 import com.example.yeogi.feature.search.SearchScreen
 import com.example.yeogi.feature.searchdetail.SearchDetailScreen
+import com.example.yeogi.navigation.graph.Graph
 import com.example.yeogi.navigation.graph.homeGraph
 import com.example.yeogi.navigation.graph.paymentGraph
 

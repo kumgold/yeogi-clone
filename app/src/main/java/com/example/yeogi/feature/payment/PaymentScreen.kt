@@ -39,15 +39,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.yeogi.R
+import com.example.yeogi.core.model.Accommodation
 import com.example.yeogi.core.presentation.SharedPaymentViewModel
 import com.example.yeogi.core.util.getFormattedMonthDay
 import com.example.yeogi.core.util.toKRWString
+import com.example.yeogi.feature.room.data.remote.Room
+import kotlinx.coroutines.delay
 import java.time.LocalDate
 
 
@@ -61,93 +63,115 @@ fun PaymentScreen(
     popBackStack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    var bookerName by remember { mutableStateOf("") }
-    var bookerPhone by remember { mutableStateOf("") }
-    var paymentMethod by remember { mutableStateOf("신용카드") }
-    var allAgreed by remember { mutableStateOf(uiState.agreed) }
 
     LaunchedEffect(null) {
+        delay(500)
         viewModel.setUiState(
             accommodation = sharedPaymentViewModel.accommodation,
             room = sharedPaymentViewModel.selectedRoom
         )
     }
 
-    if (uiState.accommodation == null) {
-
+    if (uiState.accommodation == null && uiState.room == null) {
+        PaymentScreenSkeleton()
     } else {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text(stringResource(R.string.reservation)) },
-                    navigationIcon = {
-                        IconButton(onClick = { popBackStack() }) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                        }
+        PaymentContent(
+            accommodation = uiState.accommodation!!,
+            room = uiState.room!!,
+            startDate = uiState.startDate,
+            endDate = uiState.endDate,
+            agreed = uiState.agreed,
+            popBackStack = popBackStack
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PaymentContent(
+    accommodation: Accommodation,
+    room: Room,
+    startDate: LocalDate,
+    endDate: LocalDate,
+    agreed: Boolean,
+    popBackStack: () -> Unit
+) {
+    var bookerName by remember { mutableStateOf("") }
+    var bookerPhone by remember { mutableStateOf("") }
+    var paymentMethod by remember { mutableStateOf("신용카드") }
+    var allAgreed by remember { mutableStateOf(agreed) }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(stringResource(R.string.reservation)) },
+                navigationIcon = {
+                    IconButton(onClick = { popBackStack() }) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
+                }
+            )
+        },
+        bottomBar = {
+            PaymentBottomBar(
+                price = "${room.price.toKRWString()}원",
+                isButtonEnabled = bookerName.isNotBlank() && bookerPhone.isNotBlank() && allAgreed,
+                onPaymentClick = {
+                    // 결제 로직 실행
+                }
+            )
+        }
+    ) { paddingValues ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+                ReservationInfo(
+                    accommodationName = accommodation.name,
+                    roomName = room.name,
+                    startDate = startDate,
+                    endDate = endDate
                 )
-            },
-            bottomBar = {
-                PaymentBottomBar(
-                    price = "${uiState.room?.price.toKRWString()}원",
-                    isButtonEnabled = bookerName.isNotBlank() && bookerPhone.isNotBlank() && allAgreed,
-                    onPaymentClick = {
-                        // 결제 로직 실행
-                    }
-                )
+                SectionDivider()
             }
-        ) { paddingValues ->
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-            ) {
-                item {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    ReservationInfo(
-                        accommodationName = uiState.accommodation?.name,
-                        roomName = uiState.room?.name,
-                        startDate = uiState.startDate,
-                        endDate = uiState.endDate
-                    )
-                    SectionDivider()
-                }
 
-                item {
-                    SectionTitle(title = stringResource(R.string.reservation_user_info))
-                    BookerInfoSection(
-                        name = bookerName,
-                        onNameChange = { bookerName = it },
-                        phone = bookerPhone,
-                        onPhoneChange = { bookerPhone = it }
-                    )
-                    SectionDivider()
-                }
+            item {
+                SectionTitle(title = stringResource(R.string.reservation_user_info))
+                BookerInfoSection(
+                    name = bookerName,
+                    onNameChange = { bookerName = it },
+                    phone = bookerPhone,
+                    onPhoneChange = { bookerPhone = it }
+                )
+                SectionDivider()
+            }
 
-                item {
-                    SectionTitle(title = stringResource(R.string.mean_of_payment))
-                    PaymentMethodSection(
-                        selectedMethod = paymentMethod,
-                        onMethodSelected = { paymentMethod = it }
-                    )
-                    SectionDivider()
-                }
+            item {
+                SectionTitle(title = "할인 및 결제 정보")
+                PriceSummarySection(
+                    price = room.price
+                )
+                SectionDivider()
+            }
 
-                item {
-                    SectionTitle(title = "할인 및 결제 정보")
-                    PriceSummarySection(
-                        price = uiState.room?.price!!
-                    )
-                    SectionDivider()
-                }
+            item {
+                SectionTitle(title = stringResource(R.string.mean_of_payment))
+                PaymentMethodSection(
+                    selectedMethod = paymentMethod,
+                    onMethodSelected = { paymentMethod = it }
+                )
+                SectionDivider()
+            }
 
-                item {
-                    TermsAgreementSection(
-                        isChecked = allAgreed,
-                        onCheckedChange = { allAgreed = it }
-                    )
-                    Spacer(modifier = Modifier.height(24.dp))
-                }
+            item {
+                TermsAgreementSection(
+                    isChecked = allAgreed,
+                    onCheckedChange = { allAgreed = it }
+                )
+                Spacer(modifier = Modifier.height(24.dp))
             }
         }
     }
@@ -355,19 +379,5 @@ fun PaymentBottomBar(price: String, isButtonEnabled: Boolean, onPaymentClick: ()
                 Text("결제하기", fontSize = 16.sp)
             }
         }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun PaymentScreenPreview() {
-    MaterialTheme {
-        PaymentScreen(
-            sharedPaymentViewModel = SharedPaymentViewModel(),
-            accommodationId = 0,
-            roomId = 0,
-            popBackStack = {}
-        )
     }
 }
