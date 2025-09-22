@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.yeogi.core.model.Accommodation
+import com.example.yeogi.core.util.toKRWString
 
 /**
  * 세로 스크롤에 사용될 숙소 아이템
@@ -148,7 +149,7 @@ fun VerticalAccommodationItem(item: Accommodation) {
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = item.price,
+                        text = item.price.toKRWString(),
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 18.sp,
                     )

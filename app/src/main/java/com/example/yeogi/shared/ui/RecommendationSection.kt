@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.yeogi.core.model.Accommodation
+import com.example.yeogi.core.util.toKRWString
 
 @Composable
 fun RecommendationSection(
@@ -146,7 +147,10 @@ private fun AccommodationItem(
                 Text("특가", color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 Spacer(modifier = Modifier.width(4.dp))
             }
-            Text(text = accommodation.price, fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
+            Text(
+                text = accommodation.price.toKRWString(),
+                style = MaterialTheme.typography.bodyLarge
+            )
         }
     }
 }

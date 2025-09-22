@@ -24,18 +24,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.AcUnit
-import androidx.compose.material.icons.filled.BusinessCenter
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.FitnessCenter
-import androidx.compose.material.icons.filled.LocalParking
-import androidx.compose.material.icons.filled.Pool
-import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.filled.SmokeFree
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarRate
-import androidx.compose.material.icons.filled.Wifi
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -78,6 +70,7 @@ import com.example.yeogi.R
 import com.example.yeogi.core.model.Accommodation
 import com.example.yeogi.core.model.Facility
 import com.example.yeogi.core.model.Review
+import com.example.yeogi.core.util.toKRWString
 import com.example.yeogi.shared.ui.DateGuestSelectionBottomSheet
 import com.example.yeogi.ui.theme.Yellow
 import kotlinx.coroutines.delay
@@ -160,7 +153,7 @@ private fun AccommodationScreenContent(
         modifier = Modifier.navigationBarsPadding(),
         bottomBar = {
             BookingBottomBar(
-                price = accommodation.price,
+                price = accommodation.price.toKRWString(),
                 navigateToRoomSelection = {
                     navigateToRoomSelection(accommodation.id)
                 }
@@ -595,35 +588,6 @@ fun BookingBottomBar(
 @Preview(showBackground = true)
 @Composable
 fun AccommodationDetailScreenPreview() {
-    val sampleAccommodation = Accommodation(
-        id = 1,
-        name = "서울 시그니처 호텔",
-        rating = 4.9,
-        reviewCount = 2108,
-        price = "125,000원",
-        imageUrl = "https://images.unsplash.com/photo-1566073771259-6a8506099945",
-        category = "5성급 호텔",
-        address = "서울특별시 강남구 테헤란로 123",
-        isSpecialPrice = true,
-        facilities = listOf(
-            Facility(Icons.Default.Wifi, "무료 Wifi"),
-            Facility(Icons.Default.LocalParking, "주차가능"),
-            Facility(Icons.Default.Restaurant, "레스토랑"),
-            Facility(Icons.Default.Pool, "수영장"),
-            Facility(Icons.Default.FitnessCenter, "피트니스"),
-            Facility(Icons.Default.BusinessCenter, "비즈니스"),
-            Facility(Icons.Default.SmokeFree, "금연"),
-            Facility(Icons.Default.AcUnit, "에어컨")
-        ),
-        checkInTime = "15:00",
-        checkOutTime = "11:00",
-        notice = "코로나19 방역 수칙을 준수하고 있습니다. 일부 부대시설 이용이 제한될 수 있습니다.",
-        usageInfo = "• 모든 객실은 금연입니다.\n• 반려동물 동반 입실은 불가합니다.\n• 미성년자는 보호자 동반 없이 이용할 수 없습니다.",
-        reviews = listOf(
-            Review("여행가", 5.0, "정말 깨끗하고 좋았어요! 직원분들도 친절하고 위치도 최고입니다.", "2025.09.09"),
-            Review("김철수", 4.0, "전반적으로 만족하지만, 조식 메뉴가 조금 아쉬웠습니다.", "2025.09.05")
-        )
-    )
     MaterialTheme {
         AccommodationScreen(
             accommodationId = 1,

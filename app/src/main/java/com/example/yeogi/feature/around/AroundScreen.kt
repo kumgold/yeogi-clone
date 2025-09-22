@@ -68,6 +68,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.yeogi.SystemBarColor
 import com.example.yeogi.core.model.Accommodation
+import com.example.yeogi.core.util.toKRWString
 import com.example.yeogi.ui.theme.YeogiTheme
 import kotlinx.coroutines.launch
 
@@ -364,7 +365,7 @@ fun AccommodationListItem(item: Accommodation) {
                 Text(text = "${item.rating} (${item.reviewCount})", fontSize = 12.sp, color = Color.Gray)
             }
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = item.price, fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
+            Text(text = item.price.toKRWString(), fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
         }
     }
 }

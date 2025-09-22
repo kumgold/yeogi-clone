@@ -59,6 +59,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.yeogi.SystemBarColor
 import com.example.yeogi.core.model.Accommodation
+import com.example.yeogi.core.util.toKRWString
 import com.example.yeogi.ui.theme.YeogiTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -245,7 +246,7 @@ fun FavoriteItemCard(item: Accommodation) {
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = item.price,
+                        text = item.price.toKRWString(),
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 18.sp,
                         modifier = Modifier.align(Alignment.Bottom)
