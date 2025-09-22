@@ -1,5 +1,16 @@
 package com.example.yeogi.feature.hotel
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -11,6 +22,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,10 +35,11 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Star
@@ -40,7 +53,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,44 +64,27 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import com.example.yeogi.core.model.Accommodation
+import com.example.yeogi.core.util.toKRWString
 import com.example.yeogi.feature.hotel.data.HotelCategory
-import com.example.yeogi.feature.hotel.data.RecommendedHotel
 import com.example.yeogi.ui.theme.YeogiTheme
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HotelScreen(
+    viewModel: HotelViewModel = viewModel(),
     popBackStack: () -> Unit
 ) {
-    val categories = remember {
-        listOf(
-            HotelCategory("전체", "https://..."),
-            HotelCategory("5성급", "https://..."),
-            HotelCategory("리조트", "https://..."),
-            HotelCategory("가성비", "https://..."),
-            HotelCategory("호캉스", "https://..."),
-            HotelCategory("반려견", "https://..."),
-            HotelCategory("신규", "https://...")
-        )
-    }
-    val regions = remember {
-        listOf("서울", "경기", "인천", "강원", "부산", "제주", "여수", "경주", "전주")
-    }
-    val popularHotels = remember {
-        listOf(
-            RecommendedHotel(1, "조선 팰리스 서울 강남", "https://images.unsplash.com/photo-1566073771259-6a8506099945", 4.9, "450,000원"),
-            RecommendedHotel(2, "시그니엘 서울", "https://images.unsplash.com/photo-1582719508461-905c673771fd", 4.9, "550,000원"),
-            RecommendedHotel(3, "파라다이스시티", "https://images.unsplash.com/photo-1549294413-26f195200c16", 4.8, "380,000원"),
-            RecommendedHotel(4, "롯데호텔 제주", "https://images.unsplash.com/photo-1618773928121-c32242e63f39", 4.7, "320,000원")
-        )
-    }
-    val premiumHotels = remember { popularHotels.shuffled() }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -105,14 +104,14 @@ fun HotelScreen(
                 .padding(paddingValues),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            item { HotelCategorySection(categories = categories) }
+            item { HotelCategorySection(categories = uiState.categories) }
             item { HotelSearchSection() }
-            item { RegionSelectionSection(regions = regions) }
+            item { RegionSelectionSection(regions = uiState.regions) }
             item { AdBannerSection() }
             item {
                 HotelRecommendationSection(
                     title = "요즘 뜨는 호텔",
-                    hotels = popularHotels,
+                    hotels = uiState.popularHotels,
                     onItemClick = { /* 호텔 상세로 이동 */ },
                     onViewAllClick = { /* 전체보기 화면으로 이동 */ }
                 )
@@ -120,12 +119,11 @@ fun HotelScreen(
             item {
                 HotelRecommendationSection(
                     title = "프리미엄 블랙",
-                    hotels = premiumHotels,
+                    hotels = uiState.premiumHotels,
                     onItemClick = { /* 호텔 상세로 이동 */ },
                     onViewAllClick = { /* 전체보기 화면으로 이동 */ }
                 )
             }
-            item { Spacer(modifier = Modifier.height(16.dp)) }
         }
     }
 }
@@ -145,14 +143,14 @@ private fun HotelCategorySection(categories: List<HotelCategory>) {
                 AsyncImage(
                     modifier = Modifier
                         .size(60.dp)
-                        .clip(CircleShape)
+                        .clip(RoundedCornerShape(8.dp))
                         .background(Color.LightGray),
                     model = category.imageUrl,
                     contentDescription = category.name,
                     contentScale = ContentScale.Crop,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(text = category.name, fontSize = 13.sp)
+                Text(text = category.name, style = MaterialTheme.typography.bodyMedium)
             }
         }
     }
@@ -176,26 +174,102 @@ private fun HotelSearchSection() {
 }
 
 @Composable
-private fun RegionSelectionSection(regions: List<String>) {
+private fun RegionSelectionSection(regions: Map<String, List<String>>) {
+    var expandedRegion by remember { mutableStateOf<String?>(null) }
+
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         Text("어디로 떠나볼까요?", style = MaterialTheme.typography.titleLarge)
         Spacer(modifier = Modifier.height(16.dp))
-        LazyVerticalGrid(
-            modifier = Modifier.height(150.dp),
-            columns = GridCells.Fixed(3),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            userScrollEnabled = false
+
+        val chunkedRegions = regions.keys.chunked(3)
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(BorderStroke(1.dp, Color.LightGray))
         ) {
-            items(regions) { region ->
-                Box(
-                    modifier = Modifier
-                        .border(BorderStroke(1.dp, Color.LightGray), shape = RectangleShape)
-                        .clickable { /* TODO: 해당 지역으로 검색 */ }
-                        .padding(vertical = 12.dp),
-                    contentAlignment = Alignment.Center
+            chunkedRegions.forEachIndexed { rowIndex, rowItems ->
+                Row(Modifier.fillMaxWidth()) {
+                    rowItems.forEachIndexed { itemIndex, region ->
+                        Box(
+                            modifier = Modifier
+                                .weight(1f)
+                                .clickable {
+                                    expandedRegion = if (expandedRegion == region) null else region
+                                }
+                                .padding(vertical = 12.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = region,
+                                style = MaterialTheme.typography.labelMedium
+                            )
+                        }
+
+                        if (itemIndex < rowItems.size - 1) {
+                            Box(
+                                modifier = Modifier
+                                    .width(1.dp)
+                                    .height(42.dp)
+                                    .background(Color.LightGray)
+                            )
+                        }
+                    }
+                }
+
+                AnimatedVisibility(
+                    visible = rowItems.contains(expandedRegion),
+                    enter = expandVertically(animationSpec = tween(300)) + fadeIn(animationSpec = tween(300)),
+                    exit = shrinkVertically(animationSpec = tween(300)) + fadeOut(animationSpec = tween(300))
                 ) {
-                    Text(text = region, fontSize = 14.sp)
+                    val details = regions[expandedRegion].orEmpty()
+                    ExpandedDetailView(details = details)
+                }
+
+                if (rowIndex < chunkedRegions.size - 1) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(1.dp)
+                            .background(Color.LightGray)
+                    )
+                }
+            }
+        }
+    }
+}
+
+/**
+ * 확장되었을 때 보여줄 상세 지역 그리드 Composable
+ */
+@Composable
+private fun ExpandedDetailView(details: List<String>) {
+    val chunkedDetails = details.chunked(4)
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.Gray.copy(alpha = 0.05f))
+            .padding(8.dp)
+    ) {
+        chunkedDetails.forEach { rowItems ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                rowItems.forEach { detail ->
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(RoundedCornerShape(4.dp))
+                            .clickable { /* TODO: 상세 지역($detail)으로 검색 */ }
+                            .padding(vertical = 8.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(text = detail, style = MaterialTheme.typography.labelMedium)
+                    }
+                }
+                repeat(4 - rowItems.size) {
+                    Spacer(modifier = Modifier.weight(1f))
                 }
             }
         }
@@ -214,7 +288,7 @@ private fun AdBannerSection() {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Gray.copy(alpha = 0.3f)), // Placeholder
+                .background(Color.Gray.copy(alpha = 0.3f)),
             contentAlignment = Alignment.Center
         ) {
             Text("광고 배너 영역", color = Color.White)
@@ -225,10 +299,31 @@ private fun AdBannerSection() {
 @Composable
 private fun HotelRecommendationSection(
     title: String,
-    hotels: List<RecommendedHotel>,
+    hotels: List<Accommodation>,
     onItemClick: (Int) -> Unit,
     onViewAllClick: () -> Unit
 ) {
+    if (hotels.isEmpty()) return
+
+    // 화면 너비를 기준으로 그리드의 동적 높이를 계산
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
+    // 그리드 아이템 하나의 너비 계산
+    // 양쪽 패딩(16*2)과 아이템 사이 간격(12)을 제외한 공간을 2로 나눔
+    val itemWidth = (screenWidth - 32.dp - 12.dp) / 2
+
+    // 아이템 하나의 높이 추정
+    // 이미지 높이(너비와 동일) + 하단 텍스트 영역 높이(여유있게 80dp로 설정)
+    val itemHeight = itemWidth + 80.dp
+
+    // 총 행(row)의 개수 계산 (2열 그리드이므로 아이템 개수를 2로 나눈 올림)
+    val numberOfRows = (hotels.size + 1) / 2
+
+    // 그리드의 전체 높이 계산
+    // (아이템 높이 * 행 개수) + (행 사이 간격 * (행 개수 - 1))
+    val gridHeight = (itemHeight * numberOfRows) + (12.dp * (numberOfRows - 1))
+
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -254,7 +349,7 @@ private fun HotelRecommendationSection(
             columns = GridCells.Fixed(2),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.height(480.dp),
+            modifier = Modifier.height(gridHeight),
             userScrollEnabled = false
         ) {
             items(hotels) { hotel ->
@@ -265,7 +360,7 @@ private fun HotelRecommendationSection(
 }
 
 @Composable
-private fun HotelCard(hotel: RecommendedHotel, onClick: () -> Unit) {
+private fun HotelCard(hotel: Accommodation, onClick: () -> Unit) {
     Column(modifier = Modifier.clickable(onClick = onClick)) {
         AsyncImage(
             modifier = Modifier
@@ -293,7 +388,10 @@ private fun HotelCard(hotel: RecommendedHotel, onClick: () -> Unit) {
             Spacer(modifier = Modifier.width(4.dp))
             Text(text = hotel.rating.toString(), fontSize = 14.sp)
         }
-        Text(text = hotel.price, fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
+        Text(
+            text = hotel.price.toKRWString(),
+            style = MaterialTheme.typography.bodyLarge
+        )
     }
 }
 
