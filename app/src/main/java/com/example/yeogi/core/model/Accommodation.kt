@@ -5,7 +5,7 @@ data class Accommodation(
     val name: String,
     val rating: Double,
     val reviewCount: Int,
-    val price: String,
+    val price: Int,
     val imageUrl: String,
     val category: String,
     val address: String,

@@ -2,7 +2,7 @@ package com.example.yeogi.core.presentation
 
 import androidx.lifecycle.ViewModel
 import com.example.yeogi.core.model.Accommodation
-import com.example.yeogi.core.repository.SharedRepository
+import com.example.yeogi.core.data.repository.SharedRepository
 import java.time.LocalDate
 
 open class SharedViewModel : ViewModel() {

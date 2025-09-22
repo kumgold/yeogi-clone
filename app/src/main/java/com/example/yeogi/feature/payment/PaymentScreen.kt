@@ -110,10 +110,9 @@ private fun PaymentContent(
             roomName = room.name,
             startDate = startDate,
             endDate = endDate,
-            onDismissRequest = { isOpenPaymentPopup = false }, // 팝업 닫기
+            onDismissRequest = { isOpenPaymentPopup = false },
             onConfirmClick = {
-                // TODO: 실제 결제 로직 실행
-                isOpenPaymentPopup = false // 결제 후 팝업 닫기
+                isOpenPaymentPopup = false
             }
         )
     }
@@ -236,7 +235,6 @@ fun PaymentConfirmationPopup(
                 )
                 HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
-                // 경고 문구
                 Text(
                     text = "예약 내용을 반드시 확인해주세요.\n취소 및 변경이 어려울 수 있습니다.",
                     fontSize = 13.sp,
@@ -244,7 +242,6 @@ fun PaymentConfirmationPopup(
                     lineHeight = 18.sp
                 )
 
-                // 취소 동의
                 Row(
                     modifier = Modifier.clickable { agreedToCancellation = !agreedToCancellation },
                     verticalAlignment = Alignment.CenterVertically
@@ -412,8 +409,8 @@ fun PriceSummarySection(
     ) {
         val fee = price / 10
 
-        InfoRow(title = "객실 요금", value = "${price.toKRWString()}원")
-        InfoRow(title = "수수료", value = "${fee.toKRWString()}원")
+        InfoRow(title = "객실 요금", value = price.toKRWString())
+        InfoRow(title = "수수료", value = fee.toKRWString())
         HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -422,7 +419,7 @@ fun PriceSummarySection(
         ) {
             Text("총 결제 금액", fontWeight = FontWeight.Bold, fontSize = 16.sp)
             Text(
-                "${(price + fee).toKRWString()}원",
+                (price + fee).toKRWString(),
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 color = MaterialTheme.colorScheme.primary
@@ -491,7 +488,7 @@ fun PaymentBottomBar(
                     .height(50.dp),
                 shape = RoundedCornerShape(12.dp)
             ) {
-                Text("${price.toKRWString()}원 결제하기", fontSize = 16.sp)
+                Text("${price.toKRWString()} 결제하기", fontSize = 16.sp)
             }
         }
     }

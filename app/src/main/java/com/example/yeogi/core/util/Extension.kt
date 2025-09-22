@@ -46,5 +46,5 @@ fun Int?.toKRWString(): String {
     if (this == null) return "0"
 
     val formatter = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.KOREA)
-    return formatter.format(this)
+    return "${formatter.format(this)}원"
 }
