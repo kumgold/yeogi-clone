@@ -1,16 +1,11 @@
 package com.example.yeogi.feature.hotel
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -22,7 +17,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -38,8 +32,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Star
@@ -61,7 +53,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -82,6 +73,8 @@ import com.example.yeogi.ui.theme.YeogiTheme
 @Composable
 fun HotelScreen(
     viewModel: HotelViewModel = viewModel(),
+    navigateToAccommodation: (Int) -> Unit,
+    navigateToSearchDetail: () -> Unit,
     popBackStack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -104,7 +97,12 @@ fun HotelScreen(
                 .padding(paddingValues),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            item { HotelCategorySection(categories = uiState.categories) }
+            item {
+                HotelCategorySection(
+                    categories = uiState.categories,
+                    navigateToSearchDetail = navigateToSearchDetail
+                )
+            }
             item { HotelSearchSection() }
             item { RegionSelectionSection(regions = uiState.regions) }
             item { AdBannerSection() }
@@ -112,7 +110,7 @@ fun HotelScreen(
                 HotelRecommendationSection(
                     title = "요즘 뜨는 호텔",
                     hotels = uiState.popularHotels,
-                    onItemClick = { /* 호텔 상세로 이동 */ },
+                    onItemClick = { id -> navigateToAccommodation(id) },
                     onViewAllClick = { /* 전체보기 화면으로 이동 */ }
                 )
             }
@@ -120,7 +118,7 @@ fun HotelScreen(
                 HotelRecommendationSection(
                     title = "프리미엄 블랙",
                     hotels = uiState.premiumHotels,
-                    onItemClick = { /* 호텔 상세로 이동 */ },
+                    onItemClick = { id -> navigateToAccommodation(id) },
                     onViewAllClick = { /* 전체보기 화면으로 이동 */ }
                 )
             }
@@ -128,9 +126,11 @@ fun HotelScreen(
     }
 }
 
-
 @Composable
-private fun HotelCategorySection(categories: List<HotelCategory>) {
+private fun HotelCategorySection(
+    categories: List<HotelCategory>,
+    navigateToSearchDetail: () -> Unit
+) {
     LazyRow(
         contentPadding = PaddingValues(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -138,7 +138,7 @@ private fun HotelCategorySection(categories: List<HotelCategory>) {
         items(categories) { category ->
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.clickable {  }
+                modifier = Modifier.clickable { navigateToSearchDetail() }
             ) {
                 AsyncImage(
                     modifier = Modifier
@@ -441,6 +441,8 @@ private fun SearchInfoRow(
 fun HotelScreenPreview() {
     YeogiTheme {
         HotelScreen(
+            navigateToAccommodation = {},
+            navigateToSearchDetail = {},
             popBackStack = {}
         )
     }

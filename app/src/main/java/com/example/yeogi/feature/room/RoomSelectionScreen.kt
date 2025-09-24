@@ -104,7 +104,6 @@ fun RoomSelectionScreen(
     }
 }
 
-
 @Composable
 private fun RoomSelectionContent(
     dateRangeString: String,
@@ -137,7 +136,6 @@ private fun RoomSelectionContent(
         }
     }
 }
-
 
 @Composable
 private fun RoomItem(

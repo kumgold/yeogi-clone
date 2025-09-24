@@ -137,7 +137,6 @@ fun AccommodationScreen(
     }
 }
 
-
 @Composable
 private fun AccommodationScreenContent(
     accommodation: Accommodation,
@@ -200,7 +199,6 @@ private fun AccommodationScreenContent(
         )
     }
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -282,7 +280,6 @@ fun AccommodationAppBar(
     )
 }
 
-
 @Composable
 fun ImageHeader(
     accommodation: Accommodation
@@ -297,7 +294,6 @@ fun ImageHeader(
         )
     }
 }
-
 
 @Composable
 fun MainInfoSection(accommodation: Accommodation) {
@@ -363,7 +359,6 @@ fun MainInfoSection(accommodation: Accommodation) {
     }
 }
 
-
 @Composable
 fun FacilityInfoSection(facilities: List<Facility>) {
     LazyRow(
@@ -375,7 +370,6 @@ fun FacilityInfoSection(facilities: List<Facility>) {
         }
     }
 }
-
 
 @Composable
 fun FacilityItem(facility: Facility) {
@@ -390,7 +384,6 @@ fun FacilityItem(facility: Facility) {
         Text(facility.name, fontSize = 12.sp)
     }
 }
-
 
 @Composable
 fun LocationSection() {
@@ -411,7 +404,6 @@ fun LocationSection() {
         }
     }
 }
-
 
 @Composable
 fun UsageInfoSection(checkIn: String, checkOut: String, usageInfo: String) {
@@ -435,7 +427,6 @@ fun UsageInfoSection(checkIn: String, checkOut: String, usageInfo: String) {
     }
 }
 
-
 @Composable
 fun NoticeSection(notice: String) {
     Column(modifier = Modifier.padding(16.dp)) {
@@ -451,7 +442,6 @@ fun NoticeSection(notice: String) {
         )
     }
 }
-
 
 @Composable
 fun ReviewSection(rating: Double, reviews: List<Review>) {
@@ -493,7 +483,6 @@ fun ReviewSection(rating: Double, reviews: List<Review>) {
     }
 }
 
-
 @Composable
 fun ReviewItem(review: Review) {
     Column(modifier = Modifier.padding(vertical = 8.dp)) {
@@ -522,7 +511,6 @@ fun ReviewItem(review: Review) {
     }
 }
 
-
 @Composable
 fun SectionDivider() {
     HorizontalDivider(
@@ -530,7 +518,6 @@ fun SectionDivider() {
         color = Color.LightGray.copy(alpha = 0.3f)
     )
 }
-
 
 @Composable
 fun InfoRow(title: String, value: String) {
@@ -543,7 +530,6 @@ fun InfoRow(title: String, value: String) {
         Text(value, fontWeight = FontWeight.Bold, fontSize = 16.sp)
     }
 }
-
 
 @Composable
 fun BookingBottomBar(
@@ -583,7 +569,6 @@ fun BookingBottomBar(
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

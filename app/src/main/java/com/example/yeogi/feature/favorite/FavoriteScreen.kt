@@ -257,7 +257,6 @@ fun FavoriteItemCard(item: Accommodation) {
     }
 }
 
-
 @Composable
 fun EmptyFavoritesView(message: String = "찜 내역이 없어요.") {
     Box(

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -65,8 +66,13 @@ fun SearchDetailScreen(
         viewModel.getAccommodations().toList()
     }
 
-    Scaffold(
-        topBar = {
+    LazyColumn(
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.background)
+            .statusBarsPadding()
+            .fillMaxSize()
+    ) {
+        item {
             SearchResultTopBar(
                 searchQuery = "강남",
                 startDate = LocalDate.now(),
@@ -76,55 +82,46 @@ fun SearchDetailScreen(
                 onSearchClick = { /* 검색 화면으로 이동 */ },
                 onKeywordSearchClick = { /* 키워드 검색 로직 */ }
             )
-        },
-        containerColor = Color.White
-    ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
-        ) {
-            item {
-                AccommodationTypeFilter()
-            }
+        }
 
-            item {
-                FilterChips()
-            }
+        item {
+            AccommodationTypeFilter()
+        }
 
-            // 여기어때 추천 숙소
-            item {
-                Column(Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)) {
-                    Text(
-                        text = "여기어때 추천",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.ExtraBold,
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
-                    VerticalAccommodationItem(item = recommendedAccommodation)
-                }
-            }
+        item {
+            FilterChips()
+        }
 
-            item {
-                RecommendationSection(
-                    title = "지금 지역에서 주목할 숙소",
-                    accommodations = horizontalAccommodations,
-                    isAd = true,
-                    onItemClick = { id ->
-                        navigateToAccommodation(id)
-                    }
+        item {
+            Column(Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)) {
+                Text(
+                    text = "여기어때 추천",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.ExtraBold,
                 )
+                Spacer(modifier = Modifier.height(12.dp))
+                VerticalAccommodationItem(item = recommendedAccommodation)
             }
+        }
 
-            items(verticalAccommodations) { accommodation ->
-                Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)) {
-                    VerticalAccommodationItem(item = accommodation)
+        item {
+            RecommendationSection(
+                title = "지금 지역에서 주목할 숙소",
+                accommodations = horizontalAccommodations,
+                isAd = true,
+                onItemClick = { id ->
+                    navigateToAccommodation(id)
                 }
+            )
+        }
+
+        items(verticalAccommodations) { accommodation ->
+            Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)) {
+                VerticalAccommodationItem(item = accommodation)
             }
         }
     }
 }
-
 
 @Composable
 fun SearchResultTopBar(
@@ -165,7 +162,6 @@ fun SearchResultTopBar(
     }
 }
 
-
 @Composable
 fun SearchKeywordField(
     modifier: Modifier,
@@ -186,7 +182,6 @@ fun SearchKeywordField(
         Text("숙소 이름으로 검색", color = Color.Gray, fontSize = 15.sp)
     }
 }
-
 
 @Composable
 fun AccommodationTypeFilter() {
@@ -231,7 +226,6 @@ fun AccommodationTypeFilter() {
         }
     }
 }
-
 
 @Composable
 fun FilterChips() {

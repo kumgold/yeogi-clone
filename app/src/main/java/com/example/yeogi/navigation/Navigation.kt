@@ -70,6 +70,12 @@ fun Navigation(navController: NavHostController) {
             route = NavItem.Hotel.route
         ) {
             HotelScreen(
+                navigateToAccommodation = { id ->
+                    navController.navigate(NavItem.AccommodationDetail.createRoute(id))
+                },
+                navigateToSearchDetail = {
+                    navController.navigate(NavItem.SearchDetail.route)
+                },
                 popBackStack = {
                     navController.popBackStack()
                 }

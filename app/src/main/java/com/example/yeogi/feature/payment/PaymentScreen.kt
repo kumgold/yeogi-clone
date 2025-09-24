@@ -194,7 +194,6 @@ private fun PaymentContent(
     }
 }
 
-
 @Composable
 fun PaymentConfirmationPopup(
     accommodationName: String,
@@ -293,7 +292,6 @@ private fun PopupInfoRow(title: String, value: String) {
     }
 }
 
-
 @Composable
 fun SectionTitle(title: String) {
     Text(
@@ -302,7 +300,6 @@ fun SectionTitle(title: String) {
         style = MaterialTheme.typography.titleLarge,
     )
 }
-
 
 @Composable
 fun ReservationInfo(
@@ -334,7 +331,6 @@ fun ReservationInfo(
     }
 }
 
-
 @Composable
 fun BookerInfoSection(
     name: String,
@@ -360,7 +356,6 @@ fun BookerInfoSection(
         )
     }
 }
-
 
 @Composable
 fun PaymentMethodSection(selectedMethod: String, onMethodSelected: (String) -> Unit) {
@@ -398,7 +393,6 @@ fun PaymentMethodSection(selectedMethod: String, onMethodSelected: (String) -> U
     }
 }
 
-
 @Composable
 fun PriceSummarySection(
     price: Int
@@ -428,7 +422,6 @@ fun PriceSummarySection(
     }
 }
 
-
 @Composable
 fun TermsAgreementSection(isChecked: Boolean, onCheckedChange: (Boolean) -> Unit) {
     Row(
@@ -443,7 +436,6 @@ fun TermsAgreementSection(isChecked: Boolean, onCheckedChange: (Boolean) -> Unit
     }
 }
 
-
 @Composable
 fun InfoRow(title: String, value: String) {
     Row(
@@ -455,7 +447,6 @@ fun InfoRow(title: String, value: String) {
     }
 }
 
-
 @Composable
 fun SectionDivider() {
     HorizontalDivider(
@@ -464,7 +455,6 @@ fun SectionDivider() {
         color = Color.LightGray.copy(alpha = 0.3f)
     )
 }
-
 
 @Composable
 fun PaymentBottomBar(
