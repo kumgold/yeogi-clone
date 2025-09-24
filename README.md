@@ -23,6 +23,48 @@ Server : Firebase <br>
   <img src="./images/yeogi-6.png" width="24%">
 </p>
 
+## 프로젝트 구조
+```markdown
+yeogi-clone/
+    ├── core/
+    │   ├── data/...
+    │   ├── model/...
+    │   ├── util/...
+    │   └── presentation/...
+    ├── main/
+    │   └── MainScreen.kt
+    ├── feature/
+    │   ├── home/
+    │   │   ├── data/
+    │   │   │   ├── local/...
+    │   │   │   └── repository/...
+    │   │   ├── HomeScreen.kt
+    │   │   └── HomeViewModel.kt
+    │   ├── hotel/
+    │   │   ├── data/
+    │   │   │   └── HotelCategory.kt
+    │   │   ├── HotelScreen.kt
+    │   │   └── HotelViewModel.kt
+    │   ├── accommodation/
+    │   │   ├── AccommodationScreen.kt
+    │   │   └── AccommodationViewModel.kt
+    │   ├── payment/
+    │   │   ├── data/
+    │   │   │   └── PaymentDetail.kt
+    │   │   ├── PaymentScreen.kt
+    │   │   └── PaymentViewModel.kt
+    │   │ ...
+    ├── navigation/
+    │   │   ├── graph/
+    │   │   │   └── HomeGraph.kt
+    │   │   ├── Navigation.kt
+    │   │   └── NavItem.kt
+    ├── shared/
+    │   ├── ui/
+    │   │   └── RecentHistorySection.kt
+    │   │   ...
+    └── MainActivity.kt
+```
 
 ## 👀 개발 과정에서 발생한 이슈
 
