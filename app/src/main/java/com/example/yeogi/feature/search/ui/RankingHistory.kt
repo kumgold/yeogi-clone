@@ -30,10 +30,14 @@ import androidx.compose.ui.unit.sp
 fun SearchRankingSection(rankings: List<String>) {
     Column(
         modifier = Modifier
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
             .padding(16.dp)
     ) {
-        Text("여기어때 검색 순위", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+        Text(
+            text = "여기어때 검색 순위",
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onBackground
+        )
         Spacer(modifier = Modifier.height(16.dp))
         Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
             rankings.chunked(2).forEach { (first, secondOrNull) ->
@@ -56,19 +60,22 @@ fun SearchRankingSection(rankings: List<String>) {
 @Composable
 private fun RankingItem(rank: Int, keyword: String, modifier: Modifier = Modifier) {
     Row(
-        modifier = modifier.clickable { /* 순위 클릭 이벤트 */ },
+        modifier = modifier.background(MaterialTheme.colorScheme.background).clickable { /* 순위 클릭 이벤트 */ },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = "$rank",
-            color = if (rank <= 3) MaterialTheme.colorScheme.primary else Color.Black,
-            fontWeight = FontWeight.ExtraBold,
-            fontSize = 16.sp,
+            color = if (rank <= 3) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground,
+            style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
             modifier = Modifier.width(24.dp)
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Text(keyword, fontSize = 16.sp)
+        Text(
+            text = keyword,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onBackground
+        )
         Spacer(modifier = Modifier.width(4.dp))
         when {
             rank in 1..3 -> Icon(Icons.Default.ArrowDropUp, contentDescription = "상승", tint = Color.Red, modifier = Modifier.size(20.dp))

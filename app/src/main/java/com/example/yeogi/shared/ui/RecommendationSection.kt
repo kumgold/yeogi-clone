@@ -1,5 +1,6 @@
 package com.example.yeogi.shared.ui
 
+import android.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -40,6 +41,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.yeogi.core.model.Accommodation
 import com.example.yeogi.core.util.toKRWString
+import com.example.yeogi.ui.theme.Yellow
 
 @Composable
 fun RecommendationSection(
@@ -61,22 +63,27 @@ fun RecommendationSection(
                     text = title,
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.ExtraBold,
+                    color = MaterialTheme.colorScheme.onBackground
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 if (isAd) {
                     Text(
-                        text = "AD",
-                        color = Color.Gray,
-                        fontSize = 12.sp,
                         modifier = Modifier
                             .background(Color(0xFFEEEEEE), CircleShape)
-                            .padding(horizontal = 6.dp, vertical = 2.dp)
+                            .padding(horizontal = 6.dp, vertical = 2.dp),
+                        text = "AD",
+                        color = MaterialTheme.colorScheme.background,
+                        fontSize = 12.sp,
                     )
                 }
             }
 
             TextButton(onClick = { /* 전체보기 */ }) {
-                Text("전체보기", fontWeight = FontWeight.SemiBold, color = Color.Gray)
+                Text(
+                    text = "전체보기",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
             }
         }
         Spacer(modifier = Modifier.height(12.dp))
@@ -130,26 +137,40 @@ private fun AccommodationItem(
 
         Text(
             text = accommodation.name,
-            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.bodyMedium,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            fontSize = 14.sp
+            color = MaterialTheme.colorScheme.onBackground
         )
         Spacer(modifier = Modifier.height(2.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(Icons.Filled.Star, contentDescription = "별점", tint = Color(0xFFFFC107), modifier = Modifier.size(14.dp))
+            Icon(
+                modifier = Modifier.size(14.dp),
+                imageVector = Icons.Filled.Star,
+                contentDescription = "별점",
+                tint = Yellow,
+            )
             Spacer(modifier = Modifier.width(2.dp))
-            Text(text = "${accommodation.rating} (${accommodation.reviewCount})", fontSize = 12.sp, color = Color.Gray)
+            Text(
+                text = "${accommodation.rating} (${accommodation.reviewCount})",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onBackground
+            )
         }
         Spacer(modifier = Modifier.height(4.dp))
         Row(verticalAlignment = Alignment.Bottom) {
             if (accommodation.isSpecialPrice) {
-                Text("특가", color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Text(
+                    text = "특가",
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.bodyLarge
+                )
                 Spacer(modifier = Modifier.width(4.dp))
             }
             Text(
                 text = accommodation.price.toKRWString(),
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onBackground
             )
         }
     }

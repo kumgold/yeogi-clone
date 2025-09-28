@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -36,7 +37,7 @@ fun RecentHistorySection(
 ) {
     Column(
         modifier = Modifier
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
             .padding(16.dp)
     ) {
         Row(
@@ -44,11 +45,15 @@ fun RecentHistorySection(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("최근 검색 기록", fontWeight = FontWeight.Bold, fontSize = 18.sp)
             Text(
-                "전체삭제",
-                color = Color.Gray,
-                fontSize = 14.sp,
+                text = "최근 검색 기록",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            Text(
+                text = "전체삭제",
+                color = MaterialTheme.colorScheme.onBackground,
+                style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.clickable { onClearAll() }
             )
         }
@@ -72,14 +77,15 @@ private fun RecentHistoryItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.background)
             .clickable { onClick() }
             .padding(vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            Icons.Default.History,
+            imageVector = Icons.Default.History,
             contentDescription = "검색 기록 아이콘",
-            tint = Color.Gray,
+            tint = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier.size(20.dp)
         )
         Spacer(modifier = Modifier.width(12.dp))
@@ -87,12 +93,16 @@ private fun RecentHistoryItem(
             Text(item.keyword, fontWeight = FontWeight.Bold, fontSize = 16.sp)
             Text(
                 "${item.startDate.getFormattedMonthDay()} - ${item.endDate.getFormattedMonthDay()}",
-                color = Color.Gray,
-                fontSize = 12.sp
+                color = MaterialTheme.colorScheme.onBackground,
+                style = MaterialTheme.typography.labelMedium
             )
         }
         IconButton(onClick = onDelete) {
-            Icon(Icons.Default.Close, contentDescription = "삭제", tint = Color.LightGray)
+            Icon(
+                imageVector = Icons.Default.Close,
+                contentDescription = "삭제",
+                tint = MaterialTheme.colorScheme.onBackground
+            )
         }
     }
 }

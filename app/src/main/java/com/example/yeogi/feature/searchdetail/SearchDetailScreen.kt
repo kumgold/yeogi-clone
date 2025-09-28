@@ -97,7 +97,7 @@ fun SearchDetailScreen(
                 Text(
                     text = "여기어때 추천",
                     style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.ExtraBold,
+                    color = MaterialTheme.colorScheme.onBackground
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 VerticalAccommodationItem(item = recommendedAccommodation)
@@ -138,7 +138,11 @@ fun SearchResultTopBar(
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(onClick = onBackClick) {
-            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "뒤로가기")
+            Icon(
+                Icons.AutoMirrored.Filled.ArrowBack,
+                tint = MaterialTheme.colorScheme.onBackground,
+                contentDescription = "뒤로가기"
+            )
         }
         SearchKeywordField(
             modifier = Modifier.weight(3f),
@@ -151,12 +155,12 @@ fun SearchResultTopBar(
             Text(
                 text = "${startDate.monthValue}.${startDate.dayOfMonth} - ${endDate.monthValue}.${endDate.dayOfMonth}",
                 fontSize = 14.sp,
-                color = Color.Gray
+                color = MaterialTheme.colorScheme.onBackground
             )
             Text(
                 text = "$guestCount 명",
                 fontSize = 14.sp,
-                color = Color.Gray
+                color = MaterialTheme.colorScheme.onBackground
             )
         }
     }
@@ -171,15 +175,27 @@ fun SearchKeywordField(
         modifier = modifier
             .fillMaxWidth()
             .height(48.dp)
-            .background(Color(0xFFF5F5F5), RoundedCornerShape(8.dp))
+            .background(
+                MaterialTheme.colorScheme.onBackground,
+                RoundedCornerShape(8.dp)
+            )
             .clip(RoundedCornerShape(8.dp))
             .clickable(onClick = onClick)
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(Icons.Default.Search, contentDescription = "검색 아이콘", tint = Color.Gray, modifier = Modifier.size(20.dp))
+        Icon(
+            modifier = Modifier.size(20.dp),
+            imageVector = Icons.Default.Search,
+            contentDescription = "검색 아이콘",
+            tint = MaterialTheme.colorScheme.background
+        )
         Spacer(modifier = Modifier.width(8.dp))
-        Text("숙소 이름으로 검색", color = Color.Gray, fontSize = 15.sp)
+        Text(
+            text = "숙소 이름으로 검색",
+            color = MaterialTheme.colorScheme.background,
+            style = MaterialTheme.typography.bodyMedium
+        )
     }
 }
 
@@ -196,9 +212,9 @@ fun AccommodationTypeFilter() {
         item {
             Text(
                 text = "숙소유형",
-                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
-                fontSize = 14.sp
+                color = MaterialTheme.colorScheme.onBackground
             )
             Spacer(modifier = Modifier.width(8.dp))
         }
@@ -220,6 +236,8 @@ fun AccommodationTypeFilter() {
             ) {
                 Text(
                     text = type,
+                    color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground,
+                    style = MaterialTheme.typography.bodyMedium,
                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
                 )
             }

@@ -60,18 +60,28 @@ fun SearchScreen(navController: NavController) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("검색", style = MaterialTheme.typography.bodyMedium) },
+                title = {
+                    Text(
+                        text = "검색",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "뒤로가기")
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "뒤로가기",
+                            tint = MaterialTheme.colorScheme.onBackground
+                        )
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = White
+                    containerColor = MaterialTheme.colorScheme.background
                 )
             )
         },
-        containerColor = White
+        containerColor = MaterialTheme.colorScheme.background
     ) { scaffoldPadding ->
         Column(modifier = Modifier.padding(scaffoldPadding)) {
             CustomSearchTabs(
@@ -134,7 +144,10 @@ fun CustomSearchTabs(tabs: List<String>, selectedTabIndex: Int, onTabClick: (Int
                     .clip(RoundedCornerShape(50))
                     .then(
                         if (selectedTabIndex == index) {
-                            Modifier.background(White, shape = RoundedCornerShape(50))
+                            Modifier.background(
+                                color = MaterialTheme.colorScheme.onBackground,
+                                shape = RoundedCornerShape(50)
+                            )
                         } else {
                             Modifier
                         }
@@ -145,7 +158,8 @@ fun CustomSearchTabs(tabs: List<String>, selectedTabIndex: Int, onTabClick: (Int
             ) {
                 Text(
                     text = title,
-                    color = if (selectedTabIndex == index) MaterialTheme.colorScheme.primary else Color.Gray,
+                    color = if (selectedTabIndex == index) MaterialTheme.colorScheme.primary
+                            else MaterialTheme.colorScheme.onBackground,
                     fontWeight = if (selectedTabIndex == index) FontWeight.Bold else FontWeight.Normal,
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.bodyMedium

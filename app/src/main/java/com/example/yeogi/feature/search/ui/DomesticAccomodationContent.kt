@@ -132,7 +132,7 @@ fun DomesticAccommodationContent(
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         Column(
             modifier = Modifier
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(horizontal = 16.dp)
         ) {
             Spacer(modifier = Modifier.height(16.dp))
@@ -155,7 +155,11 @@ fun DomesticAccommodationContent(
                     shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 ) {
-                    Text("숙소 검색", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                    Text(
+                        text = "숙소 검색",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.background
+                    )
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 TextButton(
@@ -164,9 +168,17 @@ fun DomesticAccommodationContent(
                     modifier = Modifier.height(50.dp),
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Default.Map, contentDescription = "지도 아이콘", tint = Color.Gray)
+                        Icon(
+                            imageVector = Icons.Default.Map,
+                            contentDescription = "지도 아이콘",
+                            tint = MaterialTheme.colorScheme.onBackground
+                        )
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("지도로 찾기", color = Color.Gray, fontWeight = FontWeight.Bold)
+                        Text(
+                            text = "지도로 찾기",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            style = MaterialTheme.typography.bodyLarge
+                        )
                     }
                 }
             }
@@ -206,7 +218,7 @@ fun SearchBottomSheetContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 16.dp)
             .verticalScroll(rememberScrollState())
     ) {
@@ -218,14 +230,18 @@ fun SearchBottomSheetContent(
             Text(
                 text = "국내 숙소",
                 modifier = Modifier.align(Alignment.Center),
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onBackground
             )
             IconButton(
                 onClick = onDismiss,
                 modifier = Modifier.align(Alignment.CenterStart)
             ) {
-                Icon(Icons.Default.Close, contentDescription = "닫기")
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = "닫기",
+                    tint = MaterialTheme.colorScheme.onBackground
+                )
             }
         }
 
@@ -235,16 +251,20 @@ fun SearchBottomSheetContent(
             value = searchText,
             onValueChange = { searchText = it },
             modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text("지역, 숙소 검색", color = Color.Gray) },
+            placeholder = { Text("지역, 숙소 검색", color = MaterialTheme.colorScheme.onBackground) },
             leadingIcon = {
-                Icon(Icons.Default.Search, contentDescription = "검색 아이콘", tint = Color.Gray)
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = "검색 아이콘",
+                    tint = MaterialTheme.colorScheme.onBackground
+                )
             },
             shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.White,
-                unfocusedContainerColor = Color.White,
+                focusedContainerColor = MaterialTheme.colorScheme.onBackground,
+                unfocusedContainerColor = MaterialTheme.colorScheme.onBackground,
                 focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-                unfocusedIndicatorColor = Color.LightGray
+                unfocusedIndicatorColor = MaterialTheme.colorScheme.onBackground
             ),
             singleLine = true
         )
@@ -272,15 +292,22 @@ fun SearchInputField(onClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .height(50.dp)
-            .border(1.dp, Color.LightGray, RoundedCornerShape(8.dp))
+            .border(1.dp, MaterialTheme.colorScheme.onBackground, RoundedCornerShape(8.dp))
             .clip(RoundedCornerShape(8.dp))
             .clickable(onClick = onClick)
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(Icons.Default.Search, contentDescription = "검색 아이콘", tint = Color.Gray)
+        Icon(
+            imageVector = Icons.Default.Search,
+            contentDescription = "검색 아이콘",
+            tint = MaterialTheme.colorScheme.onBackground
+        )
         Spacer(modifier = Modifier.width(8.dp))
-        Text("지역, 숙소 검색", color = Color.Gray, fontSize = 16.sp)
+        Text(text = "지역, 숙소 검색",
+            color = MaterialTheme.colorScheme.onBackground,
+            style = MaterialTheme.typography.bodyMedium
+        )
     }
 }
 
@@ -304,29 +331,49 @@ fun DateAndGuestPicker(
             modifier = Modifier
                 .weight(2f)
                 .fillMaxHeight()
-                .border(1.dp, Color.LightGray, RoundedCornerShape(8.dp))
+                .border(1.dp, MaterialTheme.colorScheme.onBackground, RoundedCornerShape(8.dp))
                 .clip(RoundedCornerShape(8.dp))
                 .clickable { onClick() }
                 .padding(horizontal = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(Icons.Default.CalendarToday, contentDescription = "달력 아이콘", modifier = Modifier.size(20.dp), tint = Color.Gray)
+            Icon(
+                modifier = Modifier.size(20.dp),
+                imageVector = Icons.Default.CalendarToday,
+                contentDescription = "달력 아이콘",
+                tint = MaterialTheme.colorScheme.onBackground
+            )
             Spacer(modifier = Modifier.width(8.dp))
-            Text(dateRange, style = MaterialTheme.typography.bodyMedium, maxLines = 1)
+            Text(
+                text = dateRange,
+                style = MaterialTheme.typography.bodyMedium,
+                maxLines = 1,
+                color = MaterialTheme.colorScheme.onBackground
+            )
         }
         Row(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxHeight()
-                .border(1.dp, Color.LightGray, RoundedCornerShape(8.dp))
+                .border(1.dp, MaterialTheme.colorScheme.onBackground, RoundedCornerShape(8.dp))
                 .clip(RoundedCornerShape(8.dp))
                 .clickable { onClick() }
                 .padding(horizontal = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(Icons.Default.Person, contentDescription = "인원 아이콘", modifier = Modifier.size(20.dp), tint = Color.Gray)
+            Icon(
+                imageVector = Icons.Default.Person,
+                contentDescription = "인원 아이콘",
+                modifier = Modifier.size(20.dp),
+                tint = MaterialTheme.colorScheme.onBackground
+            )
             Spacer(modifier = Modifier.width(8.dp))
-            Text("성인 $guestCount", style = MaterialTheme.typography.bodyMedium, maxLines = 1)
+            Text(
+                text = "성인 $guestCount",
+                style = MaterialTheme.typography.bodyMedium,
+                maxLines = 1,
+                color = MaterialTheme.colorScheme.onBackground
+            )
         }
     }
 }
