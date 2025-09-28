@@ -1,6 +1,7 @@
 package com.example.yeogi.feature.searchdetail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -175,9 +176,11 @@ fun SearchKeywordField(
         modifier = modifier
             .fillMaxWidth()
             .height(48.dp)
-            .background(
-                MaterialTheme.colorScheme.onBackground,
-                RoundedCornerShape(8.dp)
+            .background(MaterialTheme.colorScheme.background)
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.onBackground,
+                shape = RoundedCornerShape(8.dp)
             )
             .clip(RoundedCornerShape(8.dp))
             .clickable(onClick = onClick)
@@ -188,12 +191,12 @@ fun SearchKeywordField(
             modifier = Modifier.size(20.dp),
             imageVector = Icons.Default.Search,
             contentDescription = "검색 아이콘",
-            tint = MaterialTheme.colorScheme.background
+            tint = MaterialTheme.colorScheme.onBackground
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = "숙소 이름으로 검색",
-            color = MaterialTheme.colorScheme.background,
+            color = MaterialTheme.colorScheme.onBackground,
             style = MaterialTheme.typography.bodyMedium
         )
     }

@@ -158,7 +158,7 @@ fun DomesticAccommodationContent(
                     Text(
                         text = "숙소 검색",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.background
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
                 Spacer(modifier = Modifier.width(8.dp))
@@ -251,7 +251,12 @@ fun SearchBottomSheetContent(
             value = searchText,
             onValueChange = { searchText = it },
             modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text("지역, 숙소 검색", color = MaterialTheme.colorScheme.onBackground) },
+            placeholder = {
+                Text(
+                    text = "지역, 숙소 검색",
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Search,
@@ -261,8 +266,8 @@ fun SearchBottomSheetContent(
             },
             shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colorScheme.onBackground,
-                unfocusedContainerColor = MaterialTheme.colorScheme.onBackground,
+                focusedContainerColor = MaterialTheme.colorScheme.background,
+                unfocusedContainerColor = MaterialTheme.colorScheme.background,
                 focusedIndicatorColor = MaterialTheme.colorScheme.primary,
                 unfocusedIndicatorColor = MaterialTheme.colorScheme.onBackground
             ),
@@ -292,8 +297,13 @@ fun SearchInputField(onClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .height(50.dp)
-            .border(1.dp, MaterialTheme.colorScheme.onBackground, RoundedCornerShape(8.dp))
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.onBackground,
+                shape = RoundedCornerShape(8.dp)
+            )
             .clip(RoundedCornerShape(8.dp))
+            .background(MaterialTheme.colorScheme.background)
             .clickable(onClick = onClick)
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically

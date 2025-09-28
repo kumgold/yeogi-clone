@@ -145,7 +145,7 @@ fun CustomSearchTabs(tabs: List<String>, selectedTabIndex: Int, onTabClick: (Int
                     .then(
                         if (selectedTabIndex == index) {
                             Modifier.background(
-                                color = MaterialTheme.colorScheme.onBackground,
+                                color = MaterialTheme.colorScheme.primary,
                                 shape = RoundedCornerShape(50)
                             )
                         } else {
@@ -158,7 +158,7 @@ fun CustomSearchTabs(tabs: List<String>, selectedTabIndex: Int, onTabClick: (Int
             ) {
                 Text(
                     text = title,
-                    color = if (selectedTabIndex == index) MaterialTheme.colorScheme.primary
+                    color = if (selectedTabIndex == index) MaterialTheme.colorScheme.onPrimary
                             else MaterialTheme.colorScheme.onBackground,
                     fontWeight = if (selectedTabIndex == index) FontWeight.Bold else FontWeight.Normal,
                     textAlign = TextAlign.Center,
