@@ -157,7 +157,8 @@ private fun AccommodationScreenContent(
                     navigateToRoomSelection(accommodation.id)
                 }
             )
-        }
+        },
+        containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
@@ -200,6 +201,21 @@ private fun AccommodationScreenContent(
     }
 }
 
+@Composable
+fun ImageHeader(
+    accommodation: Accommodation
+) {
+    Box(modifier = Modifier.fillMaxWidth().height(300.dp)) {
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(accommodation.imageUrl).crossfade(true).build(),
+            contentDescription = accommodation.name,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccommodationAppBar(
@@ -223,10 +239,10 @@ fun AccommodationAppBar(
                 ) {
                     Text(
                         text = dateRange,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.bodyMedium,
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
+                        color = MaterialTheme.colorScheme.background
                     )
                 }
             }
@@ -235,14 +251,14 @@ fun AccommodationAppBar(
             IconButton(
                 onClick = { popBackStack() },
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = if (isScrolled.value) Color.Transparent else White
+                    containerColor = if (isScrolled.value) Color.Transparent else MaterialTheme.colorScheme.onBackground
                 ),
                 modifier = if (isScrolled.value) Modifier else Modifier.clip(CircleShape)
             ) {
                 Icon(
-                    Icons.AutoMirrored.Filled.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Back",
-                    tint = Color.Black
+                    tint = MaterialTheme.colorScheme.background
                 )
             }
         },
@@ -250,27 +266,27 @@ fun AccommodationAppBar(
             IconButton(
                 onClick = { /* 공유하기 */ },
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = if (isScrolled.value) Color.Transparent else White
+                    containerColor = if (isScrolled.value) Color.Transparent else MaterialTheme.colorScheme.onBackground
                 ),
                 modifier = if (isScrolled.value) Modifier else Modifier.clip(CircleShape)
             ) {
                 Icon(
                     Icons.Default.Share,
                     contentDescription = "Share",
-                    tint = Color.Black
+                    tint = MaterialTheme.colorScheme.background
                 )
             }
             IconButton(
                 onClick = { /* 찜하기 */ },
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = if (isScrolled.value) Color.Transparent else White
+                    containerColor = if (isScrolled.value) Color.Transparent else MaterialTheme.colorScheme.onBackground
                 ),
                 modifier = if (isScrolled.value) Modifier else Modifier.clip(CircleShape)
             ) {
                 Icon(
-                    Icons.Default.FavoriteBorder,
+                    imageVector = Icons.Default.FavoriteBorder,
                     contentDescription = "Favorite",
-                    tint = Color.Black
+                    tint = MaterialTheme.colorScheme.background
                 )
             }
         },
@@ -281,32 +297,18 @@ fun AccommodationAppBar(
 }
 
 @Composable
-fun ImageHeader(
-    accommodation: Accommodation
-) {
-    Box(modifier = Modifier.fillMaxWidth().height(300.dp)) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(accommodation.imageUrl).crossfade(true).build(),
-            contentDescription = accommodation.name,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
-        )
-    }
-}
-
-@Composable
 fun MainInfoSection(accommodation: Accommodation) {
     Column(modifier = Modifier.padding(16.dp)) {
         Text(
             text = accommodation.name,
-            style = MaterialTheme.typography.headlineLarge
+            style = MaterialTheme.typography.headlineLarge,
+            color = MaterialTheme.colorScheme.onBackground
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = accommodation.category,
             style = MaterialTheme.typography.bodyMedium,
-            color = Color.Gray,
+            color = MaterialTheme.colorScheme.onBackground
         )
         Spacer(modifier = Modifier.height(12.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -314,13 +316,13 @@ fun MainInfoSection(accommodation: Accommodation) {
                 modifier = Modifier.size(18.dp),
                 imageVector = Icons.Outlined.LocationOn,
                 contentDescription = "Address",
-                tint = Color.Black,
+                tint = MaterialTheme.colorScheme.onBackground,
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = accommodation.address,
                 style = MaterialTheme.typography.bodyLarge,
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onBackground
             )
         }
         Spacer(modifier = Modifier.height(12.dp))
@@ -340,20 +342,20 @@ fun MainInfoSection(accommodation: Accommodation) {
                     modifier = Modifier.size(18.dp),
                     imageVector = Icons.Default.StarRate,
                     contentDescription = "Rating",
-                    tint = Color.Black,
+                    tint = Yellow,
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = accommodation.rating.toString(),
                     style = MaterialTheme.typography.bodyLarge,
-                    color = Color.Black
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             }
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = "${accommodation.reviewCount}개 평가",
                 style = MaterialTheme.typography.bodyMedium,
-                color = Color.Gray
+                color = MaterialTheme.colorScheme.onBackground
             )
         }
     }
@@ -375,13 +377,17 @@ fun FacilityInfoSection(facilities: List<Facility>) {
 fun FacilityItem(facility: Facility) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Icon(
-            facility.icon,
+            imageVector = facility.icon,
             modifier = Modifier.size(20.dp),
             contentDescription = facility.name,
-            tint = Color.Black
+            tint = MaterialTheme.colorScheme.onBackground
         )
         Spacer(modifier = Modifier.height(4.dp))
-        Text(facility.name, fontSize = 12.sp)
+        Text(
+            text = facility.name,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onBackground
+        )
     }
 }
 
@@ -397,10 +403,16 @@ fun LocationSection() {
                 .fillMaxWidth()
                 .height(150.dp)
                 .padding(top = 16.dp)
-                .background(Color.LightGray, RoundedCornerShape(12.dp)),
+                .background(
+                    color = Color.LightGray,
+                    shape = RoundedCornerShape(12.dp)
+                ),
             contentAlignment = Alignment.Center
         ) {
-            Text("지도 표시 영역")
+            Text(
+                text = "지도 표시 영역",
+                color = MaterialTheme.colorScheme.onBackground
+            )
         }
     }
 }
@@ -408,7 +420,11 @@ fun LocationSection() {
 @Composable
 fun UsageInfoSection(checkIn: String, checkOut: String, usageInfo: String) {
     Column(modifier = Modifier.padding(16.dp)) {
-        Text(stringResource(R.string.introduce_accommodation), style = MaterialTheme.typography.titleLarge)
+        Text(
+            text = stringResource(R.string.introduce_accommodation),
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onBackground
+        )
         Spacer(modifier = Modifier.height(16.dp))
         InfoRow(stringResource(R.string.check_in), checkIn)
         HorizontalDivider(
@@ -422,7 +438,7 @@ fun UsageInfoSection(checkIn: String, checkOut: String, usageInfo: String) {
             text = usageInfo,
             modifier = Modifier.padding(top = 8.dp),
             style = MaterialTheme.typography.bodyMedium,
-            color = Color.DarkGray
+            color = MaterialTheme.colorScheme.onBackground
         )
     }
 }
@@ -432,13 +448,14 @@ fun NoticeSection(notice: String) {
     Column(modifier = Modifier.padding(16.dp)) {
         Text(
             stringResource(R.string.notice),
-            style = MaterialTheme.typography.titleLarge
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onBackground
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = notice,
             style = MaterialTheme.typography.bodyMedium,
-            color = Color.DarkGray
+            color = MaterialTheme.colorScheme.onBackground
         )
     }
 }
@@ -459,12 +476,13 @@ fun ReviewSection(rating: Double, reviews: List<Review>) {
             Text(
                 text = "$rating",
                 style = MaterialTheme.typography.titleLarge,
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onBackground
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 "${reviews.size}개 평가",
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground
             )
         }
 
@@ -487,9 +505,17 @@ fun ReviewSection(rating: Double, reviews: List<Review>) {
 fun ReviewItem(review: Review) {
     Column(modifier = Modifier.padding(vertical = 8.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(review.userName, fontWeight = FontWeight.Bold)
+            Text(
+                text = review.userName,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground
+            )
             Spacer(modifier = Modifier.width(8.dp))
-            Text(review.date, color = Color.Gray, fontSize = 12.sp)
+            Text(
+                text = review.date,
+                color = MaterialTheme.colorScheme.onBackground,
+                fontSize = 12.sp
+            )
         }
         Row(
             modifier = Modifier.padding(vertical = 4.dp),
@@ -497,7 +523,7 @@ fun ReviewItem(review: Review) {
         ) {
             (1..5).forEach { index ->
                 Icon(
-                    Icons.Filled.Star,
+                    imageVector = Icons.Filled.Star,
                     contentDescription = null,
                     tint = if (index <= review.rating) Yellow else Color.LightGray,
                     modifier = Modifier.size(16.dp)
@@ -506,7 +532,8 @@ fun ReviewItem(review: Review) {
         }
         Text(
             text = review.comment,
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onBackground
         )
     }
 }
@@ -526,8 +553,16 @@ fun InfoRow(title: String, value: String) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(title, color = Color.Gray, fontSize = 16.sp)
-        Text(value, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+        Text(
+            text = title,
+            color = MaterialTheme.colorScheme.onBackground,
+            style = MaterialTheme.typography.bodyMedium
+        )
+        Text(
+            text = value,
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onBackground
+        )
     }
 }
 
@@ -550,13 +585,14 @@ fun BookingBottomBar(
         ) {
             Column {
                 Text(
-                    "1박당 최저가",
+                    text = "1박당 최저가",
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onBackground
                 )
                 Text(
                     text = price,
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             }
             Button(
@@ -564,7 +600,11 @@ fun BookingBottomBar(
                 modifier = Modifier.height(50.dp),
                 shape = RoundedCornerShape(12.dp)
             ) {
-                Text("객실 선택하기", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(
+                    text = "객실 선택하기",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
             }
         }
     }
