@@ -73,4 +73,4 @@ yeogi-clone/
 ## 👀 개발 과정에서 발생한 이슈
 
 ## 🎯 개발 계획
-- Dummy 데이터를 Firebase에 옮겨서 네트워크 연결을 구현할 예정.
+- Dummy 데이터를 Firebase에 옮겨서 네트워크 연결 구현 예정
