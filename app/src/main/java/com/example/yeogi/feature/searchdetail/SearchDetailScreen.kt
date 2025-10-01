@@ -1,6 +1,7 @@
 package com.example.yeogi.feature.searchdetail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,7 +29,6 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -44,6 +44,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.yeogi.feature.searchdetail.ui.VerticalAccommodationItem
 import com.example.yeogi.shared.ui.RecommendationSection
@@ -58,12 +59,11 @@ fun SearchDetailScreen(
     navigateToAccommodation: (Int) -> Unit,
     popBackStack: () -> Unit,
 ) {
-    val recommendedAccommodation = viewModel.getAccommodations().first()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val recommendedAccommodation = uiState.accommodations.first()
     val horizontalAccommodations = remember {
-        viewModel.getAccommodations().subList(1, 6)
-    }
-    val verticalAccommodations = remember {
-        viewModel.getAccommodations().toList()
+        uiState.accommodations.subList(1, 6)
     }
 
     LazyColumn(
@@ -85,11 +85,17 @@ fun SearchDetailScreen(
         }
 
         item {
-            AccommodationTypeFilter()
+            AccommodationTypeFilter(
+                selectedTypes = uiState.selectedAccommodationTypes,
+                onTypeSelected = { type -> viewModel.selectAccommodationType(type) }
+            )
         }
 
         item {
-            FilterChips()
+            FilterChips(
+                selectedFilters = uiState.selectedDetailFilters,
+                onFilterToggled = { filter -> viewModel.toggleDetailFilter(filter) }
+            )
         }
 
         item {
@@ -100,7 +106,10 @@ fun SearchDetailScreen(
                     color = MaterialTheme.colorScheme.onBackground
                 )
                 Spacer(modifier = Modifier.height(12.dp))
-                VerticalAccommodationItem(item = recommendedAccommodation)
+                VerticalAccommodationItem(
+                    item = recommendedAccommodation,
+                    onClick = { id -> navigateToAccommodation(id) }
+                )
             }
         }
 
@@ -115,9 +124,12 @@ fun SearchDetailScreen(
             )
         }
 
-        items(verticalAccommodations) { accommodation ->
+        items(uiState.filteredAccommodations) { accommodation ->
             Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)) {
-                VerticalAccommodationItem(item = accommodation)
+                VerticalAccommodationItem(
+                    item = accommodation,
+                    onClick = { id -> navigateToAccommodation(id) }
+                )
             }
         }
     }
@@ -175,9 +187,11 @@ fun SearchKeywordField(
         modifier = modifier
             .fillMaxWidth()
             .height(48.dp)
-            .background(
-                MaterialTheme.colorScheme.onBackground,
-                RoundedCornerShape(8.dp)
+            .background(MaterialTheme.colorScheme.background)
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.onBackground,
+                shape = RoundedCornerShape(8.dp)
             )
             .clip(RoundedCornerShape(8.dp))
             .clickable(onClick = onClick)
@@ -188,21 +202,23 @@ fun SearchKeywordField(
             modifier = Modifier.size(20.dp),
             imageVector = Icons.Default.Search,
             contentDescription = "검색 아이콘",
-            tint = MaterialTheme.colorScheme.background
+            tint = MaterialTheme.colorScheme.onBackground
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = "숙소 이름으로 검색",
-            color = MaterialTheme.colorScheme.background,
+            color = MaterialTheme.colorScheme.onBackground,
             style = MaterialTheme.typography.bodyMedium
         )
     }
 }
 
 @Composable
-fun AccommodationTypeFilter() {
+fun AccommodationTypeFilter(
+    selectedTypes: Set<String>,
+    onTypeSelected: (String) -> Unit
+) {
     val types = listOf("전체", "호텔", "펜션", "리조트", "모텔", "캠핑", "게하")
-    var selectedTypes by remember { mutableStateOf(setOf("전체")) }
 
     LazyRow(
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp),
@@ -221,15 +237,7 @@ fun AccommodationTypeFilter() {
         items (types) { type ->
             val isSelected = selectedTypes.contains(type)
             TextButton(
-                onClick = {
-                    // "전체"를 누르면 다른 선택 해제, 다른 버튼 누르면 "전체" 선택 해제
-                    val newSelection = if (type == "전체") {
-                        setOf("전체")
-                    } else {
-                        if (isSelected) selectedTypes - type else selectedTypes + type - "전체"
-                    }
-                    selectedTypes = if (newSelection.isEmpty()) setOf("전체") else newSelection
-                },
+                onClick = { onTypeSelected(type) },
                 colors = ButtonDefaults.textButtonColors(
                     contentColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.Black
                 )
@@ -246,8 +254,11 @@ fun AccommodationTypeFilter() {
 }
 
 @Composable
-fun FilterChips() {
-    val filters = listOf("예약가능", "쿠폰", "포인트 적립", "조식포함", "반려견")
+fun FilterChips(
+    selectedFilters: Set<String>,
+    onFilterToggled: (String) -> Unit
+) {
+    val filters = listOf("특가", "예약가능", "쿠폰", "조식포함", "오션뷰", "시티뷰", "마운틴뷰")
 
     LazyRow(
         contentPadding = PaddingValues(horizontal = 16.dp),
@@ -262,10 +273,10 @@ fun FilterChips() {
             )
         }
         items(filters) { filter ->
-            var selected by remember { mutableStateOf(false) }
+            val selected = selectedFilters.contains(filter)
             FilterChip(
                 selected = selected,
-                onClick = { selected = !selected },
+                onClick = { onFilterToggled(filter) },
                 label = { Text(filter) }
             )
         }

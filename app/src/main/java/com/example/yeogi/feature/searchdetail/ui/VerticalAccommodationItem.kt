@@ -43,13 +43,16 @@ import com.example.yeogi.core.util.toKRWString
  * 세로 스크롤에 사용될 숙소 아이템
  */
 @Composable
-fun VerticalAccommodationItem(item: Accommodation) {
+fun VerticalAccommodationItem(
+    item: Accommodation,
+    onClick: (Int) -> Unit
+) {
     var isFavorite by remember { mutableStateOf(true) }
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { /* 상세 페이지로 이동 */ },
+            .clickable { onClick(item.id) },
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
