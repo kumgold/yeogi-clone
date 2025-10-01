@@ -82,10 +82,20 @@ fun HotelScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("호텔•리조트") },
+                title = {
+                    Text(
+                        text = "호텔•리조트",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = { popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "뒤로가기")
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "뒤로가기",
+                            tint = MaterialTheme.colorScheme.onBackground
+                        )
                     }
                 }
             )
@@ -150,7 +160,11 @@ private fun HotelCategorySection(
                     contentScale = ContentScale.Crop,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(text = category.name, style = MaterialTheme.typography.bodyMedium)
+                Text(
+                    text = category.name,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
             }
         }
     }
@@ -395,7 +409,6 @@ private fun HotelCard(hotel: Accommodation, onClick: () -> Unit) {
     }
 }
 
-
 @Composable
 private fun SearchInfoRow(
     modifier: Modifier = Modifier,
@@ -423,18 +436,17 @@ private fun SearchInfoRow(
             Text(
                 text = title,
                 style = MaterialTheme.typography.labelMedium,
-                color = Color.Gray
+                color = MaterialTheme.colorScheme.onBackground
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = content,
                 style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.Bold
+                color = MaterialTheme.colorScheme.onBackground
             )
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

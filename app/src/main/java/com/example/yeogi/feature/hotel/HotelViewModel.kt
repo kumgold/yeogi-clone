@@ -1,6 +1,5 @@
 package com.example.yeogi.feature.hotel
 
-import androidx.compose.runtime.remember
 import androidx.lifecycle.viewModelScope
 import com.example.yeogi.core.model.Accommodation
 import com.example.yeogi.core.presentation.SharedViewModel
