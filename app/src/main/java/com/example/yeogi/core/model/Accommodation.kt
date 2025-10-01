@@ -17,6 +17,12 @@ data class Accommodation(
     val checkOutTime: String,
     val notice: String,
     val usageInfo: String,
-    val reviews: List<Review>
+    val reviews: List<Review>,
+    val hasCoupon: Boolean,
+    val isBreakfastIncluded: Boolean,
+    val hasOceanView: Boolean,
+    val hasCityView: Boolean,
+    val hasMountainView: Boolean,
+    val isAvailable: Boolean
 )
 
