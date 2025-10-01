@@ -130,7 +130,9 @@ fun ServiceCategorySection(
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.background
+        ),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Column(modifier = Modifier.padding(vertical = 16.dp)) {
@@ -174,10 +176,14 @@ fun CategoryIcon(
             category.icon,
             contentDescription = category.name,
             modifier = Modifier.size(28.dp),
-            tint = Color(0xFF333333)
+            tint = MaterialTheme.colorScheme.onBackground
         )
         Spacer(modifier = Modifier.height(6.dp))
-        Text(text = category.name, fontSize = 12.sp, color = Color.DarkGray)
+        Text(
+            text = category.name,
+            color = MaterialTheme.colorScheme.onBackground,
+            style = MaterialTheme.typography.labelMedium
+        )
     }
 }
 

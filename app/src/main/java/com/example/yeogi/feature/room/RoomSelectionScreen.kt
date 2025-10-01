@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,6 +32,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -121,7 +125,8 @@ private fun RoomSelectionContent(
                 },
                 popBackStack = popBackStack
             )
-        }
+        },
+        containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
@@ -131,7 +136,10 @@ private fun RoomSelectionContent(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(rooms) { room ->
-                RoomItem(room = room, onBookingClick = { navigateToPayment(room.id) })
+                RoomItem(
+                    room = room,
+                    onBookingClick = { navigateToPayment(room.id) }
+                )
             }
         }
     }
@@ -146,7 +154,7 @@ private fun RoomItem(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        colors = CardDefaults.cardColors(containerColor = White)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onBackground)
     ) {
         Column {
             AsyncImage(
@@ -159,15 +167,23 @@ private fun RoomItem(
                 contentScale = ContentScale.Crop,
             )
             Column(Modifier.padding(16.dp)) {
-                Text(room.name, style = MaterialTheme.typography.titleLarge)
+                Text(
+                    text = room.name,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.background
+                )
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(room.capacity, style = MaterialTheme.typography.bodyMedium, color = Color.Gray)
+                Text(
+                    text = room.capacity,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                     room.features.forEach { feature ->
                         Text(
                             text = "· $feature",
-                            fontSize = 12.sp,
+                            style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.primary
                         )
                     }
@@ -189,17 +205,34 @@ private fun RoomItem(
                             )
                             Spacer(Modifier.width(4.dp))
                             Text(
-                                text = room.originalPrice.toKRWString(),
-                                style = MaterialTheme.typography.bodyMedium
+                                buildAnnotatedString {
+                                    append(room.originalPrice.toKRWString())
+                                    addStyle(
+                                        SpanStyle(textDecoration = TextDecoration.LineThrough),
+                                        0,
+                                        room.originalPrice.toKRWString().length
+                                    )
+                                },
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.background
                             )
                         }
                         Text(
                             text = room.price.toKRWString(),
-                            style = MaterialTheme.typography.bodyLarge
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.background
                         )
                     }
-                    Button(onClick = { onBookingClick(room.id) }) {
-                        Text(room.bookingStatus)
+                    Button(
+                        onClick = { onBookingClick(room.id) },
+                        colors = ButtonDefaults.buttonColors().copy(
+                            containerColor = MaterialTheme.colorScheme.primary
+                        )
+                    ) {
+                        Text(
+                            text = room.bookingStatus,
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
                     }
                 }
             }

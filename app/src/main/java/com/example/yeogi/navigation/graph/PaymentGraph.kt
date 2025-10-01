@@ -8,7 +8,6 @@ import androidx.navigation.navigation
 import com.example.yeogi.core.presentation.SharedPaymentViewModel
 import com.example.yeogi.feature.payment.PaymentScreen
 import com.example.yeogi.feature.room.RoomSelectionScreen
-import com.example.yeogi.navigation.graph.Graph
 import com.example.yeogi.navigation.NavItem
 import com.example.yeogi.navigation.horizontalSlideComposable
 

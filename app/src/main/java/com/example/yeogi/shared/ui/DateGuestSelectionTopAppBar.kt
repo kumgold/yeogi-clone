@@ -10,6 +10,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -31,6 +32,9 @@ fun DateGuestSelectionTopAppBar(
     popBackStack: () -> Unit
 ) {
     TopAppBar(
+        colors = TopAppBarDefaults.topAppBarColors().copy(
+            containerColor = MaterialTheme.colorScheme.background
+        ),
         title = {
             Box(
                 modifier = Modifier.clickable {
@@ -39,10 +43,10 @@ fun DateGuestSelectionTopAppBar(
             ) {
                 Text(
                     text = dateRange,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.bodyLarge,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             }
         },
@@ -51,13 +55,13 @@ fun DateGuestSelectionTopAppBar(
                 modifier = Modifier,
                 onClick = { popBackStack() },
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = White
+                    containerColor = MaterialTheme.colorScheme.onBackground
                 )
             ) {
                 Icon(
                     Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Back",
-                    tint = Color.Black
+                    tint = MaterialTheme.colorScheme.background
                 )
             }
         },
@@ -66,32 +70,29 @@ fun DateGuestSelectionTopAppBar(
                 modifier = Modifier,
                 onClick = { /* 공유하기 */ },
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = White
+                    containerColor = MaterialTheme.colorScheme.onBackground
                 )
             ) {
                 Icon(
                     Icons.Default.Share,
                     contentDescription = "Share",
-                    tint = Color.Black
+                    tint = MaterialTheme.colorScheme.background
                 )
             }
             IconButton(
                 modifier = Modifier,
                 onClick = { /* 찜하기 */ },
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = White
+                    containerColor = MaterialTheme.colorScheme.onBackground
                 )
             ) {
                 Icon(
                     Icons.Default.FavoriteBorder,
                     contentDescription = "Favorite",
-                    tint = Color.Black
+                    tint = MaterialTheme.colorScheme.background
                 )
             }
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = White
-        )
+        }
     )
 }
 
