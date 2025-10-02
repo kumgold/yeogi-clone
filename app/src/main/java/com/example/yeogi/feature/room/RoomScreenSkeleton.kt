@@ -52,7 +52,7 @@ fun RoomScreenSkeleton(
                     Icon(
                         Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back",
-                        tint = MaterialTheme.colorScheme.onBackground
+                        tint = Color.Gray
                     )
                 }
             }

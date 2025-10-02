@@ -53,7 +53,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -225,7 +224,7 @@ fun AccommodationAppBar(
     popBackStack: () -> Unit
 ) {
     val appBarColor by animateColorAsState(
-        targetValue = if (isScrolled.value) White else Color.Transparent,
+        targetValue = if (isScrolled.value) MaterialTheme.colorScheme.background else Color.Transparent,
         label = "appBarColorAnimation"
     )
 
@@ -242,7 +241,7 @@ fun AccommodationAppBar(
                         style = MaterialTheme.typography.bodyMedium,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        color = MaterialTheme.colorScheme.background
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                 }
             }
@@ -251,14 +250,14 @@ fun AccommodationAppBar(
             IconButton(
                 onClick = { popBackStack() },
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = if (isScrolled.value) Color.Transparent else MaterialTheme.colorScheme.onBackground
+                    containerColor = if (isScrolled.value) Color.Transparent else MaterialTheme.colorScheme.background
                 ),
                 modifier = if (isScrolled.value) Modifier else Modifier.clip(CircleShape)
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Back",
-                    tint = MaterialTheme.colorScheme.background
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
         },
@@ -266,27 +265,27 @@ fun AccommodationAppBar(
             IconButton(
                 onClick = { /* 공유하기 */ },
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = if (isScrolled.value) Color.Transparent else MaterialTheme.colorScheme.onBackground
+                    containerColor = if (isScrolled.value) Color.Transparent else MaterialTheme.colorScheme.background
                 ),
                 modifier = if (isScrolled.value) Modifier else Modifier.clip(CircleShape)
             ) {
                 Icon(
                     Icons.Default.Share,
                     contentDescription = "Share",
-                    tint = MaterialTheme.colorScheme.background
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
             IconButton(
                 onClick = { /* 찜하기 */ },
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = if (isScrolled.value) Color.Transparent else MaterialTheme.colorScheme.onBackground
+                    containerColor = if (isScrolled.value) Color.Transparent else MaterialTheme.colorScheme.background
                 ),
                 modifier = if (isScrolled.value) Modifier else Modifier.clip(CircleShape)
             ) {
                 Icon(
                     imageVector = Icons.Default.FavoriteBorder,
                     contentDescription = "Favorite",
-                    tint = MaterialTheme.colorScheme.background
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
         },

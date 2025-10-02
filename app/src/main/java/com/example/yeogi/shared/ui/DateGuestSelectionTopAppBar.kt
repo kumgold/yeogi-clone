@@ -55,13 +55,13 @@ fun DateGuestSelectionTopAppBar(
                 modifier = Modifier,
                 onClick = { popBackStack() },
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = MaterialTheme.colorScheme.onBackground
+                    containerColor = MaterialTheme.colorScheme.background
                 )
             ) {
                 Icon(
                     Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Back",
-                    tint = MaterialTheme.colorScheme.background
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
         },
@@ -70,26 +70,26 @@ fun DateGuestSelectionTopAppBar(
                 modifier = Modifier,
                 onClick = { /* 공유하기 */ },
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = MaterialTheme.colorScheme.onBackground
+                    containerColor = MaterialTheme.colorScheme.background
                 )
             ) {
                 Icon(
                     Icons.Default.Share,
                     contentDescription = "Share",
-                    tint = MaterialTheme.colorScheme.background
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
             IconButton(
                 modifier = Modifier,
                 onClick = { /* 찜하기 */ },
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = MaterialTheme.colorScheme.onBackground
+                    containerColor = MaterialTheme.colorScheme.background
                 )
             ) {
                 Icon(
                     Icons.Default.FavoriteBorder,
                     contentDescription = "Favorite",
-                    tint = MaterialTheme.colorScheme.background
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
         }
