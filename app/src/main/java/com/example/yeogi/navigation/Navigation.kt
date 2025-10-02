@@ -14,14 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.yeogi.feature.accommodation.AccommodationScreen
-import com.example.yeogi.feature.around.AroundMeScreen
-import com.example.yeogi.feature.favorite.FavoritesScreen
-import com.example.yeogi.feature.home.HomeScreen
 import com.example.yeogi.feature.hotel.HotelScreen
-import com.example.yeogi.feature.info.MyInfoScreen
-import com.example.yeogi.feature.payment.PaymentScreen
-import com.example.yeogi.feature.room.RoomSelectionScreen
-import com.example.yeogi.feature.search.SearchScreen
 import com.example.yeogi.feature.searchdetail.SearchDetailScreen
 import com.example.yeogi.navigation.graph.Graph
 import com.example.yeogi.navigation.graph.homeGraph
@@ -32,8 +25,16 @@ fun Navigation(navController: NavHostController) {
     NavHost(navController = navController, startDestination = Graph.HOME) {
         homeGraph(navController = navController)
 
-        horizontalSlideComposable(NavItem.SearchDetail.route) {
+        horizontalSlideComposable(
+            route = NavItem.SearchDetail.route,
+            arguments = listOf(
+                navArgument("query") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val query = NavItem.SearchDetail.decodeQuery(backStackEntry)
+
             SearchDetailScreen(
+                query = query,
                 navigateToAccommodation = { id ->
                     navController.navigate(NavItem.AccommodationDetail.createRoute(id))
                 },
@@ -73,8 +74,8 @@ fun Navigation(navController: NavHostController) {
                 navigateToAccommodation = { id ->
                     navController.navigate(NavItem.AccommodationDetail.createRoute(id))
                 },
-                navigateToSearchDetail = {
-                    navController.navigate(NavItem.SearchDetail.route)
+                navigateToSearchDetail = { query ->
+                    navController.navigate(NavItem.SearchDetail.createRoute(query))
                 },
                 popBackStack = {
                     navController.popBackStack()

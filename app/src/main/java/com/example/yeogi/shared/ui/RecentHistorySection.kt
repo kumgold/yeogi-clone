@@ -33,7 +33,7 @@ fun RecentHistorySection(
     items: MutableList<RecentSearch>,
     onClearAll: () -> Unit,
     onDeleteItem: (RecentSearch) -> Unit,
-    onClick: () -> Unit
+    onClick: (String) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -62,7 +62,9 @@ fun RecentHistorySection(
             RecentHistoryItem(
                 item = item,
                 onDelete = { onDeleteItem(item) },
-                onClick = onClick
+                onClick = { query ->
+                    onClick(query)
+                }
             )
         }
     }
@@ -72,13 +74,13 @@ fun RecentHistorySection(
 private fun RecentHistoryItem(
     item: RecentSearch,
     onDelete: () -> Unit,
-    onClick: () -> Unit
+    onClick: (String) -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.background)
-            .clickable { onClick() }
+            .clickable { onClick(item.keyword) }
             .padding(vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

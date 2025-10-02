@@ -32,6 +32,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.yeogi.core.model.Accommodation
 import com.example.yeogi.feature.searchdetail.ui.VerticalAccommodationItem
 import com.example.yeogi.shared.ui.RecommendationSection
 import java.time.LocalDate
@@ -55,15 +57,28 @@ import java.time.LocalDate
  */
 @Composable
 fun SearchDetailScreen(
+    query: String?,
     viewModel: SearchDetailViewModel = viewModel(),
     navigateToAccommodation: (Int) -> Unit,
     popBackStack: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val recommendedAccommodation = uiState.accommodations.first()
-    val horizontalAccommodations = remember {
-        uiState.accommodations.subList(1, 6)
+    val recommendedAccommodation: Accommodation? =  try {
+        uiState.displayedAccommodations.first()
+    } catch (e: Exception) {
+        null
+    }
+    val horizontalAccommodations = try {
+        uiState.displayedAccommodations.subList(1, 6)
+    } catch (e: Exception) {
+        emptyList()
+    }
+
+    LaunchedEffect(query) {
+        if (query != null) {
+            viewModel.searchAccommodationsByQueryString(query)
+        }
     }
 
     LazyColumn(
@@ -74,7 +89,7 @@ fun SearchDetailScreen(
     ) {
         item {
             SearchResultTopBar(
-                searchQuery = "강남",
+                searchQuery = query ?: "",
                 startDate = LocalDate.now(),
                 endDate = LocalDate.now().plusDays(1),
                 guestCount = 2,
@@ -98,33 +113,47 @@ fun SearchDetailScreen(
             )
         }
 
-        item {
-            Column(Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)) {
-                Text(
-                    text = "여기어때 추천",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-                VerticalAccommodationItem(
-                    item = recommendedAccommodation,
-                    onClick = { id -> navigateToAccommodation(id) }
+        if (recommendedAccommodation != null) {
+            item {
+                Column(Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)) {
+                    Text(
+                        text = "여기어때 추천",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                    VerticalAccommodationItem(
+                        item = recommendedAccommodation,
+                        onClick = { id -> navigateToAccommodation(id) }
+                    )
+                }
+            }
+        }
+
+        if (horizontalAccommodations.isNotEmpty()) {
+            item {
+                RecommendationSection(
+                    title = "지금 지역에서 주목할 숙소",
+                    accommodations = horizontalAccommodations,
+                    isAd = true,
+                    onItemClick = { id ->
+                        navigateToAccommodation(id)
+                    }
                 )
             }
         }
 
         item {
-            RecommendationSection(
-                title = "지금 지역에서 주목할 숙소",
-                accommodations = horizontalAccommodations,
-                isAd = true,
-                onItemClick = { id ->
-                    navigateToAccommodation(id)
-                }
-            )
+            Column(Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)) {
+                Text(
+                    text = "호텔 목록",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+            }
         }
-
-        items(uiState.filteredAccommodations) { accommodation ->
+        items(uiState.displayedAccommodations) { accommodation ->
             Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)) {
                 VerticalAccommodationItem(
                     item = accommodation,
@@ -158,6 +187,7 @@ fun SearchResultTopBar(
         }
         SearchKeywordField(
             modifier = Modifier.weight(3f),
+            query = searchQuery,
             onClick = onKeywordSearchClick
         )
         Spacer(modifier = Modifier.width(8.dp))
@@ -181,6 +211,7 @@ fun SearchResultTopBar(
 @Composable
 fun SearchKeywordField(
     modifier: Modifier,
+    query: String?,
     onClick: () -> Unit
 ) {
     Row(
@@ -206,7 +237,7 @@ fun SearchKeywordField(
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
-            text = "숙소 이름으로 검색",
+            text = query ?: "숙소, 지역 이름으로 검색",
             color = MaterialTheme.colorScheme.onBackground,
             style = MaterialTheme.typography.bodyMedium
         )

@@ -74,7 +74,7 @@ import com.example.yeogi.ui.theme.YeogiTheme
 fun HotelScreen(
     viewModel: HotelViewModel = viewModel(),
     navigateToAccommodation: (Int) -> Unit,
-    navigateToSearchDetail: () -> Unit,
+    navigateToSearchDetail: (String) -> Unit,
     popBackStack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -110,11 +110,20 @@ fun HotelScreen(
             item {
                 HotelCategorySection(
                     categories = uiState.categories,
-                    navigateToSearchDetail = navigateToSearchDetail
+                    navigateToSearchDetail = { query ->
+                        navigateToSearchDetail(query)
+                    }
                 )
             }
             item { HotelSearchSection() }
-            item { RegionSelectionSection(regions = uiState.regions) }
+            item {
+                RegionSelectionSection(
+                    regions = uiState.regions,
+                    navigateToSearchDetail = { query ->
+                        navigateToSearchDetail(query)
+                    }
+                )
+            }
             item { AdBannerSection() }
             item {
                 HotelRecommendationSection(
@@ -139,7 +148,7 @@ fun HotelScreen(
 @Composable
 private fun HotelCategorySection(
     categories: List<HotelCategory>,
-    navigateToSearchDetail: () -> Unit
+    navigateToSearchDetail: (String) -> Unit
 ) {
     LazyRow(
         contentPadding = PaddingValues(horizontal = 16.dp),
@@ -148,7 +157,7 @@ private fun HotelCategorySection(
         items(categories) { category ->
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.clickable { navigateToSearchDetail() }
+                modifier = Modifier.clickable { navigateToSearchDetail(category.name) }
             ) {
                 AsyncImage(
                     modifier = Modifier
@@ -188,7 +197,10 @@ private fun HotelSearchSection() {
 }
 
 @Composable
-private fun RegionSelectionSection(regions: Map<String, List<String>>) {
+private fun RegionSelectionSection(
+    regions: Map<String, List<String>>,
+    navigateToSearchDetail: (String) -> Unit
+) {
     var expandedRegion by remember { mutableStateOf<String?>(null) }
 
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
@@ -237,7 +249,10 @@ private fun RegionSelectionSection(regions: Map<String, List<String>>) {
                     exit = shrinkVertically(animationSpec = tween(300)) + fadeOut(animationSpec = tween(300))
                 ) {
                     val details = regions[expandedRegion].orEmpty()
-                    ExpandedDetailView(details = details)
+                    ExpandedDetailView(
+                        details = details,
+                        navigateToSearchDetail = navigateToSearchDetail
+                    )
                 }
 
                 if (rowIndex < chunkedRegions.size - 1) {
@@ -257,7 +272,10 @@ private fun RegionSelectionSection(regions: Map<String, List<String>>) {
  * 확장되었을 때 보여줄 상세 지역 그리드 Composable
  */
 @Composable
-private fun ExpandedDetailView(details: List<String>) {
+private fun ExpandedDetailView(
+    details: List<String>,
+    navigateToSearchDetail: (String) -> Unit
+) {
     val chunkedDetails = details.chunked(4)
     Column(
         modifier = Modifier
@@ -275,7 +293,7 @@ private fun ExpandedDetailView(details: List<String>) {
                         modifier = Modifier
                             .weight(1f)
                             .clip(RoundedCornerShape(4.dp))
-                            .clickable { /* TODO: 상세 지역($detail)으로 검색 */ }
+                            .clickable { navigateToSearchDetail(detail) }
                             .padding(vertical = 8.dp),
                         contentAlignment = Alignment.Center
                     ) {

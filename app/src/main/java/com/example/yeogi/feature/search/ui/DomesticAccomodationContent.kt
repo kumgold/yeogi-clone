@@ -64,7 +64,7 @@ import java.time.LocalDate
 @Composable
 fun DomesticAccommodationContent(
     viewModel: SearchViewModel,
-    navigateToDetail: () -> Unit,
+    navigateToDetail: (String) -> Unit,
 ) {
     val recentSearches = remember {
         viewModel.domesticRecentSearches.toMutableStateList()
@@ -103,7 +103,9 @@ fun DomesticAccommodationContent(
                         }
                     }
                 },
-                navigateToDetail = navigateToDetail
+                navigateToDetail = { query ->
+                    navigateToDetail(query)
+                }
             )
         }
     }
@@ -211,7 +213,7 @@ fun SearchBottomSheetContent(
     onClearAll: () -> Unit,
     onDeleteItem: (RecentSearch) -> Unit,
     onDismiss: () -> Unit,
-    navigateToDetail: () -> Unit
+    navigateToDetail: (String) -> Unit
 ) {
     var searchText by remember { mutableStateOf("") }
 
@@ -281,7 +283,9 @@ fun SearchBottomSheetContent(
                 items = recentSearches,
                 onClearAll = onClearAll,
                 onDeleteItem = onDeleteItem,
-                onClick = navigateToDetail
+                onClick = { query ->
+                    navigateToDetail(query)
+                }
             )
             Spacer(modifier = Modifier.height(8.dp))
         }

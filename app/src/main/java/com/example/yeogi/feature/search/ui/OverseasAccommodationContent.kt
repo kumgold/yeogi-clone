@@ -45,7 +45,7 @@ import com.example.yeogi.core.util.getFormattedMonthDay
 @Composable
 fun OverseasAccommodationContent(
     viewModel: SearchViewModel,
-    navigateToDetail: () -> Unit,
+    navigateToDetail: (String) -> Unit,
 ) {
     val overseasRecentSearches = remember {
         viewModel.overseaRecentSearches.toMutableStateList()

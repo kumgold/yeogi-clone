@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.yeogi.core.model.Accommodation
 import com.example.yeogi.core.presentation.SharedViewModel
 import com.example.yeogi.feature.hotel.data.HotelCategory
+import com.example.yeogi.feature.hotel.data.Region
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

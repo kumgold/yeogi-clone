@@ -105,8 +105,8 @@ fun SearchScreen(navController: NavController) {
                 when (targetIndex) {
                     0 -> DomesticAccommodationContent(
                         viewModel = viewModel,
-                        navigateToDetail = {
-                            navController.navigate(NavItem.SearchDetail.route)
+                        navigateToDetail = { query ->
+                            navController.navigate(NavItem.SearchDetail.createRoute(query))
                         }
                     )
                     1 -> OverseasAccommodationContent(
