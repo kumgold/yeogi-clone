@@ -1,4 +1,4 @@
-package com.example.yeogi.feature.hotel
+package com.example.yeogi.feature.hotel.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -21,8 +21,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
@@ -44,16 +45,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.yeogi.feature.hotel.ui.RegionSelectionSection
+import com.example.yeogi.feature.hotel.HotelViewModel
 import com.example.yeogi.ui.theme.YeogiTheme
 
 @Composable
@@ -102,11 +102,6 @@ fun HotelSearchDetailScreen(
         ) {
             BasicTextField(
                 value = searchQuery,
-                onValueChange = { searchQuery = it },
-                textStyle = TextStyle(
-                    fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.onBackground
-                ),
                 modifier = Modifier
                     .weight(1f)
                     .clip(CircleShape)
@@ -120,7 +115,22 @@ fun HotelSearchDetailScreen(
                     .onFocusChanged { focusState ->
                         isSearchFocused = focusState.isFocused
                     },
+                onValueChange = { searchQuery = it },
+                textStyle = MaterialTheme.typography.bodyMedium.copy(
+                    color = MaterialTheme.colorScheme.onBackground
+                ),
+                cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
                 singleLine = true,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                keyboardActions = KeyboardActions(
+                    onSearch = {
+                        if (searchQuery.isNotBlank()) {
+                            onSearch(searchQuery)
+                            onDismiss()
+                        }
+                        focusManager.clearFocus()
+                    }
+                ),
                 decorationBox = { innerTextField ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -129,15 +139,15 @@ fun HotelSearchDetailScreen(
                         Icon(
                             imageVector = Icons.Default.Search,
                             contentDescription = "검색 아이콘",
-                            tint = Color.Gray,
+                            tint = MaterialTheme.colorScheme.onBackground,
                             modifier = Modifier.size(20.dp)
                         )
                         Box(Modifier.weight(1f)) {
                             if (searchQuery.isEmpty() && !isSearchFocused) {
                                 Text(
                                     text = "지역, 지하철역, 호텔•리조트명 검색",
-                                    color = Color.Gray,
-                                    fontSize = 16.sp
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    style = MaterialTheme.typography.bodyMedium
                                 )
                             }
                             innerTextField()
@@ -151,14 +161,14 @@ fun HotelSearchDetailScreen(
                 exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.CenterVertically)
             ) {
                 Text(
-                    text = "취소",
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Medium,
                     modifier = Modifier.clickable {
                         searchQuery = ""
                         isSearchFocused = false
-                        focusManager.clearFocus() // 포커스 해제
-                    }
+                        focusManager.clearFocus()
+                    },
+                    text = "취소",
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
         }
@@ -183,7 +193,7 @@ fun HotelSearchDetailScreen(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clickable { onSearch(search) } // 검색 후 화면 닫히도록 연결
+                                .clickable { onSearch(search) }
                                 .padding(vertical = 12.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
@@ -196,7 +206,7 @@ fun HotelSearchDetailScreen(
                                 Icon(
                                     imageVector = Icons.Default.Close,
                                     contentDescription = "검색어 삭제",
-                                    tint = Color.Gray
+                                    tint = MaterialTheme.colorScheme.onBackground
                                 )
                             }
                         }
