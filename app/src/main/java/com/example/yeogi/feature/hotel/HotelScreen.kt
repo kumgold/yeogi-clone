@@ -1,14 +1,6 @@
 package com.example.yeogi.feature.hotel
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -41,13 +33,16 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -66,7 +61,9 @@ import coil.compose.AsyncImage
 import com.example.yeogi.core.model.Accommodation
 import com.example.yeogi.core.util.toKRWString
 import com.example.yeogi.feature.hotel.data.HotelCategory
+import com.example.yeogi.feature.hotel.ui.RegionSelectionSection
 import com.example.yeogi.ui.theme.YeogiTheme
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -78,6 +75,9 @@ fun HotelScreen(
     popBackStack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val scope = rememberCoroutineScope()
+    var showBottomSheet by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -115,9 +115,16 @@ fun HotelScreen(
                     }
                 )
             }
-            item { HotelSearchSection() }
+            item {
+                HotelSearchSection(
+                    onSearch = {
+                        showBottomSheet = true
+                    }
+                )
+            }
             item {
                 RegionSelectionSection(
+                    title = "어디로 떠날까요?",
                     regions = uiState.regions,
                     navigateToSearchDetail = { query ->
                         navigateToSearchDetail(query)
@@ -139,6 +146,32 @@ fun HotelScreen(
                     hotels = uiState.premiumHotels,
                     onItemClick = { id -> navigateToAccommodation(id) },
                     onViewAllClick = { /* 전체보기 화면으로 이동 */ }
+                )
+            }
+        }
+
+        if (showBottomSheet) {
+            ModalBottomSheet(
+                onDismissRequest = { showBottomSheet = false },
+                sheetState = sheetState,
+                containerColor = MaterialTheme.colorScheme.background
+            ) {
+                HotelSearchDetailScreen(
+                    onDismiss = {
+                        scope.launch { sheetState.hide() }.invokeOnCompletion {
+                            if (!sheetState.isVisible) {
+                                showBottomSheet = false
+                            }
+                        }
+                    },
+                    onSearch = { query ->
+                        navigateToSearchDetail(query)
+                        scope.launch { sheetState.hide() }.invokeOnCompletion {
+                            if (!sheetState.isVisible) {
+                                showBottomSheet = false
+                            }
+                        }
+                    }
                 )
             }
         }
@@ -180,9 +213,12 @@ private fun HotelCategorySection(
 }
 
 @Composable
-private fun HotelSearchSection() {
+private fun HotelSearchSection(
+    onSearch: () -> Unit
+) {
     Card(
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = Modifier.padding(horizontal = 16.dp)
+            .clickable { onSearch() },
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(4.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
@@ -190,121 +226,8 @@ private fun HotelSearchSection() {
         SearchInfoRow(
             icon = Icons.Default.LocationOn,
             title = "어디로 떠나시나요?",
-            content = "숙소, 지역, 지하철역 검색",
-            onClick = { /* TODO: 지역 선택 화면으로 이동 */ }
+            content = "숙소, 지역, 지하철역 검색"
         )
-    }
-}
-
-@Composable
-private fun RegionSelectionSection(
-    regions: Map<String, List<String>>,
-    navigateToSearchDetail: (String) -> Unit
-) {
-    var expandedRegion by remember { mutableStateOf<String?>(null) }
-
-    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-        Text("어디로 떠나볼까요?", style = MaterialTheme.typography.titleLarge)
-        Spacer(modifier = Modifier.height(16.dp))
-
-        val chunkedRegions = regions.keys.chunked(3)
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .border(BorderStroke(1.dp, Color.LightGray))
-        ) {
-            chunkedRegions.forEachIndexed { rowIndex, rowItems ->
-                Row(Modifier.fillMaxWidth()) {
-                    rowItems.forEachIndexed { itemIndex, region ->
-                        Box(
-                            modifier = Modifier
-                                .weight(1f)
-                                .clickable {
-                                    expandedRegion = if (expandedRegion == region) null else region
-                                }
-                                .padding(vertical = 12.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = region,
-                                style = MaterialTheme.typography.labelMedium
-                            )
-                        }
-
-                        if (itemIndex < rowItems.size - 1) {
-                            Box(
-                                modifier = Modifier
-                                    .width(1.dp)
-                                    .height(42.dp)
-                                    .background(Color.LightGray)
-                            )
-                        }
-                    }
-                }
-
-                AnimatedVisibility(
-                    visible = rowItems.contains(expandedRegion),
-                    enter = expandVertically(animationSpec = tween(300)) + fadeIn(animationSpec = tween(300)),
-                    exit = shrinkVertically(animationSpec = tween(300)) + fadeOut(animationSpec = tween(300))
-                ) {
-                    val details = regions[expandedRegion].orEmpty()
-                    ExpandedDetailView(
-                        details = details,
-                        navigateToSearchDetail = navigateToSearchDetail
-                    )
-                }
-
-                if (rowIndex < chunkedRegions.size - 1) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(1.dp)
-                            .background(Color.LightGray)
-                    )
-                }
-            }
-        }
-    }
-}
-
-/**
- * 확장되었을 때 보여줄 상세 지역 그리드 Composable
- */
-@Composable
-private fun ExpandedDetailView(
-    details: List<String>,
-    navigateToSearchDetail: (String) -> Unit
-) {
-    val chunkedDetails = details.chunked(4)
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.Gray.copy(alpha = 0.05f))
-            .padding(8.dp)
-    ) {
-        chunkedDetails.forEach { rowItems ->
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                rowItems.forEach { detail ->
-                    Box(
-                        modifier = Modifier
-                            .weight(1f)
-                            .clip(RoundedCornerShape(4.dp))
-                            .clickable { navigateToSearchDetail(detail) }
-                            .padding(vertical = 8.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(text = detail, style = MaterialTheme.typography.labelMedium)
-                    }
-                }
-                repeat(4 - rowItems.size) {
-                    Spacer(modifier = Modifier.weight(1f))
-                }
-            }
-        }
     }
 }
 
@@ -432,13 +355,11 @@ private fun SearchInfoRow(
     modifier: Modifier = Modifier,
     icon: ImageVector? = null,
     title: String,
-    content: String,
-    onClick: () -> Unit
+    content: String
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick)
             .padding(vertical = 12.dp, horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -454,13 +375,13 @@ private fun SearchInfoRow(
             Text(
                 text = title,
                 style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onBackground
+                color = MaterialTheme.colorScheme.primary
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = content,
                 style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onBackground
+                color = MaterialTheme.colorScheme.primary
             )
         }
     }
