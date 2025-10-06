@@ -32,11 +32,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.yeogi.feature.hotel.data.Region
 
 @Composable
 fun RegionSelectionSection(
     title: String,
-    regions: Map<String, List<String>>,
+    regions: Map<String, List<Region>>,
     navigateToSearchDetail: (String) -> Unit
 ) {
     var expandedRegion by remember { mutableStateOf<String?>(null) }
@@ -112,7 +113,7 @@ fun RegionSelectionSection(
  */
 @Composable
 private fun ExpandedDetailView(
-    details: List<String>,
+    details: List<Region>,
     navigateToSearchDetail: (String) -> Unit
 ) {
     val chunkedDetails = details.chunked(4)
@@ -132,11 +133,11 @@ private fun ExpandedDetailView(
                         modifier = Modifier
                             .weight(1f)
                             .clip(RoundedCornerShape(4.dp))
-                            .clickable { navigateToSearchDetail(detail) }
+                            .clickable { navigateToSearchDetail(detail.name) }
                             .padding(vertical = 8.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(text = detail, style = MaterialTheme.typography.labelMedium)
+                        Text(text = detail.name, style = MaterialTheme.typography.labelMedium)
                     }
                 }
                 repeat(4 - rowItems.size) {

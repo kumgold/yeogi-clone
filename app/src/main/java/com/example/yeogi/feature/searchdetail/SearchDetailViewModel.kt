@@ -81,7 +81,7 @@ class SearchDetailViewModel : SharedViewModel() {
                         it.address.lowercase().contains(lowerCaseQuery)
             }
 
-            val allRegions = DummyServer.regions.values.flatten()
+            val allRegions = getRegions().values.flatten()
             val region = allRegions.find { it.name.lowercase().contains(lowerCaseQuery) }
 
             val regionMatches = if (region != null) {
