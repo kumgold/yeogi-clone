@@ -1,4 +1,4 @@
-package com.example.yeogi.shared.ui
+package com.example.yeogi.core.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically

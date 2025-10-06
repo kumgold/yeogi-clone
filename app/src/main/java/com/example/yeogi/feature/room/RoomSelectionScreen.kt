@@ -29,22 +29,19 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.yeogi.core.presentation.SharedPaymentViewModel
 import com.example.yeogi.core.util.toKRWString
 import com.example.yeogi.feature.room.data.remote.Room
-import com.example.yeogi.shared.ui.DateGuestSelectionBottomSheet
-import com.example.yeogi.shared.ui.DateGuestSelectionTopAppBar
+import com.example.yeogi.core.ui.DateGuestSelectionBottomSheet
+import com.example.yeogi.core.ui.DateGuestSelectionTopAppBar
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

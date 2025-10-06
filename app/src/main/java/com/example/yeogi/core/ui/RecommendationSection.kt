@@ -1,6 +1,5 @@
-package com.example.yeogi.shared.ui
+package com.example.yeogi.core.ui
 
-import android.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
