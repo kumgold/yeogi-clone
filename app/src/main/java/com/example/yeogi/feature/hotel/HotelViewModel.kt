@@ -1,6 +1,7 @@
 package com.example.yeogi.feature.hotel
 
 import androidx.lifecycle.viewModelScope
+import com.example.yeogi.core.data.usecase.GetAccommodationsUseCase
 import com.example.yeogi.core.model.Accommodation
 import com.example.yeogi.core.presentation.SharedViewModel
 import com.example.yeogi.feature.hotel.data.HotelCategory
@@ -19,6 +20,8 @@ data class HotelUiState(
 )
 
 class HotelViewModel : SharedViewModel() {
+    private val getAccommodationsUseCase = GetAccommodationsUseCase()
+
     private val _uiState = MutableStateFlow(HotelUiState())
     val uiState: StateFlow<HotelUiState> = _uiState.asStateFlow()
 
@@ -42,8 +45,8 @@ class HotelViewModel : SharedViewModel() {
                 currentState.copy(
                     categories = categories,
                     regions = getRegions(),
-                    popularHotels = getAccommodations().shuffled().subList(0, 4),
-                    premiumHotels = getAccommodations().shuffled().subList(0, 4)
+                    popularHotels = getAccommodationsUseCase().shuffled().subList(0, 4),
+                    premiumHotels = getAccommodationsUseCase().shuffled().subList(0, 4)
                 )
             }
         }

@@ -51,20 +51,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.yeogi.feature.hotel.HotelViewModel
+import com.example.yeogi.core.presentation.SharedViewModel
 import com.example.yeogi.feature.hotel.ui.RegionSelectionSection
 import com.example.yeogi.ui.theme.YeogiTheme
 
 @Composable
 fun SearchDetailBottomSheet(
-    viewModel: HotelViewModel = viewModel(),
+    viewModel: SharedViewModel = viewModel(),
     onDismiss: () -> Unit,
     onSearch: (String) -> Unit
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
     var searchQuery by rememberSaveable { mutableStateOf("") }
     var isSearchFocused by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
@@ -180,22 +177,23 @@ fun SearchDetailBottomSheet(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .padding(horizontal = 16.dp)
         ) {
             item {
                 if (recentSearches.isNotEmpty()) {
                     Text(
+                        modifier = Modifier
+                            .padding(bottom = 8.dp)
+                            .padding(horizontal = 16.dp),
                         text = "최근 검색 기록",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(bottom = 8.dp)
                     )
                     recentSearches.forEach { search ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable { onSearch(search) }
-                                .padding(vertical = 12.dp),
+                                .padding(vertical = 12.dp, horizontal = 16.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
@@ -217,16 +215,9 @@ fun SearchDetailBottomSheet(
             }
 
             item {
-                Text(
-                    text = "지역 선택",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
-
                 RegionSelectionSection(
                     title = "지역 선택",
-                    regions = uiState.regions,
+                    regions = viewModel.getRegions(),
                     navigateToSearchDetail = { query ->
                         onSearch(query)
                         onDismiss()

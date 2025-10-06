@@ -72,7 +72,7 @@ fun FavoritesScreen(
     val tabs = listOf("숙소", "공간대여", "레저·티켓")
 
     val favoriteAccommodations = remember {
-        viewModel.getAccommodations().subList(0, 10)
+        emptyList<Accommodation>()
     }
 
     SystemBarColor(color = Color.White)

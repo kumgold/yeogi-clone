@@ -1,7 +1,7 @@
 package com.example.yeogi.feature.searchdetail
 
 import androidx.lifecycle.viewModelScope
-import com.example.yeogi.core.data.network.DummyServer
+import com.example.yeogi.core.data.usecase.GetAccommodationsUseCase
 import com.example.yeogi.core.model.Accommodation
 import com.example.yeogi.core.presentation.SharedViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,6 +18,8 @@ data class SearchDetailUiState(
 )
 
 class SearchDetailViewModel : SharedViewModel() {
+    private val getAccommodationsUseCase = GetAccommodationsUseCase()
+
     private val _uiState = MutableStateFlow(SearchDetailUiState())
     val uiState = _uiState.asStateFlow()
 
@@ -28,7 +30,9 @@ class SearchDetailViewModel : SharedViewModel() {
     private fun loadInitialAccommodations() {
         viewModelScope.launch {
             _uiState.update { it.copy(isSearching = true) }
-            val allAccommodations = getAccommodations()
+
+            val allAccommodations = getAccommodationsUseCase()
+
             _uiState.update {
                 it.copy(
                     originalAccommodations = allAccommodations,
@@ -73,7 +77,7 @@ class SearchDetailViewModel : SharedViewModel() {
         viewModelScope.launch {
             _uiState.update { it.copy(isSearching = true) }
 
-            val allAccommodations = getAccommodations()
+            val allAccommodations = getAccommodationsUseCase()
             val lowerCaseQuery = query.lowercase()
 
             val keywordMatches = allAccommodations.filter {

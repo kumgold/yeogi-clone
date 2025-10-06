@@ -78,7 +78,7 @@ fun AroundMeScreen(
     navController: NavController,
     viewModel: AroundViewModel = viewModel()
 ) {
-    val accommodations = viewModel.getAccommodations()
+    val accommodations = emptyList<Accommodation>()
     val sheetState = rememberStandardBottomSheetState(
         skipHiddenState = false
     )

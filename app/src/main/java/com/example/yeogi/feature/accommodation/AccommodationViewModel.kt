@@ -1,5 +1,6 @@
 package com.example.yeogi.feature.accommodation
 
+import com.example.yeogi.core.data.usecase.GetAccommodationsUseCase
 import com.example.yeogi.core.model.Accommodation
 import com.example.yeogi.core.presentation.SharedViewModel
 import com.example.yeogi.core.util.getFormattedMonthDay
@@ -20,6 +21,7 @@ data class AccommodationUiState(
 }
 
 class AccommodationViewModel : SharedViewModel() {
+    private val getAccommodationsUseCase = GetAccommodationsUseCase()
     private val _uiState = MutableStateFlow(
         AccommodationUiState(
             startDate = startDate,
@@ -30,7 +32,7 @@ class AccommodationViewModel : SharedViewModel() {
     val uiState = _uiState.asStateFlow()
 
     fun getAccommodation(accommodationId: Int) {
-        val accommodation = super.getAccommodations().find { it.id == accommodationId }
+        val accommodation = getAccommodationsUseCase().find { it.id == accommodationId }
 
         _uiState.update {
             it.copy(accommodation = accommodation)

@@ -13,10 +13,10 @@ open class SharedViewModel : ViewModel() {
     val endDate = sharedRepository.reservationEndDate
     val guest = sharedRepository.reservationGuest
 
-    open fun getAccommodations(): List<Accommodation> {
-        return sharedRepository.getAccommodations()
-    }
-
+    /**
+     * 위 Accommodations와 다르게 날짜와 인원 선택은 SharedViewModel 형태가 적합한 것 같다.
+     * 거의 모든 화면에서 역할을 하기 때문이다.
+     */
     open fun setDateAndGuest(
         startDate: LocalDate,
         endDate: LocalDate,
