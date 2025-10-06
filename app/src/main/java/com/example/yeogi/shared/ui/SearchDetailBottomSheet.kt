@@ -1,4 +1,4 @@
-package com.example.yeogi.feature.hotel.ui
+package com.example.yeogi.shared.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -54,10 +54,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.yeogi.feature.hotel.HotelViewModel
+import com.example.yeogi.feature.hotel.ui.RegionSelectionSection
 import com.example.yeogi.ui.theme.YeogiTheme
 
 @Composable
-fun HotelSearchDetailScreen(
+fun SearchDetailBottomSheet(
     viewModel: HotelViewModel = viewModel(),
     onDismiss: () -> Unit,
     onSearch: (String) -> Unit
@@ -68,7 +69,7 @@ fun HotelSearchDetailScreen(
     var isSearchFocused by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
-    val recentSearches = remember { mutableStateListOf("강남 호텔", "제주 리조트", "부산") } // 실제로는 ViewModel에서 관리
+    val recentSearches = remember { mutableStateListOf("강남 호텔", "제주 리조트", "부산") }
 
     Column(
         modifier = Modifier
@@ -241,7 +242,7 @@ fun HotelSearchDetailScreen(
 fun HotelSearchDetailScreenPreview() {
     YeogiTheme {
         Surface {
-            HotelSearchDetailScreen(onDismiss = {}, onSearch = {})
+            SearchDetailBottomSheet(onDismiss = {}, onSearch = {})
         }
     }
 }
