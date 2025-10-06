@@ -61,7 +61,7 @@ import coil.compose.AsyncImage
 import com.example.yeogi.core.model.Accommodation
 import com.example.yeogi.core.util.toKRWString
 import com.example.yeogi.feature.hotel.data.HotelCategory
-import com.example.yeogi.core.ui.SearchDetailBottomSheet
+import com.example.yeogi.core.ui.bottomsheet.CategorySearchBottomSheet
 import com.example.yeogi.feature.hotel.ui.RegionSelectionSection
 import com.example.yeogi.ui.theme.YeogiTheme
 import kotlinx.coroutines.launch
@@ -157,7 +157,8 @@ fun HotelScreen(
                 sheetState = sheetState,
                 containerColor = MaterialTheme.colorScheme.background
             ) {
-                SearchDetailBottomSheet(
+                CategorySearchBottomSheet(
+                    title = "호텔•리조트",
                     onDismiss = {
                         scope.launch { sheetState.hide() }.invokeOnCompletion {
                             if (!sheetState.isVisible) {

@@ -36,7 +36,7 @@ import com.example.yeogi.SystemBarColor
 import com.example.yeogi.feature.home.data.local.ServiceCategory
 import com.example.yeogi.navigation.BottomNavigationBar
 import com.example.yeogi.navigation.NavItem
-import com.example.yeogi.core.ui.RecommendationSection
+import com.example.yeogi.core.ui.section.RecommendationSection
 import com.example.yeogi.ui.theme.YeogiTheme
 
 

@@ -40,8 +40,8 @@ import coil.compose.AsyncImage
 import com.example.yeogi.core.presentation.SharedPaymentViewModel
 import com.example.yeogi.core.util.toKRWString
 import com.example.yeogi.feature.room.data.remote.Room
-import com.example.yeogi.core.ui.DateGuestSelectionBottomSheet
-import com.example.yeogi.core.ui.DateGuestSelectionTopAppBar
+import com.example.yeogi.core.ui.bottomsheet.DateGuestSelectionBottomSheet
+import com.example.yeogi.core.ui.appbar.DateGuestSelectionTopAppBar
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

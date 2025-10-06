@@ -14,7 +14,8 @@ data class SearchDetailUiState(
     val displayedAccommodations: List<Accommodation> = emptyList(),
     val selectedAccommodationTypes: Set<String> = setOf("전체"),
     val selectedDetailFilters: Set<String> = emptySet(),
-    val isSearching: Boolean = false
+    val isSearching: Boolean = false,
+    val query: String = "",
 )
 
 class SearchDetailViewModel : SharedViewModel() {
@@ -102,7 +103,8 @@ class SearchDetailViewModel : SharedViewModel() {
                 it.copy(
                     originalAccommodations = finalResult,
                     displayedAccommodations = finalResult,
-                    isSearching = false
+                    isSearching = false,
+                    query = query
                 )
             }
 

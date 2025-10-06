@@ -51,8 +51,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.yeogi.core.model.RecentSearch
 import com.example.yeogi.feature.search.SearchViewModel
-import com.example.yeogi.core.ui.DateGuestSelectionBottomSheet
-import com.example.yeogi.core.ui.RecentHistorySection
+import com.example.yeogi.core.ui.bottomsheet.DateGuestSelectionBottomSheet
+import com.example.yeogi.core.ui.section.RecentHistorySection
 import com.example.yeogi.core.util.getFormattedMonthDay
 import kotlinx.coroutines.launch
 import java.time.LocalDate

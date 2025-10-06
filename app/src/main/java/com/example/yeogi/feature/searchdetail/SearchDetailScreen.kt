@@ -25,15 +25,22 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,13 +52,16 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.yeogi.core.model.Accommodation
+import com.example.yeogi.core.ui.bottomsheet.SearchBottomSheet
 import com.example.yeogi.feature.searchdetail.ui.VerticalAccommodationItem
-import com.example.yeogi.core.ui.RecommendationSection
+import com.example.yeogi.core.ui.section.RecommendationSection
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 /**
  * 숙소 검색 결과 메인 화면
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchDetailScreen(
     query: String?,
@@ -60,6 +70,10 @@ fun SearchDetailScreen(
     popBackStack: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val scope = rememberCoroutineScope()
+    var showQueryBottomSheet by remember { mutableStateOf(false) }
 
     val recommendedAccommodation: Accommodation? =  try {
         uiState.displayedAccommodations.first()
@@ -86,13 +100,12 @@ fun SearchDetailScreen(
     ) {
         item {
             SearchResultTopBar(
-                searchQuery = query ?: "",
+                searchQuery = uiState.query,
                 startDate = LocalDate.now(),
                 endDate = LocalDate.now().plusDays(1),
                 guestCount = 2,
                 onBackClick = { popBackStack() },
-                onSearchClick = { /* 검색 화면으로 이동 */ },
-                onKeywordSearchClick = { /* 키워드 검색 로직 */ }
+                onSearchClick = { showQueryBottomSheet = true }
             )
         }
 
@@ -159,6 +172,33 @@ fun SearchDetailScreen(
             }
         }
     }
+
+    if (showQueryBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showQueryBottomSheet = false },
+            sheetState = sheetState,
+            containerColor = MaterialTheme.colorScheme.background
+        ) {
+            SearchBottomSheet(
+                title = "호텔•리조트",
+                onDismiss = {
+                    scope.launch { sheetState.hide() }.invokeOnCompletion {
+                        if (!sheetState.isVisible) {
+                            showQueryBottomSheet = false
+                        }
+                    }
+                },
+                onSearch = { query ->
+                    viewModel.searchAccommodationsByQueryString(query)
+                    scope.launch { sheetState.hide() }.invokeOnCompletion {
+                        if (!sheetState.isVisible) {
+                            showQueryBottomSheet = false
+                        }
+                    }
+                }
+            )
+        }
+    }
 }
 
 @Composable
@@ -169,7 +209,6 @@ fun SearchResultTopBar(
     guestCount: Int,
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
-    onKeywordSearchClick: () -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
@@ -185,7 +224,7 @@ fun SearchResultTopBar(
         SearchKeywordField(
             modifier = Modifier.weight(3f),
             query = searchQuery,
-            onClick = onKeywordSearchClick
+            onClick = onSearchClick
         )
         Spacer(modifier = Modifier.width(8.dp))
         Column(

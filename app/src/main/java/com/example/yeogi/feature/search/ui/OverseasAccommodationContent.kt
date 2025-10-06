@@ -39,7 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.yeogi.feature.search.SearchViewModel
-import com.example.yeogi.core.ui.RecentHistorySection
+import com.example.yeogi.core.ui.section.RecentHistorySection
 import com.example.yeogi.core.util.getFormattedMonthDay
 
 @Composable

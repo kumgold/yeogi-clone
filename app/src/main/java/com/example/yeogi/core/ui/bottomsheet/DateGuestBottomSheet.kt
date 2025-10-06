@@ -1,4 +1,4 @@
-package com.example.yeogi.core.ui
+package com.example.yeogi.core.ui.bottomsheet
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

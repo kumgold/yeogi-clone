@@ -70,7 +70,7 @@ import com.example.yeogi.core.model.Accommodation
 import com.example.yeogi.core.model.Facility
 import com.example.yeogi.core.model.Review
 import com.example.yeogi.core.util.toKRWString
-import com.example.yeogi.core.ui.DateGuestSelectionBottomSheet
+import com.example.yeogi.core.ui.bottomsheet.DateGuestSelectionBottomSheet
 import com.example.yeogi.ui.theme.Yellow
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
