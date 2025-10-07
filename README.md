@@ -20,9 +20,10 @@ Server : Firebase <br>
   <img src="./images/yeogi-1.gif" width="24%">
   <img src="./images/yeogi-2.gif" width="24%">
   <img src="./images/yeogi-3.gif" width="24%">
-  <img src="./images/yeogi-4.png" width="24%">
+  <img src="./images/yeogi-4.gif" width="24%">
 </p>
 <p>
+  <img src="./images/yeogi-4.png" width="24%">
   <img src="./images/yeogi-5.png" width="24%">
   <img src="./images/yeogi-6.png" width="24%">
 </p>
