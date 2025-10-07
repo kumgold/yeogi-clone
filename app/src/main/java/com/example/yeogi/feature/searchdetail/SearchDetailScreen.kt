@@ -1,5 +1,6 @@
 package com.example.yeogi.feature.searchdetail
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -30,7 +31,7 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -52,9 +53,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.yeogi.core.model.Accommodation
+import com.example.yeogi.core.ui.bottomsheet.DateGuestSelectionBottomSheet
 import com.example.yeogi.core.ui.bottomsheet.SearchBottomSheet
-import com.example.yeogi.feature.searchdetail.ui.VerticalAccommodationItem
 import com.example.yeogi.core.ui.section.RecommendationSection
+import com.example.yeogi.feature.searchdetail.ui.VerticalAccommodationItem
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -73,7 +75,8 @@ fun SearchDetailScreen(
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
-    var showQueryBottomSheet by remember { mutableStateOf(false) }
+    var isShowSearchBottomSheet by remember { mutableStateOf(false) }
+    var isShowDateBottomSheet by remember { mutableStateOf(false) }
 
     val recommendedAccommodation: Accommodation? =  try {
         uiState.displayedAccommodations.first()
@@ -101,11 +104,12 @@ fun SearchDetailScreen(
         item {
             SearchResultTopBar(
                 searchQuery = uiState.query,
-                startDate = LocalDate.now(),
-                endDate = LocalDate.now().plusDays(1),
-                guestCount = 2,
+                startDate = uiState.startDate,
+                endDate = uiState.endDate,
+                guestCount = uiState.guestCount,
                 onBackClick = { popBackStack() },
-                onSearchClick = { showQueryBottomSheet = true }
+                onSearchClick = { isShowSearchBottomSheet = true },
+                onDateClick = { isShowDateBottomSheet = true }
             )
         }
 
@@ -173,31 +177,47 @@ fun SearchDetailScreen(
         }
     }
 
-    if (showQueryBottomSheet) {
-        ModalBottomSheet(
-            onDismissRequest = { showQueryBottomSheet = false },
+    if (isShowSearchBottomSheet) {
+        SearchBottomSheet(
+            title = "호텔•리조트",
             sheetState = sheetState,
-            containerColor = MaterialTheme.colorScheme.background
-        ) {
-            SearchBottomSheet(
-                title = "호텔•리조트",
-                onDismiss = {
-                    scope.launch { sheetState.hide() }.invokeOnCompletion {
-                        if (!sheetState.isVisible) {
-                            showQueryBottomSheet = false
-                        }
-                    }
-                },
-                onSearch = { query ->
-                    viewModel.searchAccommodationsByQueryString(query)
-                    scope.launch { sheetState.hide() }.invokeOnCompletion {
-                        if (!sheetState.isVisible) {
-                            showQueryBottomSheet = false
-                        }
+            onDismiss = {
+                scope.launch { sheetState.hide() }.invokeOnCompletion {
+                    if (!sheetState.isVisible) {
+                        isShowSearchBottomSheet = false
                     }
                 }
-            )
-        }
+            },
+            onSearch = { searchQuery ->
+                viewModel.searchAccommodationsByQueryString(searchQuery)
+                scope.launch { sheetState.hide() }.invokeOnCompletion {
+                    if (!sheetState.isVisible) {
+                        isShowSearchBottomSheet = false
+                    }
+                }
+            }
+        )
+    }
+
+    if (isShowDateBottomSheet) {
+        DateGuestSelectionBottomSheet(
+            initialStartDate = uiState.startDate,
+            initialEndDate = uiState.endDate,
+            initialGuestCount = uiState.guestCount,
+            sheetState = sheetState,
+            onDismiss = {
+                scope.launch { sheetState.hide() }.invokeOnCompletion {
+                    if (!sheetState.isVisible) isShowDateBottomSheet = false
+                }
+            },
+            onApply = { newStart, newEnd, newGuests ->
+                viewModel.setDateAndGuest(
+                    startDate = newStart,
+                    endDate = newEnd,
+                    guest = newGuests
+                )
+            },
+        )
     }
 }
 
@@ -209,6 +229,7 @@ fun SearchResultTopBar(
     guestCount: Int,
     onBackClick: () -> Unit,
     onSearchClick: () -> Unit,
+    onDateClick: () -> Unit,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
@@ -222,25 +243,41 @@ fun SearchResultTopBar(
             )
         }
         SearchKeywordField(
-            modifier = Modifier.weight(3f),
+            modifier = Modifier.weight(2.5f),
             query = searchQuery,
             onClick = onSearchClick
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Column(
-            modifier = Modifier.weight(1f)
+        Surface(
+            modifier = Modifier.weight(1.5f)
+                .height(48.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .clickable {
+                    onDateClick()
+                },
+            shape = RoundedCornerShape(8.dp),
+            border = BorderStroke(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.onBackground
+            )
         ) {
-            Text(
-                text = "${startDate.monthValue}.${startDate.dayOfMonth} - ${endDate.monthValue}.${endDate.dayOfMonth}",
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-            Text(
-                text = "$guestCount 명",
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onBackground
-            )
+            Column(
+                modifier = Modifier.padding(horizontal = 8.dp),
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "${startDate.monthValue}.${startDate.dayOfMonth} - ${endDate.monthValue}.${endDate.dayOfMonth}",
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Text(
+                    text = "$guestCount 명",
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
         }
+
     }
 }
 

@@ -8,8 +8,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 data class SearchDetailUiState(
+    val startDate: LocalDate = LocalDate.now(),
+    val endDate: LocalDate = LocalDate.now().plusDays(1),
+    val guestCount: Int = 2,
     val originalAccommodations: List<Accommodation> = emptyList(),
     val displayedAccommodations: List<Accommodation> = emptyList(),
     val selectedAccommodationTypes: Set<String> = setOf("전체"),
@@ -36,6 +40,9 @@ class SearchDetailViewModel : SharedViewModel() {
 
             _uiState.update {
                 it.copy(
+                    startDate = startDate,
+                    endDate = endDate,
+                    guestCount = guest,
                     originalAccommodations = allAccommodations,
                     displayedAccommodations = allAccommodations,
                     isSearching = false
@@ -146,5 +153,21 @@ class SearchDetailViewModel : SharedViewModel() {
         }
 
         _uiState.update { it.copy(displayedAccommodations = filteredList) }
+    }
+
+    override fun setDateAndGuest(
+        startDate: LocalDate,
+        endDate: LocalDate,
+        guest: Int
+    ) {
+        super.setDateAndGuest(startDate, endDate, guest)
+
+        _uiState.update {
+            it.copy(
+                startDate = startDate,
+                endDate = endDate,
+                guestCount = guest
+            )
+        }
     }
 }
