@@ -2,9 +2,12 @@ package com.example.yeogi.feature.search
 
 import androidx.lifecycle.ViewModel
 import com.example.yeogi.core.data.repository.SharedRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import java.time.LocalDate
 
-class SearchViewModel: ViewModel() {
+@HiltViewModel
+class SearchViewModel @Inject constructor() : ViewModel() {
     private val repository = SharedRepository
 
     val domesticRecentSearches = repository.getDomesticRecentSearch().toMutableList()

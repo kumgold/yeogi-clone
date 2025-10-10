@@ -61,6 +61,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
@@ -80,7 +81,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun AccommodationScreen(
     accommodationId: Int,
-    viewModel: AccommodationViewModel = viewModel(),
+    viewModel: AccommodationViewModel = hiltViewModel(),
     navigateToRoomSelection: (Int) -> Unit,
     popBackStack: () -> Unit,
 ) {

@@ -6,6 +6,8 @@ import com.example.yeogi.core.presentation.SharedViewModel
 import com.example.yeogi.feature.room.data.remote.Room
 import com.example.yeogi.feature.room.data.repository.RoomRepository
 import com.example.yeogi.core.util.getFormattedMonthDay
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -23,7 +25,10 @@ data class RoomSelectionUiState(
         get() = "${startDate.getFormattedMonthDay()} - ${endDate.getFormattedMonthDay()} ∙ 인원 ${guestCount}명"
 }
 
-class RoomSelectionViewModel(savedStateHandle: SavedStateHandle) : SharedViewModel() {
+@HiltViewModel
+class RoomSelectionViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle
+) : SharedViewModel() {
     private val repository = RoomRepository()
     private val accommodationId: Int? = savedStateHandle.get<Int>("accommodationId")
 

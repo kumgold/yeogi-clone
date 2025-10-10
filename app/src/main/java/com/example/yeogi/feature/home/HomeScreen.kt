@@ -30,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -42,9 +43,10 @@ import com.example.yeogi.ui.theme.YeogiTheme
 
 
 @Composable
-fun HomeScreen(navController: NavController) {
-    val viewModel = viewModel<HomeViewModel>()
-
+fun HomeScreen(
+    viewModel: HomeViewModel = hiltViewModel(),
+    navController: NavController
+) {
     SystemBarColor(color = MaterialTheme.colorScheme.background,)
 
     Scaffold(

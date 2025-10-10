@@ -24,7 +24,9 @@ import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import com.example.yeogi.main.MainScreen
 import com.example.yeogi.ui.theme.YeogiTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

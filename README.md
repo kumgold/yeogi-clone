@@ -12,6 +12,7 @@
 Language : Kotlin <br>
 View : Compose <br>
 Server : Firebase <br>
+Library : Hilt <br>
 
 ## ✨ 주요 기능
 

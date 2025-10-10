@@ -4,6 +4,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.yeogi.core.data.usecase.GetAccommodationsUseCase
 import com.example.yeogi.core.model.Accommodation
 import com.example.yeogi.core.presentation.SharedViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -22,7 +24,8 @@ data class SearchDetailUiState(
     val query: String = "",
 )
 
-class SearchDetailViewModel : SharedViewModel() {
+@HiltViewModel
+class SearchDetailViewModel @Inject constructor() : SharedViewModel() {
     private val getAccommodationsUseCase = GetAccommodationsUseCase()
 
     private val _uiState = MutableStateFlow(SearchDetailUiState())

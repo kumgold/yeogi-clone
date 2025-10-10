@@ -34,14 +34,14 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.yeogi.core.presentation.SharedPaymentViewModel
+import com.example.yeogi.core.ui.appbar.DateGuestSelectionTopAppBar
+import com.example.yeogi.core.ui.bottomsheet.DateGuestSelectionBottomSheet
 import com.example.yeogi.core.util.toKRWString
 import com.example.yeogi.feature.room.data.remote.Room
-import com.example.yeogi.core.ui.bottomsheet.DateGuestSelectionBottomSheet
-import com.example.yeogi.core.ui.appbar.DateGuestSelectionTopAppBar
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -51,7 +51,7 @@ import kotlinx.coroutines.launch
 fun RoomSelectionScreen(
     accommodationId: Int,
     sharedPaymentViewModel: SharedPaymentViewModel,
-    viewModel: RoomSelectionViewModel = viewModel(),
+    viewModel: RoomSelectionViewModel = hiltViewModel(),
     navigateToPayment: (Int) -> Unit,
     popBackStack: () -> Unit
 ) {

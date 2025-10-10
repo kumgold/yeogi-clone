@@ -4,6 +4,8 @@ import com.example.yeogi.core.data.usecase.GetAccommodationsUseCase
 import com.example.yeogi.core.model.Accommodation
 import com.example.yeogi.core.presentation.SharedViewModel
 import com.example.yeogi.core.util.getFormattedMonthDay
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -20,7 +22,8 @@ data class AccommodationUiState(
         get() = "${startDate.getFormattedMonthDay()} - ${endDate.getFormattedMonthDay()} ∙ 인원 ${guestCount}명"
 }
 
-class AccommodationViewModel : SharedViewModel() {
+@HiltViewModel
+class AccommodationViewModel @Inject constructor() : SharedViewModel() {
     private val getAccommodationsUseCase = GetAccommodationsUseCase()
     private val _uiState = MutableStateFlow(
         AccommodationUiState(

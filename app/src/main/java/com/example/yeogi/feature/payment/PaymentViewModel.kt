@@ -1,9 +1,10 @@
 package com.example.yeogi.feature.payment
 
-import androidx.lifecycle.SavedStateHandle
 import com.example.yeogi.core.model.Accommodation
 import com.example.yeogi.core.presentation.SharedViewModel
 import com.example.yeogi.feature.room.data.remote.Room
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -20,7 +21,8 @@ data class PaymentUiState(
     val agreed: Boolean = false
 )
 
-class PaymentViewModel(savedStateHandle: SavedStateHandle) : SharedViewModel() {
+@HiltViewModel
+class PaymentViewModel @Inject constructor() : SharedViewModel() {
     private val _uiState = MutableStateFlow(PaymentUiState())
     val uiState: StateFlow<PaymentUiState> = _uiState
 
