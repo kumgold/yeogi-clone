@@ -7,9 +7,9 @@ import jakarta.inject.Inject
 import java.time.LocalDate
 
 @HiltViewModel
-class SearchViewModel @Inject constructor() : ViewModel() {
-    private val repository = SharedRepository
-
+class SearchViewModel @Inject constructor(
+    private val repository: SharedRepository
+) : ViewModel() {
     val domesticRecentSearches = repository.getDomesticRecentSearch().toMutableList()
     val overseaRecentSearches = repository.getOverseasRecentSearch().toMutableList()
 

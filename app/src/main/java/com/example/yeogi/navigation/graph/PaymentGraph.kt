@@ -5,14 +5,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
-import com.example.yeogi.core.presentation.SharedPaymentViewModel
 import com.example.yeogi.feature.payment.PaymentScreen
 import com.example.yeogi.feature.room.RoomSelectionScreen
 import com.example.yeogi.navigation.NavItem
 import com.example.yeogi.navigation.horizontalSlideComposable
 
 fun NavGraphBuilder.paymentGraph(navController: NavHostController) {
-    val sharedPaymentViewModel = SharedPaymentViewModel()
+
 
     navigation(
         startDestination = NavItem.RoomSelection.route,
@@ -28,11 +27,8 @@ fun NavGraphBuilder.paymentGraph(navController: NavHostController) {
 
             requireNotNull(accommodationId) { "Accommodation ID is required as an argument" }
 
-            sharedPaymentViewModel.setAccommodation(accommodationId)
-
             RoomSelectionScreen(
                 accommodationId = accommodationId,
-                sharedPaymentViewModel = sharedPaymentViewModel,
                 navigateToPayment = { roomId ->
                     navController.navigate(NavItem.Payment.createRoute(
                         accommodationId = accommodationId,
@@ -58,7 +54,6 @@ fun NavGraphBuilder.paymentGraph(navController: NavHostController) {
             requireNotNull(roomId) { "room ID is required as an argument" }
 
             PaymentScreen(
-                sharedPaymentViewModel = sharedPaymentViewModel,
                 accommodationId = accommodationId,
                 roomId = roomId,
                 popBackStack = {

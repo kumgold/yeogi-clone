@@ -1,5 +1,6 @@
 package com.example.yeogi.feature.payment
 
+import com.example.yeogi.core.data.repository.SharedRepository
 import com.example.yeogi.core.model.Accommodation
 import com.example.yeogi.core.presentation.SharedViewModel
 import com.example.yeogi.feature.room.data.remote.Room
@@ -22,7 +23,9 @@ data class PaymentUiState(
 )
 
 @HiltViewModel
-class PaymentViewModel @Inject constructor() : SharedViewModel() {
+class PaymentViewModel @Inject constructor(
+    private val sharedRepository: SharedRepository
+) : SharedViewModel(sharedRepository) {
     private val _uiState = MutableStateFlow(PaymentUiState())
     val uiState: StateFlow<PaymentUiState> = _uiState
 

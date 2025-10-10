@@ -58,7 +58,7 @@ import java.time.LocalDate
 
 @Composable
 fun PaymentScreen(
-    sharedPaymentViewModel: SharedPaymentViewModel,
+    sharedPaymentViewModel: SharedPaymentViewModel = hiltViewModel(),
     viewModel: PaymentViewModel = hiltViewModel(),
     accommodationId: Int,
     roomId: Int,

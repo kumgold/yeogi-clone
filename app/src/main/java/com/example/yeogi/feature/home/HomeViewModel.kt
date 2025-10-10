@@ -7,10 +7,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor() : ViewModel() {
-    private val sharedRepository = SharedRepository
-    private val repository = HomeRepository()
-
+class HomeViewModel @Inject constructor(
+    private val sharedRepository: SharedRepository,
+    private val homeRepository: HomeRepository
+) : ViewModel() {
     val accommodationList = sharedRepository.getAccommodations()
-    val serviceCategoryList = repository.getServiceCategories()
+    val serviceCategoryList = homeRepository.getServiceCategories()
 }

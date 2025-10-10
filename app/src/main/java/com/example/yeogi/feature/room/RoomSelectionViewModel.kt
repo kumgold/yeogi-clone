@@ -2,6 +2,7 @@ package com.example.yeogi.feature.room
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.example.yeogi.core.data.repository.SharedRepository
 import com.example.yeogi.core.presentation.SharedViewModel
 import com.example.yeogi.feature.room.data.remote.Room
 import com.example.yeogi.feature.room.data.repository.RoomRepository
@@ -27,8 +28,9 @@ data class RoomSelectionUiState(
 
 @HiltViewModel
 class RoomSelectionViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle
-) : SharedViewModel() {
+    savedStateHandle: SavedStateHandle,
+    private val sharedRepository: SharedRepository
+) : SharedViewModel(sharedRepository) {
     private val repository = RoomRepository()
     private val accommodationId: Int? = savedStateHandle.get<Int>("accommodationId")
 

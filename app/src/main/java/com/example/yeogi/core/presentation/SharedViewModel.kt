@@ -4,10 +4,14 @@ import androidx.lifecycle.ViewModel
 import com.example.yeogi.core.model.Accommodation
 import com.example.yeogi.core.data.repository.SharedRepository
 import com.example.yeogi.feature.hotel.data.Region
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import java.time.LocalDate
 
-open class SharedViewModel : ViewModel() {
-    private val sharedRepository = SharedRepository
+@HiltViewModel
+open class SharedViewModel @Inject constructor(
+    private val sharedRepository: SharedRepository
+) : ViewModel() {
 
     val startDate = sharedRepository.reservationStartDate
     val endDate = sharedRepository.reservationEndDate

@@ -50,7 +50,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun RoomSelectionScreen(
     accommodationId: Int,
-    sharedPaymentViewModel: SharedPaymentViewModel,
+    sharedPaymentViewModel: SharedPaymentViewModel = hiltViewModel(),
     viewModel: RoomSelectionViewModel = hiltViewModel(),
     navigateToPayment: (Int) -> Unit,
     popBackStack: () -> Unit
@@ -60,6 +60,7 @@ fun RoomSelectionScreen(
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(accommodationId) {
+        sharedPaymentViewModel.setAccommodation(accommodationId)
         scope.launch {
             delay(500)
             viewModel.loadRooms()

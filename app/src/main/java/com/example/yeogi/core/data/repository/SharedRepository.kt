@@ -6,7 +6,7 @@ import com.example.yeogi.core.model.RecentSearch
 import com.example.yeogi.feature.hotel.data.Region
 import java.time.LocalDate
 
-object SharedRepository {
+class SharedRepository {
     var reservationStartDate: LocalDate = LocalDate.now()
     var reservationEndDate: LocalDate = reservationStartDate.plusDays(1)
     var reservationGuest = 2

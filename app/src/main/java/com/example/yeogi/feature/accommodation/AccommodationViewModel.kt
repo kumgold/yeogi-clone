@@ -1,5 +1,6 @@
 package com.example.yeogi.feature.accommodation
 
+import com.example.yeogi.core.data.repository.SharedRepository
 import com.example.yeogi.core.data.usecase.GetAccommodationsUseCase
 import com.example.yeogi.core.model.Accommodation
 import com.example.yeogi.core.presentation.SharedViewModel
@@ -23,8 +24,10 @@ data class AccommodationUiState(
 }
 
 @HiltViewModel
-class AccommodationViewModel @Inject constructor() : SharedViewModel() {
-    private val getAccommodationsUseCase = GetAccommodationsUseCase()
+class AccommodationViewModel @Inject constructor(
+    private val sharedRepository: SharedRepository,
+    private val getAccommodationsUseCase: GetAccommodationsUseCase
+) : SharedViewModel(sharedRepository) {
     private val _uiState = MutableStateFlow(
         AccommodationUiState(
             startDate = startDate,

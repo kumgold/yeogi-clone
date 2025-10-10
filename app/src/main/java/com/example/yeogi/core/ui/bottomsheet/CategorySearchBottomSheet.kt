@@ -51,6 +51,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.yeogi.core.presentation.SharedViewModel
 import com.example.yeogi.feature.hotel.ui.RegionSelectionSection
@@ -62,7 +63,7 @@ fun CategorySearchBottomSheet(
     onDismiss: () -> Unit,
     onSearch: (String) -> Unit
 ) {
-    val viewModel: SharedViewModel = viewModel()
+    val viewModel: SharedViewModel = hiltViewModel()
 
     var searchQuery by rememberSaveable { mutableStateOf("") }
     var isSearchFocused by remember { mutableStateOf(false) }
