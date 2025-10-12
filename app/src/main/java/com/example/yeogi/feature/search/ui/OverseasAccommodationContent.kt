@@ -29,7 +29,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,18 +37,17 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.yeogi.feature.search.SearchViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.yeogi.core.ui.section.RecentHistorySection
 import com.example.yeogi.core.util.getFormattedMonthDay
+import com.example.yeogi.feature.search.SearchViewModel
 
 @Composable
 fun OverseasAccommodationContent(
     viewModel: SearchViewModel,
     navigateToDetail: (String) -> Unit,
 ) {
-    val overseasRecentSearches = remember {
-        viewModel.overseaRecentSearches.toMutableStateList()
-    }
+    val overseasRecentSearches by viewModel.overseaRecentSearches.collectAsStateWithLifecycle()
 
     var startDate by remember { mutableStateOf(viewModel.startDate) }
     var endDate by remember { mutableStateOf(viewModel.endDate) }
@@ -107,12 +105,11 @@ fun OverseasAccommodationContent(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // 최근 검색 기록
         if (overseasRecentSearches.isNotEmpty()) {
             RecentHistorySection(
                 items = overseasRecentSearches,
-                onClearAll = { overseasRecentSearches.clear() },
-                onDeleteItem = { item -> overseasRecentSearches.remove(item) },
+                onClearAll = { viewModel.clearOverseasRecentSearches() },
+                onDeleteItem = { item -> viewModel.removeOverseasRecentSearch(item.id) },
                 onClick = {}
             )
         }

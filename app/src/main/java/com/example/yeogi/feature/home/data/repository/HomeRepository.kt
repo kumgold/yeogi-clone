@@ -16,7 +16,7 @@ import androidx.compose.material.icons.filled.Umbrella
 import com.example.yeogi.feature.home.data.local.ServiceCategory
 
 class HomeRepository {
-    private val dummyServiceCategory = listOf(
+    private val serviceCategory = listOf(
         ServiceCategory("호텔•리조트", Icons.Default.Business),
         ServiceCategory("모텔", Icons.Default.KingBed),
         ServiceCategory("펜션•풀빌라", Icons.Default.Umbrella),
@@ -32,6 +32,6 @@ class HomeRepository {
     )
 
     fun getServiceCategories(): List<ServiceCategory> {
-        return dummyServiceCategory
+        return serviceCategory
     }
 }

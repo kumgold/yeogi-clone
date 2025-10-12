@@ -25,11 +25,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.yeogi.core.model.RecentSearch
-import com.example.yeogi.core.util.getFormattedMonthDay
 
 @Composable
 fun RecentHistorySection(
-    items: MutableList<RecentSearch>,
+    items: List<RecentSearch>,
     onClearAll: () -> Unit,
     onDeleteItem: (RecentSearch) -> Unit,
     onClick: (String) -> Unit
@@ -93,7 +92,7 @@ private fun RecentHistoryItem(
         Column(modifier = Modifier.weight(1f)) {
             Text(item.keyword, fontWeight = FontWeight.Bold, fontSize = 16.sp)
             Text(
-                "${item.startDate.getFormattedMonthDay()} - ${item.endDate.getFormattedMonthDay()}",
+                "${item.startDate} - ${item.endDate}",
                 color = MaterialTheme.colorScheme.onBackground,
                 style = MaterialTheme.typography.labelMedium
             )

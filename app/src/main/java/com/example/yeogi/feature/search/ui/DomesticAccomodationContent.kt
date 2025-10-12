@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
@@ -48,7 +50,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.yeogi.core.model.RecentSearch
 import com.example.yeogi.feature.search.SearchViewModel
 import com.example.yeogi.core.ui.bottomsheet.DateGuestSelectionBottomSheet
@@ -64,9 +68,7 @@ fun DomesticAccommodationContent(
     viewModel: SearchViewModel,
     navigateToDetail: (String) -> Unit,
 ) {
-    val recentSearches = remember {
-        viewModel.domesticRecentSearches.toMutableStateList()
-    }
+    val recentSearches by viewModel.domesticRecentSearches.collectAsStateWithLifecycle()
     val searchRankings = listOf(
         "제주도", "강릉", "부산", "여수", "경주", "속초", "서울", "가평", "해운대", "전주"
     )
@@ -92,8 +94,8 @@ fun DomesticAccommodationContent(
             SearchBottomSheetContent(
                 recentSearches = recentSearches,
                 searchRankings = searchRankings,
-                onClearAll = { recentSearches.clear() },
-                onDeleteItem = { item -> recentSearches.remove(item) },
+                onClearAll = { viewModel.clearDomesticRecentSearches() },
+                onDeleteItem = { item -> viewModel.removeDomesticRecentSearch(item.id) },
                 onDismiss = {
                     scope.launch { sheetState.hide() }.invokeOnCompletion {
                         if (!sheetState.isVisible) {
@@ -101,6 +103,7 @@ fun DomesticAccommodationContent(
                         }
                     }
                 },
+                onSearch = { keyword -> viewModel.addDomesticRecentSearch(keyword) },
                 navigateToDetail = { query ->
                     navigateToDetail(query)
                 }
@@ -190,8 +193,8 @@ fun DomesticAccommodationContent(
         if (recentSearches.isNotEmpty()) {
             RecentHistorySection(
                 items = recentSearches,
-                onClearAll = { recentSearches.clear() },
-                onDeleteItem = { item -> recentSearches.remove(item) },
+                onClearAll = { viewModel.clearDomesticRecentSearches() },
+                onDeleteItem = { item -> viewModel.removeDomesticRecentSearch(item.id) },
                 onClick = navigateToDetail
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -206,8 +209,9 @@ fun DomesticAccommodationContent(
  */
 @Composable
 fun SearchBottomSheetContent(
-    recentSearches: MutableList<RecentSearch>,
+    recentSearches: List<RecentSearch>,
     searchRankings: List<String>,
+    onSearch: (String) -> Unit,
     onClearAll: () -> Unit,
     onDeleteItem: (RecentSearch) -> Unit,
     onDismiss: () -> Unit,
@@ -257,6 +261,15 @@ fun SearchBottomSheetContent(
                     color = MaterialTheme.colorScheme.onBackground
                 )
             },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+            keyboardActions = KeyboardActions(
+                onSearch = {
+                    if (searchText.isNotBlank()) {
+                        onSearch(searchText)
+                        onDismiss()
+                    }
+                }
+            ),
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Search,

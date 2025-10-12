@@ -43,6 +43,13 @@ android {
 
 dependencies {
 
+    // Gson
+    implementation(libs.gson)
+
+    // DataStore
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.datastore.preferences.core)
+
     // Hilt
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.hilt.android)
