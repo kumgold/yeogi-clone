@@ -52,6 +52,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.yeogi.core.model.RecentSearch
 import com.example.yeogi.feature.search.SearchViewModel
@@ -65,10 +66,10 @@ import java.time.LocalDate
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DomesticAccommodationContent(
-    viewModel: SearchViewModel,
+    viewModel: SearchViewModel = hiltViewModel(),
     navigateToDetail: (String) -> Unit,
 ) {
-    val recentSearches by viewModel.domesticRecentSearches.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val searchRankings = listOf(
         "제주도", "강릉", "부산", "여수", "경주", "속초", "서울", "가평", "해운대", "전주"
     )
@@ -80,10 +81,6 @@ fun DomesticAccommodationContent(
     val dateGuestSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var isDateGuestSheetOpen by remember { mutableStateOf(false) }
 
-    val startDate by remember { mutableStateOf(viewModel.startDate) }
-    val endDate by remember { mutableStateOf(viewModel.endDate) }
-    val guestCount by remember { mutableIntStateOf(viewModel.guest) }
-
     if (isSearchSheetOpen) {
         ModalBottomSheet(
             onDismissRequest = { isSearchSheetOpen = false },
@@ -92,7 +89,7 @@ fun DomesticAccommodationContent(
             containerColor = Color.White
         ) {
             SearchBottomSheetContent(
-                recentSearches = recentSearches,
+                recentSearches = uiState.domesticRecentSearches,
                 searchRankings = searchRankings,
                 onClearAll = { viewModel.clearDomesticRecentSearches() },
                 onDeleteItem = { item -> viewModel.removeDomesticRecentSearch(item.id) },
@@ -103,7 +100,10 @@ fun DomesticAccommodationContent(
                         }
                     }
                 },
-                onSearch = { keyword -> viewModel.addDomesticRecentSearch(keyword) },
+                onSearch = { keyword ->
+                    viewModel.addDomesticRecentSearch(keyword)
+                    navigateToDetail(keyword)
+                },
                 navigateToDetail = { query ->
                     navigateToDetail(query)
                 }
@@ -113,9 +113,9 @@ fun DomesticAccommodationContent(
 
     if (isDateGuestSheetOpen) {
         DateGuestSelectionBottomSheet(
-            initialStartDate = startDate,
-            initialEndDate = endDate,
-            initialGuestCount = guestCount,
+            initialStartDate = uiState.startDate,
+            initialEndDate = uiState.endDate,
+            initialGuestCount = uiState.guest,
             sheetState = dateGuestSheetState,
             onDismiss = {
                 scope.launch { dateGuestSheetState.hide() }.invokeOnCompletion {
@@ -142,9 +142,9 @@ fun DomesticAccommodationContent(
             SearchInputField(onClick = { isSearchSheetOpen = true })
             Spacer(modifier = Modifier.height(12.dp))
             DateAndGuestPicker(
-                startDate = startDate,
-                endDate = endDate,
-                guestCount = guestCount,
+                startDate = uiState.startDate,
+                endDate = uiState.endDate,
+                guestCount = uiState.guest,
                 onClick = { isDateGuestSheetOpen = true }
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -190,9 +190,9 @@ fun DomesticAccommodationContent(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        if (recentSearches.isNotEmpty()) {
+        if (uiState.domesticRecentSearches.isNotEmpty()) {
             RecentHistorySection(
-                items = recentSearches,
+                items = uiState.domesticRecentSearches,
                 onClearAll = { viewModel.clearDomesticRecentSearches() },
                 onDeleteItem = { item -> viewModel.removeDomesticRecentSearch(item.id) },
                 onClick = navigateToDetail

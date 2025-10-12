@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.yeogi.core.ui.section.RecentHistorySection
 import com.example.yeogi.core.util.getFormattedMonthDay
@@ -44,13 +45,10 @@ import com.example.yeogi.feature.search.SearchViewModel
 
 @Composable
 fun OverseasAccommodationContent(
-    viewModel: SearchViewModel,
+    viewModel: SearchViewModel = hiltViewModel(),
     navigateToDetail: (String) -> Unit,
 ) {
-    val overseasRecentSearches by viewModel.overseaRecentSearches.collectAsStateWithLifecycle()
-
-    var startDate by remember { mutableStateOf(viewModel.startDate) }
-    var endDate by remember { mutableStateOf(viewModel.endDate) }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier
@@ -73,7 +71,7 @@ fun OverseasAccommodationContent(
             )
 
             // 날짜 선택 영역
-            val dateRange = "${startDate.getFormattedMonthDay()} - ${endDate.getFormattedMonthDay()}"
+            val dateRange = "${uiState.startDate.getFormattedMonthDay()} - ${uiState.endDate.getFormattedMonthDay()}"
 
             OverseasSearchField(
                 icon = Icons.Default.CalendarToday,
@@ -105,9 +103,9 @@ fun OverseasAccommodationContent(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        if (overseasRecentSearches.isNotEmpty()) {
+        if (uiState.overseaRecentSearches.isNotEmpty()) {
             RecentHistorySection(
-                items = overseasRecentSearches,
+                items = uiState.overseaRecentSearches,
                 onClearAll = { viewModel.clearOverseasRecentSearches() },
                 onDeleteItem = { item -> viewModel.removeOverseasRecentSearch(item.id) },
                 onClick = {}

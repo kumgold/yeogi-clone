@@ -31,14 +31,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.yeogi.SystemBarColor
@@ -54,7 +52,6 @@ import com.example.yeogi.ui.theme.YeogiTheme
 fun SearchScreen(
     navController: NavController
 ) {
-    val viewModel = hiltViewModel<SearchViewModel>()
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     val tabs = listOf("국내숙소", "해외숙소", "항공", "레저·티켓")
 
@@ -107,13 +104,11 @@ fun SearchScreen(
             ) { targetIndex ->
                 when (targetIndex) {
                     0 -> DomesticAccommodationContent(
-                        viewModel = viewModel,
                         navigateToDetail = { query ->
                             navController.navigate(NavItem.SearchDetail.createRoute(query))
                         }
                     )
                     1 -> OverseasAccommodationContent(
-                        viewModel = viewModel,
                         navigateToDetail = {
                             navController.navigate(NavItem.SearchDetail.route)
                         }

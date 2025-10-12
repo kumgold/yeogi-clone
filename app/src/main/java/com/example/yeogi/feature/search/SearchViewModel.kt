@@ -8,9 +8,18 @@ import com.example.yeogi.core.presentation.SharedViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+
+data class SearchUiState(
+    val startDate: LocalDate = LocalDate.now(),
+    val endDate: LocalDate = LocalDate.now().plusDays(1),
+    val guest: Int = 2,
+    val domesticRecentSearches: List<RecentSearch> = emptyList(),
+    val overseaRecentSearches: List<RecentSearch> = emptyList()
+)
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
@@ -18,11 +27,14 @@ class SearchViewModel @Inject constructor(
     private val recentSearchRepository: RecentSearchRepository
 ) : SharedViewModel(repository) {
 
-    private val _domesticRecentSearches = MutableStateFlow<List<RecentSearch>>(emptyList())
-    val domesticRecentSearches: StateFlow<List<RecentSearch>> = _domesticRecentSearches.asStateFlow()
-
-    private val _overseaRecentSearches = MutableStateFlow<List<RecentSearch>>(emptyList())
-    val overseaRecentSearches: StateFlow<List<RecentSearch>> = _overseaRecentSearches.asStateFlow()
+    private val _uiState = MutableStateFlow(
+        SearchUiState(
+            startDate = startDate,
+            endDate = endDate,
+            guest = guest,
+        )
+    )
+    val uiState = _uiState.asStateFlow()
 
     init {
         loadRecentSearches()
@@ -30,19 +42,23 @@ class SearchViewModel @Inject constructor(
 
     private fun loadRecentSearches() {
         viewModelScope.launch {
-            _domesticRecentSearches.value = recentSearchRepository.getDomesticRecentSearches()
-            _overseaRecentSearches.value = recentSearchRepository.getOverseasRecentSearches()
+            _uiState.update {
+                it.copy(
+                    domesticRecentSearches = recentSearchRepository.getDomesticRecentSearches(),
+                    overseaRecentSearches = recentSearchRepository.getOverseasRecentSearches()
+                )
+            }
         }
     }
 
     fun addDomesticRecentSearch(keyword: String) {
         viewModelScope.launch {
             val newSearch = RecentSearch(
-                id = _domesticRecentSearches.value.size + 1,
+                id = uiState.value.domesticRecentSearches.size + 1,
                 keyword = keyword,
-                guest = guest,
-                startDate = startDate.toString(),
-                endDate = endDate.toString()
+                guest = uiState.value.guest,
+                startDate = uiState.value.startDate.toString(),
+                endDate = uiState.value.endDate.toString()
             )
             recentSearchRepository.addDomesticRecentSearch(newSearch)
             loadRecentSearches()
@@ -59,14 +75,16 @@ class SearchViewModel @Inject constructor(
     fun clearDomesticRecentSearches() {
         viewModelScope.launch {
             recentSearchRepository.clearDomesticRecentSearches()
-            _domesticRecentSearches.value = emptyList()
+            _uiState.update {
+                it.copy(domesticRecentSearches = emptyList())
+            }
         }
     }
 
     fun addOverseasRecentSearch(keyword: String) {
         viewModelScope.launch {
             val newSearch = RecentSearch(
-                id = _overseaRecentSearches.value.size + 1,
+                id = uiState.value.overseaRecentSearches.size + 1,
                 keyword = keyword,
                 guest = guest,
                 startDate = startDate.toString(),
@@ -87,7 +105,21 @@ class SearchViewModel @Inject constructor(
     fun clearOverseasRecentSearches() {
         viewModelScope.launch {
             recentSearchRepository.clearOverseasRecentSearches()
-            _overseaRecentSearches.value = emptyList()
+            _uiState.update {
+                it.copy(overseaRecentSearches = emptyList())
+            }
+        }
+    }
+
+    override fun setDateAndGuest(startDate: LocalDate, endDate: LocalDate, guest: Int) {
+        super.setDateAndGuest(startDate, endDate, guest)
+
+        _uiState.update {
+            it.copy(
+                startDate = startDate,
+                endDate = endDate,
+                guest = guest
+            )
         }
     }
 }
