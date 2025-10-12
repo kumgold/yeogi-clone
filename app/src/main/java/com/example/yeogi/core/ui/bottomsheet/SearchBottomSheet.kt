@@ -38,15 +38,12 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.yeogi.core.presentation.SharedViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchBottomSheet(
     title: String,
     sheetState: SheetState,
-    viewModel: SharedViewModel = viewModel(),
     onDismiss: () -> Unit,
     onSearch: (String) -> Unit
 ) {

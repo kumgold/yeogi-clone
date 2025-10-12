@@ -59,27 +59,30 @@ fun FlightContent() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
-        // 왕복, 편도 탭
         TabRow(
             selectedTabIndex = selectedFlightTabIndex,
-            containerColor = Color.White,
+            containerColor = MaterialTheme.colorScheme.background,
             contentColor = MaterialTheme.colorScheme.primary,
         ) {
             flightTabs.forEachIndexed { index, title ->
                 Tab(
                     selected = selectedFlightTabIndex == index,
                     onClick = { selectedFlightTabIndex = index },
-                    text = { Text(text = title, fontWeight = FontWeight.Bold) }
+                    text = {
+                        Text(
+                            text = title,
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                    }
                 )
             }
         }
         Spacer(modifier = Modifier.height(24.dp))
 
-        // 출발지, 도착지, 스위치 버튼 영역
         Box(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -104,14 +107,15 @@ fun FlightContent() {
             Card(
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
-                    .padding(end = 16.dp), // 오른쪽 여백
+                    .padding(end = 16.dp),
                 shape = CircleShape,
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White)
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.White
+                )
             ) {
                 IconButton(
                     onClick = {
-                        // 출발지와 도착지 값을 서로 교환
                         val temp = departure
                         departure = arrival
                         arrival = temp
@@ -153,9 +157,15 @@ fun FlightContent() {
                 .fillMaxWidth()
                 .height(55.dp),
             shape = RoundedCornerShape(8.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.primary
+            )
         ) {
-            Text("항공권 검색", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+            Text(
+                text = "항공권 검색",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onPrimary
+            )
         }
     }
 }
@@ -174,18 +184,34 @@ fun FlightSearchField(
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp)
-            .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(8.dp))
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.onBackground,
+                shape = RoundedCornerShape(8.dp)
+            )
             .clip(RoundedCornerShape(8.dp))
             .clickable(onClick = onClick)
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(icon, contentDescription = label, tint = Color.Gray)
+        Icon(
+            imageVector = icon,
+            contentDescription = label,
+            tint = MaterialTheme.colorScheme.onBackground
+        )
         Spacer(modifier = Modifier.width(12.dp))
         Column {
-            Text(label, fontSize = 12.sp, color = Color.Gray)
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground
+            )
             Spacer(modifier = Modifier.height(2.dp))
-            Text(value, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+            Text(
+                text = value,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground
+            )
         }
     }
 }

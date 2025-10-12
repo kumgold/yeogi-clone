@@ -1,6 +1,8 @@
 package com.example.yeogi.feature.search.ui
 
+import android.R
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -43,20 +45,22 @@ fun LeisureTicketContent() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background,)
+            .background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState())
     ) {
         Column(
             modifier = Modifier
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(16.dp)
         ) {
-            // 여행지 검색 영역
             SearchInputField(onClick = { /* 레저/티켓 검색 화면으로 이동 */ })
             Spacer(modifier = Modifier.height(24.dp))
 
-            // 추천 검색어
-            Text("추천 검색어", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+            Text(
+                text = "추천 검색어",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground
+            )
             Spacer(modifier = Modifier.height(16.dp))
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -70,18 +74,16 @@ fun LeisureTicketContent() {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // 추천 지역
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(vertical = 24.dp) // 상하 패딩을 더 줌
         ) {
             Text(
-                "추천 지역",
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                modifier = Modifier.padding(horizontal = 16.dp) // 좌우 패딩만 적용
+                text = "추천 지역",
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(horizontal = 16.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))
             LazyRow(
@@ -111,11 +113,20 @@ fun KeywordChip(text: String, onClick: () -> Unit) {
                 MaterialTheme.colorScheme.background,
                 RoundedCornerShape(8.dp)
             )
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.onBackground,
+                shape = RoundedCornerShape(8.dp)
+            )
             .clip(RoundedCornerShape(8.dp))
             .clickable(onClick = onClick)
             .padding(horizontal = 12.dp, vertical = 8.dp)
     ) {
-        Text(text, color = Color.DarkGray, fontSize = 14.sp)
+        Text(
+            text = text,
+            color = MaterialTheme.colorScheme.onBackground,
+            style = MaterialTheme.typography.bodyMedium
+        )
     }
 }
 
@@ -142,8 +153,8 @@ fun RegionCircleItem(name: String, imageUrl: String, onClick: () -> Unit) {
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = name,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.SemiBold
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onBackground
         )
     }
 }
