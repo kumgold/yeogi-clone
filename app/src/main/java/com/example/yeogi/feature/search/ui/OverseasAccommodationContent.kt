@@ -52,14 +52,12 @@ fun OverseasAccommodationContent(
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        // 검색 컨트롤 영역 (지역, 날짜, 인원, 검색 버튼)
         Column(
             modifier = Modifier
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // 지역 검색 영역
             OverseasSearchField(
                 icon = Icons.Default.LocationOn,
                 label = "지역",
@@ -67,7 +65,6 @@ fun OverseasAccommodationContent(
                 onClick = { /* 지역 선택 화면으로 이동 */ }
             )
 
-            // 날짜 선택 영역
             val dateRange = "${uiState.startDate.getFormattedMonthDay()} - ${uiState.endDate.getFormattedMonthDay()}"
 
             OverseasSearchField(
@@ -77,7 +74,6 @@ fun OverseasAccommodationContent(
                 onClick = { /* 캘린더 다이얼로그 표시 */ }
             )
 
-            // 인원 선택 영역
             OverseasSearchField(
                 icon = Icons.Default.Person,
                 label = "인원",
@@ -92,9 +88,15 @@ fun OverseasAccommodationContent(
                     .fillMaxWidth()
                     .height(55.dp),
                 shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary
+                )
             ) {
-                Text("해외숙소 검색", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Text(
+                    text = "해외숙소 검색",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
             }
         }
 
@@ -125,14 +127,26 @@ fun OverseasSearchField(
         modifier = Modifier
             .fillMaxWidth()
             .height(55.dp)
-            .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(8.dp))
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.onBackground,
+                shape= RoundedCornerShape(8.dp)
+            )
             .clip(RoundedCornerShape(8.dp))
             .clickable(onClick = onClick)
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(icon, contentDescription = label, tint = Color.Gray)
+        Icon(
+            imageVector = icon,
+            contentDescription = label,
+            tint = MaterialTheme.colorScheme.onBackground
+        )
         Spacer(modifier = Modifier.width(12.dp))
-        Text(value, style = MaterialTheme.typography.bodyMedium,)
+        Text(
+            text = value,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onBackground
+        )
     }
 }
