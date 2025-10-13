@@ -3,6 +3,7 @@ package com.example.yeogi.feature.searchdetail
 import androidx.lifecycle.viewModelScope
 import com.example.yeogi.core.data.repository.SharedRepository
 import com.example.yeogi.core.data.usecase.GetAccommodationsUseCase
+import com.example.yeogi.core.data.usecase.GetOverseaAccommodationsUseCase
 import com.example.yeogi.core.model.Accommodation
 import com.example.yeogi.core.presentation.SharedViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,7 +29,8 @@ data class SearchDetailUiState(
 @HiltViewModel
 class SearchDetailViewModel @Inject constructor(
     private val sharedRepository: SharedRepository,
-    private val getAccommodationsUseCase: GetAccommodationsUseCase
+    private val getAccommodationsUseCase: GetAccommodationsUseCase,
+    private val getOverseaAccommodationsUseCase: GetOverseaAccommodationsUseCase
 ) : SharedViewModel(sharedRepository) {
     private val _uiState = MutableStateFlow(SearchDetailUiState())
     val uiState = _uiState.asStateFlow()

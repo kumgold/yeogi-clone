@@ -2,6 +2,7 @@ package com.example.yeogi.core.data.di
 
 import com.example.yeogi.core.data.repository.SharedRepository
 import com.example.yeogi.core.data.usecase.GetAccommodationsUseCase
+import com.example.yeogi.core.data.usecase.GetOverseaAccommodationsUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,6 +17,14 @@ object UseCaseModule {
     fun provideGetAccommodationsUseCase(
         sharedRepository: SharedRepository
     ): GetAccommodationsUseCase = GetAccommodationsUseCase(
+        sharedRepository
+    )
+
+    @Singleton
+    @Provides
+    fun provideGetOverseaAccommodationsUseCase(
+        sharedRepository: SharedRepository
+    ): GetOverseaAccommodationsUseCase = GetOverseaAccommodationsUseCase(
         sharedRepository
     )
 }

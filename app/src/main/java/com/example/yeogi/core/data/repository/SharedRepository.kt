@@ -26,6 +26,10 @@ class SharedRepository {
         return DummyServer.accommodations
     }
 
+    fun getOverSeaAccommodations(): List<Accommodation> {
+        return DummyServer.overseaAccommodations
+    }
+
     fun getRegions(): Map<String, List<Region>> {
         return DummyServer.regions
     }
