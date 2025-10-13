@@ -21,31 +21,86 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.yeogi.core.ui.bottomsheet.DateGuestSelectionBottomSheet
+import com.example.yeogi.core.ui.bottomsheet.SearchBottomSheet
 import com.example.yeogi.core.ui.section.RecentHistorySection
 import com.example.yeogi.core.util.getFormattedMonthDay
 import com.example.yeogi.feature.search.SearchViewModel
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OverseasAccommodationContent(
     viewModel: SearchViewModel = hiltViewModel(),
     navigateToDetail: (String) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val scope = rememberCoroutineScope()
+    var isShowSearchBottomSheet by remember { mutableStateOf(false) }
+    var isShowDateBottomSheet by remember { mutableStateOf(false) }
+
+    if (isShowSearchBottomSheet) {
+        SearchBottomSheet(
+            title = "목적지 검색",
+            sheetState = sheetState,
+            onDismiss = {
+                scope.launch { sheetState.hide() }.invokeOnCompletion {
+                    if (!sheetState.isVisible) {
+                        isShowSearchBottomSheet = false
+                    }
+                }
+            },
+            onSearch = { searchQuery ->
+                navigateToDetail(searchQuery)
+                scope.launch { sheetState.hide() }.invokeOnCompletion {
+                    if (!sheetState.isVisible) {
+                        isShowSearchBottomSheet = false
+                    }
+                }
+            }
+        )
+    }
+
+    if (isShowDateBottomSheet) {
+        DateGuestSelectionBottomSheet(
+            initialStartDate = uiState.startDate,
+            initialEndDate = uiState.endDate,
+            initialGuestCount = uiState.guest,
+            sheetState = sheetState,
+            onDismiss = {
+                scope.launch { sheetState.hide() }.invokeOnCompletion {
+                    if (!sheetState.isVisible) isShowDateBottomSheet = false
+                }
+            },
+            onApply = { newStart, newEnd, newGuests ->
+                viewModel.setDateAndGuest(
+                    startDate = newStart,
+                    endDate = newEnd,
+                    guest = newGuests
+                )
+            },
+        )
+    }
 
     Column(
         modifier = Modifier
@@ -62,7 +117,9 @@ fun OverseasAccommodationContent(
                 icon = Icons.Default.LocationOn,
                 label = "지역",
                 value = "도쿄, 일본",
-                onClick = { /* 지역 선택 화면으로 이동 */ }
+                onClick = {
+                    isShowSearchBottomSheet = true
+                }
             )
 
             val dateRange = "${uiState.startDate.getFormattedMonthDay()} - ${uiState.endDate.getFormattedMonthDay()}"
@@ -71,19 +128,24 @@ fun OverseasAccommodationContent(
                 icon = Icons.Default.CalendarToday,
                 label = "날짜",
                 value = dateRange,
-                onClick = { /* 캘린더 다이얼로그 표시 */ }
+                onClick = {
+                    isShowDateBottomSheet = true
+                }
             )
 
             OverseasSearchField(
                 icon = Icons.Default.Person,
                 label = "인원",
                 value = "성인 2명, 아동 0명",
-                onClick = { /* 인원 선택 다이얼로그 표시 */ }
+                onClick = {
+                    isShowDateBottomSheet = true
+                }
             )
 
-            // 검색 버튼
             Button(
-                onClick = { /* 해외숙소 검색 실행 */ },
+                onClick = {
+
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(55.dp),

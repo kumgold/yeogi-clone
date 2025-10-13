@@ -144,7 +144,6 @@ object DummyServer {
                 Review("김신라", 5.0, "역시 최고의 호텔입니다. 서비스, 룸 컨디션 모두 만족스러웠어요.", "2025.09.01"),
                 Review("이투숙", 4.0, "수영장이 정말 좋았지만, 주말이라 사람이 너무 많았네요.", "2025.08.28")
             ),
-            // 필터칩 관련 속성 추가
             hasCoupon = true,
             isBreakfastIncluded = true,
             hasOceanView = false,
@@ -181,7 +180,6 @@ object DummyServer {
                 Review("박롯데", 5.0, "위치가 너무 좋아서 비즈니스 출장객에게 최고입니다. 룸서비스도 훌륭해요.", "2025.09.05"),
                 Review("최서울", 4.0, "오래된 호텔이라 약간의 세월감은 있지만, 관리가 잘 되어있습니다.", "2025.08.25")
             ),
-            // 필터칩 관련 속성 추가
             hasCoupon = false,
             isBreakfastIncluded = false,
             hasOceanView = false,
@@ -217,7 +215,6 @@ object DummyServer {
             reviews = listOf(
                 Review("강남스타일", 5.0, "뷰가 정말 최고입니다. 기념일에 방문했는데 잊지 못할 경험이었어요.", "2025.09.03")
             ),
-            // 필터칩 관련 속성 추가
             hasCoupon = true,
             isBreakfastIncluded = true,
             hasOceanView = false,
@@ -253,7 +250,6 @@ object DummyServer {
             reviews = listOf(
                 Review("이종로", 5.0, "가족 여행으로 방문했는데 키즈 라운지가 있어서 아이가 정말 좋아했어요.", "2025.08.22")
             ),
-            // 필터칩 관련 속성 추가
             hasCoupon = true,
             isBreakfastIncluded = false,
             hasOceanView = false,
@@ -289,7 +285,6 @@ object DummyServer {
             reviews = listOf(
                 Review("김송파", 5.0, "프로포즈를 위해 예약했는데, 야경이 정말 압도적이었습니다. 최고의 하루였어요.", "2025.09.01")
             ),
-            // 필터칩 관련 속성 추가
             hasCoupon = false,
             isBreakfastIncluded = true,
             hasOceanView = false,
@@ -326,7 +321,6 @@ object DummyServer {
                 Review("김가평", 5.0, "사장님도 친절하시고 방도 깨끗해서 잘 쉬다 갑니다!", "2025.08.15"),
                 Review("최커플", 5.0, "개별 수영장이 있어서 프라이빗하고 너무 좋았어요. 또 오고 싶어요.", "2025.08.11")
             ),
-            // 필터칩 관련 속성 추가
             hasCoupon = true,
             isBreakfastIncluded = false,
             hasOceanView = false,
@@ -361,7 +355,6 @@ object DummyServer {
             notice = "광안대교 뷰 객실은 조기 마감될 수 있습니다. 실내 수영장에서 멋진 뷰를 즐겨보세요.",
             usageInfo = "• 객실 내에서는 금연입니다.\n• 주차는 투숙객에 한해 무료로 제공됩니다.",
             reviews = listOf(Review("이부산", 5.0, "광안대교 뷰가 정말 환상적입니다. 인생샷 건졌어요!", "2025.09.02")),
-            // 필터칩 관련 속성 추가
             hasCoupon = true,
             isBreakfastIncluded = true,
             hasOceanView = true,
@@ -397,7 +390,6 @@ object DummyServer {
             reviews = listOf(
                 Review("박해운대", 5.0, "인피니티 풀 하나만으로도 올 가치가 충분합니다. 뷰가 정말 최고예요.", "2025.08.18")
             ),
-            // 필터칩 관련 속성 추가
             hasCoupon = false,
             isBreakfastIncluded = true,
             hasOceanView = true,
@@ -433,7 +425,6 @@ object DummyServer {
             reviews = listOf(
                 Review("김기장", 5.0, "가족 여행으로 완벽한 곳입니다. 아이들이 놀 거리가 많아서 좋았어요.", "2025.09.04")
             ),
-            // 필터칩 관련 속성 추가
             hasCoupon = true,
             isBreakfastIncluded = true,
             hasOceanView = true,
@@ -470,7 +461,6 @@ object DummyServer {
             reviews = listOf(
                 Review("박서귀포", 5.0, "오래되었지만 관리가 정말 잘 되어있고, 직원들의 서비스가 최고 수준입니다. 정원이 아름다워요.", "2025.08.30")
             ),
-            // 필터칩 관련 속성 추가
             hasCoupon = false,
             isBreakfastIncluded = true,
             hasOceanView = true,
@@ -506,7 +496,6 @@ object DummyServer {
             reviews = listOf(
                 Review("최중문", 5.0, "아이들과 함께 가기 최고의 호텔입니다. 수영장에서 하루 종일 놀았어요.", "2025.08.25")
             ),
-            // 필터칩 관련 속성 추가
             hasCoupon = true,
             isBreakfastIncluded = true,
             hasOceanView = false,
@@ -540,7 +529,6 @@ object DummyServer {
             notice = "제주 전통 돌담집을 개조한 독채 펜션입니다. 벌레가 나올 수 있습니다.",
             usageInfo = "• 조용한 마을에 위치해 있어 밤 10시 이후 소음 발생을 자제해주세요.\n• 바베큐는 지정된 장소에서만 이용 가능합니다.",
             reviews = listOf(Review("박제주", 5.0, "고즈넉하고 정말 좋았어요. 힐링 그 자체였습니다.", "2025.08.20")),
-            // 필터칩 관련 속성 추가
             hasCoupon = false,
             isBreakfastIncluded = false,
             hasOceanView = false,
@@ -577,7 +565,6 @@ object DummyServer {
             reviews = listOf(
                 Review("김강릉", 5.0, "국내 최고의 호텔 중 하나라고 생각합니다. 뷰, 시설, 서비스 모두 완벽했어요.", "2025.09.08")
             ),
-            // 필터칩 관련 속성 추가
             hasCoupon = false,
             isBreakfastIncluded = true,
             hasOceanView = true,
@@ -611,7 +598,6 @@ object DummyServer {
             notice = "경포 호수와 경포 해변 사이에 위치하여 양쪽 뷰를 모두 즐길 수 있습니다. 20층 인피니티 풀이 상징적입니다.",
             usageInfo = "• 인피니티 풀은 유료 시설입니다.\n• 주차 공간이 협소할 수 있으니 참고 바랍니다.",
             reviews = listOf(Review("이경포", 4.0, "가성비 좋은 인피니티 풀 호텔입니다. 뷰는 정말 좋았어요.", "2025.08.15")),
-            // 필터칩 관련 속성 추가
             hasCoupon = true,
             isBreakfastIncluded = false,
             hasOceanView = true,
@@ -647,7 +633,6 @@ object DummyServer {
             reviews = listOf(
                 Review("박설악", 5.0, "설악산 등반하고 묵었는데 위치가 정말 최고였습니다. 고풍스러운 분위기도 좋았어요.", "2025.09.07")
             ),
-            // 필터칩 관련 속성 추가
             hasCoupon = false,
             isBreakfastIncluded = true,
             hasOceanView = false,
@@ -684,7 +669,6 @@ object DummyServer {
             reviews = listOf(
                 Review("김경주", 5.0, "리모델링해서 정말 좋아졌네요. 아이들과 함께 호캉스하기 최고의 장소입니다.", "2025.08.29")
             ),
-            // 필터칩 관련 속성 추가
             hasCoupon = true,
             isBreakfastIncluded = true,
             hasOceanView = false,
@@ -718,7 +702,6 @@ object DummyServer {
             notice = "황리단길 중심에 위치하여 관광하기에 매우 편리합니다. 간단한 조식이 무료로 제공됩니다.",
             usageInfo = "• 객실 내 취식은 금지되어 있습니다. (공용 주방 이용)\n• 한옥 특성상 방음이 취약할 수 있습니다.",
             reviews = listOf(Review("최경주", 5.0, "위치도 좋고 한옥의 정취를 느낄 수 있어서 정말 좋았습니다.", "2025.07.30")),
-            // 필터칩 관련 속성 추가
             hasCoupon = false,
             isBreakfastIncluded = true,
             hasOceanView = false,
@@ -753,7 +736,6 @@ object DummyServer {
             notice = "여수 엑스포역과 가까워 KTX 이용객에게 편리합니다. 오동도와 아쿠아플라넷이 가깝습니다.",
             usageInfo = "• 전 객실 오션 뷰입니다.\n• 반려동물 동반 입실은 불가합니다.",
             reviews = listOf(Review("이여수", 5.0, "위치가 정말 환상적입니다. 룸에서 보는 바다 뷰가 최고였어요.", "2025.09.06")),
-            // 필터칩 관련 속성 추가
             hasCoupon = false,
             isBreakfastIncluded = true,
             hasOceanView = true,
@@ -787,7 +769,6 @@ object DummyServer {
             notice = "루프탑 수영장은 온수풀로 운영되며, 유료 시설입니다. 여수 해상 케이블카 탑승장과 가깝습니다.",
             usageInfo = "• 전 객실 금연입니다.\n• 주차장이 협소할 수 있어 만차 시 외부 주차장을 이용해야 할 수 있습니다.",
             reviews = listOf(Review("박관광", 4.0, "가성비가 좋은 호텔입니다. 관광지 접근성이 뛰어나요.", "2025.08.24")),
-            // 필터칩 관련 속성 추가
             hasCoupon = true,
             isBreakfastIncluded = false,
             hasOceanView = true,

@@ -179,7 +179,7 @@ fun SearchDetailScreen(
 
     if (isShowSearchBottomSheet) {
         SearchBottomSheet(
-            title = "호텔•리조트",
+            title = "목적지 검색",
             sheetState = sheetState,
             onDismiss = {
                 scope.launch { sheetState.hide() }.invokeOnCompletion {
