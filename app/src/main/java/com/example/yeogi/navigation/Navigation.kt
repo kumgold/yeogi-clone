@@ -20,50 +20,14 @@ import com.example.yeogi.feature.searchdetail.oversea.OverseaSearchDetailScreen
 import com.example.yeogi.navigation.graph.Graph
 import com.example.yeogi.navigation.graph.homeGraph
 import com.example.yeogi.navigation.graph.paymentGraph
+import com.example.yeogi.navigation.graph.searchDetailGraph
 
 @Composable
 fun Navigation(navController: NavHostController) {
     NavHost(navController = navController, startDestination = Graph.HOME) {
         homeGraph(navController = navController)
         paymentGraph(navController = navController)
-
-        horizontalSlideComposable(
-            route = NavItem.DomesticSearchDetail.route,
-            arguments = listOf(
-                navArgument("query") { type = NavType.StringType }
-            )
-        ) { backStackEntry ->
-            val query = NavItem.DomesticSearchDetail.decodeQuery(backStackEntry)
-
-            DomesticSearchDetailScreen(
-                query = query,
-                navigateToAccommodation = { id ->
-                    navController.navigate(NavItem.AccommodationDetail.createRoute(id))
-                },
-                popBackStack = {
-                    navController.popBackStack()
-                }
-            )
-        }
-
-        horizontalSlideComposable(
-            route = NavItem.OverseaSearchDetail.route,
-            arguments = listOf(
-                navArgument("query") { type = NavType.StringType }
-            )
-        ) { backStackEntry ->
-            val query = NavItem.OverseaSearchDetail.decodeQuery(backStackEntry)
-
-            OverseaSearchDetailScreen(
-                query = query,
-                navigateToAccommodation = { id ->
-                    navController.navigate(NavItem.AccommodationDetail.createRoute(id))
-                },
-                popBackStack = {
-                    navController.popBackStack()
-                }
-            )
-        }
+        searchDetailGraph(navController = navController)
 
         horizontalSlideComposable(
             route = NavItem.AccommodationDetail.route,

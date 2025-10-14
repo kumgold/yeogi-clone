@@ -1,0 +1,57 @@
+package com.example.yeogi.navigation.graph
+
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
+import androidx.navigation.navigation
+import com.example.yeogi.feature.searchdetail.domestic.DomesticSearchDetailScreen
+import com.example.yeogi.feature.searchdetail.oversea.OverseaSearchDetailScreen
+import com.example.yeogi.navigation.BottomNavItem
+import com.example.yeogi.navigation.NavItem
+import com.example.yeogi.navigation.horizontalSlideComposable
+
+fun NavGraphBuilder.searchDetailGraph(navController: NavHostController) {
+    navigation(
+        startDestination = BottomNavItem.Search.route,
+        route = Graph.SEARCH_DETAIL
+    ) {
+        horizontalSlideComposable(
+            route = NavItem.DomesticSearchDetail.route,
+            arguments = listOf(
+                navArgument("query") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val query = NavItem.DomesticSearchDetail.decodeQuery(backStackEntry)
+
+            DomesticSearchDetailScreen(
+                query = query,
+                navigateToAccommodation = { id ->
+                    navController.navigate(NavItem.AccommodationDetail.createRoute(id))
+                },
+                popBackStack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        horizontalSlideComposable(
+            route = NavItem.OverseaSearchDetail.route,
+            arguments = listOf(
+                navArgument("query") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val query = NavItem.OverseaSearchDetail.decodeQuery(backStackEntry)
+
+            OverseaSearchDetailScreen(
+                query = query,
+                navigateToAccommodation = { id ->
+                    navController.navigate(NavItem.AccommodationDetail.createRoute(id))
+                },
+                popBackStack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+    }
+}
