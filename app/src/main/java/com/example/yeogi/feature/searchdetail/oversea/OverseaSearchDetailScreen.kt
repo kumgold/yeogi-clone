@@ -40,12 +40,6 @@ fun OverseaSearchDetailScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(query) {
-        if (query != null) {
-            viewModel.searchAccommodationsByQueryString(query)
-        }
-    }
-
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
     var isShowDateBottomSheet by remember { mutableStateOf(false) }

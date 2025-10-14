@@ -1,12 +1,12 @@
 package com.example.yeogi.feature.room
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.yeogi.core.data.repository.SharedRepository
-import com.example.yeogi.core.presentation.SharedViewModel
+import com.example.yeogi.core.util.getFormattedMonthDay
 import com.example.yeogi.feature.room.data.remote.Room
 import com.example.yeogi.feature.room.data.repository.RoomRepository
-import com.example.yeogi.core.util.getFormattedMonthDay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,15 +30,15 @@ data class RoomSelectionUiState(
 class RoomSelectionViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val sharedRepository: SharedRepository
-) : SharedViewModel(sharedRepository) {
+) : ViewModel() {
     private val repository = RoomRepository()
     private val accommodationId: Int? = savedStateHandle.get<Int>("accommodationId")
 
     private val _uiState = MutableStateFlow(
         RoomSelectionUiState(
-            startDate = startDate,
-            endDate = endDate,
-            guestCount = guest
+            startDate = sharedRepository.reservationStartDate,
+            endDate = sharedRepository.reservationEndDate,
+            guestCount = sharedRepository.reservationGuest
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -51,7 +51,7 @@ class RoomSelectionViewModel @Inject constructor(
         _uiState.update { it.copy(isDateGuestSheetOpen = false) }
     }
 
-    override fun setDateAndGuest(startDate: LocalDate, endDate: LocalDate, guest: Int) {
+    fun setDateAndGuest(startDate: LocalDate, endDate: LocalDate, guest: Int) {
         _uiState.update {
             it.copy(
                 startDate = startDate,
@@ -60,7 +60,7 @@ class RoomSelectionViewModel @Inject constructor(
             )
         }
 
-        super.setDateAndGuest(startDate, endDate, guest)
+        sharedRepository.setDatesAndGuest(startDate, endDate, guest)
     }
 
     fun loadRooms() {

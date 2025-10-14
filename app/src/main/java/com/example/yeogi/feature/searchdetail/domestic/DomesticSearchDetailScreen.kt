@@ -89,12 +89,6 @@ fun DomesticSearchDetailScreen(
         emptyList()
     }
 
-    LaunchedEffect(query) {
-        if (query != null) {
-            viewModel.searchAccommodationsByQueryString(query)
-        }
-    }
-
     LazyColumn(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)

@@ -1,10 +1,10 @@
 package com.example.yeogi.feature.search
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.yeogi.core.data.repository.RecentSearchRepository
 import com.example.yeogi.core.data.repository.SharedRepository
 import com.example.yeogi.core.model.RecentSearch
-import com.example.yeogi.core.presentation.SharedViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,15 +23,15 @@ data class SearchUiState(
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val repository: SharedRepository,
+    private val sharedRepository: SharedRepository,
     private val recentSearchRepository: RecentSearchRepository
-) : SharedViewModel(repository) {
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
         SearchUiState(
-            startDate = startDate,
-            endDate = endDate,
-            guest = guest,
+            startDate = sharedRepository.reservationStartDate,
+            endDate = sharedRepository.reservationEndDate,
+            guest = sharedRepository.reservationGuest,
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -86,9 +86,9 @@ class SearchViewModel @Inject constructor(
             val newSearch = RecentSearch(
                 id = uiState.value.overseaRecentSearches.size + 1,
                 keyword = keyword,
-                guest = guest,
-                startDate = startDate.toString(),
-                endDate = endDate.toString()
+                guest = sharedRepository.reservationGuest,
+                startDate = sharedRepository.reservationStartDate.toString(),
+                endDate = sharedRepository.reservationEndDate.toString()
             )
             recentSearchRepository.addOverseasRecentSearch(newSearch)
             loadRecentSearches()
@@ -111,8 +111,8 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    override fun setDateAndGuest(startDate: LocalDate, endDate: LocalDate, guest: Int) {
-        super.setDateAndGuest(startDate, endDate, guest)
+    fun setDateAndGuest(startDate: LocalDate, endDate: LocalDate, guest: Int) {
+        sharedRepository.setDatesAndGuest(startDate, endDate, guest)
 
         _uiState.update {
             it.copy(

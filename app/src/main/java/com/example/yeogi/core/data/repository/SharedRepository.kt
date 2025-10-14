@@ -10,15 +10,13 @@ class SharedRepository {
     var reservationEndDate: LocalDate = reservationStartDate.plusDays(1)
     var reservationGuest = 2
 
-    fun setDates(
+    fun setDatesAndGuest(
         startDate: LocalDate,
         endDate: LocalDate,
+        guest: Int
     ) {
         reservationStartDate = startDate
         reservationEndDate = endDate
-    }
-
-    fun setGuest(guest: Int) {
         reservationGuest = guest
     }
 
@@ -28,6 +26,12 @@ class SharedRepository {
 
     fun getOverSeaAccommodations(): List<Accommodation> {
         return DummyServer.overseaAccommodations
+    }
+
+    fun getAccommodation(accommodationId: Int): Accommodation? {
+        val total = DummyServer.accommodations + DummyServer.overseaAccommodations
+
+        return total.find { it.id == accommodationId }
     }
 
     fun getRegions(): Map<String, List<Region>> {

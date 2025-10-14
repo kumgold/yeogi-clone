@@ -26,8 +26,7 @@ open class SharedViewModel @Inject constructor(
         endDate: LocalDate,
         guest: Int
     ) {
-        sharedRepository.setDates(startDate, endDate)
-        sharedRepository.setGuest(guest)
+        sharedRepository.setDatesAndGuest(startDate, endDate, guest)
     }
 
     open fun getRegions(): Map<String, List<Region>> {

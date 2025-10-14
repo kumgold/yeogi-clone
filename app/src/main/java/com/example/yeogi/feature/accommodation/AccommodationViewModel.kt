@@ -1,9 +1,9 @@
 package com.example.yeogi.feature.accommodation
 
+import androidx.lifecycle.ViewModel
 import com.example.yeogi.core.data.repository.SharedRepository
 import com.example.yeogi.core.data.usecase.GetAccommodationsUseCase
 import com.example.yeogi.core.model.Accommodation
-import com.example.yeogi.core.presentation.SharedViewModel
 import com.example.yeogi.core.util.getFormattedMonthDay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
@@ -27,12 +27,12 @@ data class AccommodationUiState(
 class AccommodationViewModel @Inject constructor(
     private val sharedRepository: SharedRepository,
     private val getAccommodationsUseCase: GetAccommodationsUseCase
-) : SharedViewModel(sharedRepository) {
+) : ViewModel() {
     private val _uiState = MutableStateFlow(
         AccommodationUiState(
-            startDate = startDate,
-            endDate = endDate,
-            guestCount = guest
+            startDate = sharedRepository.reservationStartDate,
+            endDate = sharedRepository.reservationEndDate,
+            guestCount = sharedRepository.reservationGuest
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -53,7 +53,7 @@ class AccommodationViewModel @Inject constructor(
         _uiState.update { it.copy(isDateGuestSheetOpen = false) }
     }
 
-    override fun setDateAndGuest(startDate: LocalDate, endDate: LocalDate, guest: Int) {
+    fun setDateAndGuest(startDate: LocalDate, endDate: LocalDate, guest: Int) {
         _uiState.update {
             it.copy(
                 startDate = startDate,
@@ -62,6 +62,6 @@ class AccommodationViewModel @Inject constructor(
             )
         }
 
-        super.setDateAndGuest(startDate, endDate, guest)
+        sharedRepository.setDatesAndGuest(startDate, endDate, guest)
     }
 }

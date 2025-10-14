@@ -1,10 +1,11 @@
 package com.example.yeogi.feature.searchdetail.oversea
 
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.yeogi.core.data.repository.SharedRepository
 import com.example.yeogi.core.data.usecase.GetOverseaAccommodationsUseCase
 import com.example.yeogi.core.model.Accommodation
-import com.example.yeogi.core.presentation.SharedViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,14 +28,22 @@ data class OverseaSearchDetailUiState(
 
 @HiltViewModel
 class OverseaSearchDetailViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val sharedRepository: SharedRepository,
     private val getOverseaAccommodationsUseCase: GetOverseaAccommodationsUseCase
-) : SharedViewModel(sharedRepository) {
+) : ViewModel() {
+
+    private val query: String? = savedStateHandle.get<String>("query")
+
     private val _uiState = MutableStateFlow(OverseaSearchDetailUiState())
     val uiState = _uiState.asStateFlow()
 
     init {
         loadInitialAccommodations()
+
+        if (query != null) {
+            searchAccommodationsByQueryString(query)
+        }
     }
 
     private fun loadInitialAccommodations() {
@@ -45,9 +54,9 @@ class OverseaSearchDetailViewModel @Inject constructor(
 
             _uiState.update {
                 it.copy(
-                    startDate = startDate,
-                    endDate = endDate,
-                    guestCount = guest,
+                    startDate = sharedRepository.reservationStartDate,
+                    endDate = sharedRepository.reservationEndDate,
+                    guestCount = sharedRepository.reservationGuest,
                     originalAccommodations = allAccommodations,
                     displayedAccommodations = allAccommodations,
                     isSearching = false
@@ -56,12 +65,12 @@ class OverseaSearchDetailViewModel @Inject constructor(
         }
     }
 
-    override fun setDateAndGuest(
+    fun setDateAndGuest(
         startDate: LocalDate,
         endDate: LocalDate,
         guest: Int
     ) {
-        super.setDateAndGuest(startDate, endDate, guest)
+        sharedRepository.setDatesAndGuest(startDate, endDate, guest)
 
         _uiState.update {
             it.copy(
@@ -84,7 +93,7 @@ class OverseaSearchDetailViewModel @Inject constructor(
                         it.address.lowercase().contains(lowerCaseQuery)
             }
 
-            val allRegions = getRegions().values.flatten()
+            val allRegions = sharedRepository.getRegions().values.flatten()
             val region = allRegions.find { it.name.lowercase().contains(lowerCaseQuery) }
 
             val regionMatches = if (region != null) {

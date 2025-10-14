@@ -1,6 +1,6 @@
 package com.example.yeogi.core.presentation
 
-import com.example.yeogi.core.data.repository.SharedRepository
+import androidx.lifecycle.ViewModel
 import com.example.yeogi.core.data.usecase.GetAccommodationsUseCase
 import com.example.yeogi.core.model.Accommodation
 import com.example.yeogi.feature.room.data.remote.Room
@@ -9,9 +9,8 @@ import jakarta.inject.Inject
 
 @HiltViewModel
 class SharedPaymentViewModel @Inject constructor(
-    sharedRepository: SharedRepository,
     private val getAccommodationsUseCase: GetAccommodationsUseCase
-) : SharedViewModel(sharedRepository) {
+) : ViewModel() {
     var accommodation: Accommodation? = null
     var selectedRoom: Room? = null
 
