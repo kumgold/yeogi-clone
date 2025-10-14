@@ -1,4 +1,4 @@
-package com.example.yeogi.feature.searchdetail
+package com.example.yeogi.feature.searchdetail.domestic
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -65,9 +65,9 @@ import java.time.LocalDate
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchDetailScreen(
+fun DomesticSearchDetailScreen(
     query: String?,
-    viewModel: SearchDetailViewModel = hiltViewModel(),
+    viewModel: DomesticSearchDetailViewModel = hiltViewModel(),
     navigateToAccommodation: (Int) -> Unit,
     popBackStack: () -> Unit,
 ) {
@@ -167,6 +167,7 @@ fun SearchDetailScreen(
                 Spacer(modifier = Modifier.height(12.dp))
             }
         }
+
         items(uiState.displayedAccommodations) { accommodation ->
             Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)) {
                 VerticalAccommodationItem(

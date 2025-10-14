@@ -1,4 +1,4 @@
-package com.example.yeogi.feature.searchdetail
+package com.example.yeogi.feature.searchdetail.domestic
 
 import androidx.lifecycle.viewModelScope
 import com.example.yeogi.core.data.repository.SharedRepository
@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-data class SearchDetailUiState(
+data class DomesticSearchDetailUiState(
     val startDate: LocalDate = LocalDate.now(),
     val endDate: LocalDate = LocalDate.now().plusDays(1),
     val guestCount: Int = 2,
@@ -27,12 +27,11 @@ data class SearchDetailUiState(
 )
 
 @HiltViewModel
-class SearchDetailViewModel @Inject constructor(
+class DomesticSearchDetailViewModel @Inject constructor(
     private val sharedRepository: SharedRepository,
-    private val getAccommodationsUseCase: GetAccommodationsUseCase,
-    private val getOverseaAccommodationsUseCase: GetOverseaAccommodationsUseCase
+    private val getAccommodationsUseCase: GetAccommodationsUseCase
 ) : SharedViewModel(sharedRepository) {
-    private val _uiState = MutableStateFlow(SearchDetailUiState())
+    private val _uiState = MutableStateFlow(DomesticSearchDetailUiState())
     val uiState = _uiState.asStateFlow()
 
     init {

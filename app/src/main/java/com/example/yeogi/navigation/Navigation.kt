@@ -15,7 +15,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.yeogi.feature.accommodation.AccommodationScreen
 import com.example.yeogi.feature.hotel.HotelScreen
-import com.example.yeogi.feature.searchdetail.SearchDetailScreen
+import com.example.yeogi.feature.searchdetail.domestic.DomesticSearchDetailScreen
+import com.example.yeogi.feature.searchdetail.oversea.OverseaSearchDetailScreen
 import com.example.yeogi.navigation.graph.Graph
 import com.example.yeogi.navigation.graph.homeGraph
 import com.example.yeogi.navigation.graph.paymentGraph
@@ -24,16 +25,36 @@ import com.example.yeogi.navigation.graph.paymentGraph
 fun Navigation(navController: NavHostController) {
     NavHost(navController = navController, startDestination = Graph.HOME) {
         homeGraph(navController = navController)
+        paymentGraph(navController = navController)
 
         horizontalSlideComposable(
-            route = NavItem.SearchDetail.route,
+            route = NavItem.DomesticSearchDetail.route,
             arguments = listOf(
                 navArgument("query") { type = NavType.StringType }
             )
         ) { backStackEntry ->
-            val query = NavItem.SearchDetail.decodeQuery(backStackEntry)
+            val query = NavItem.DomesticSearchDetail.decodeQuery(backStackEntry)
 
-            SearchDetailScreen(
+            DomesticSearchDetailScreen(
+                query = query,
+                navigateToAccommodation = { id ->
+                    navController.navigate(NavItem.AccommodationDetail.createRoute(id))
+                },
+                popBackStack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        horizontalSlideComposable(
+            route = NavItem.OverseaSearchDetail.route,
+            arguments = listOf(
+                navArgument("query") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val query = NavItem.OverseaSearchDetail.decodeQuery(backStackEntry)
+
+            OverseaSearchDetailScreen(
                 query = query,
                 navigateToAccommodation = { id ->
                     navController.navigate(NavItem.AccommodationDetail.createRoute(id))
@@ -65,8 +86,6 @@ fun Navigation(navController: NavHostController) {
             )
         }
 
-        paymentGraph(navController = navController)
-
         horizontalSlideComposable(
             route = NavItem.Hotel.route
         ) {
@@ -75,7 +94,7 @@ fun Navigation(navController: NavHostController) {
                     navController.navigate(NavItem.AccommodationDetail.createRoute(id))
                 },
                 navigateToSearchDetail = { query ->
-                    navController.navigate(NavItem.SearchDetail.createRoute(query))
+                    navController.navigate(NavItem.DomesticSearchDetail.createRoute(query))
                 },
                 popBackStack = {
                     navController.popBackStack()

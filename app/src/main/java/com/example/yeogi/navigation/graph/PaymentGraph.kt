@@ -11,8 +11,6 @@ import com.example.yeogi.navigation.NavItem
 import com.example.yeogi.navigation.horizontalSlideComposable
 
 fun NavGraphBuilder.paymentGraph(navController: NavHostController) {
-
-
     navigation(
         startDestination = NavItem.RoomSelection.route,
         route = Graph.PAYMENT
