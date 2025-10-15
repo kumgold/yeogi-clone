@@ -21,11 +21,8 @@ fun NavGraphBuilder.searchDetailGraph(navController: NavHostController) {
             arguments = listOf(
                 navArgument("query") { type = NavType.StringType }
             )
-        ) { backStackEntry ->
-            val query = NavItem.DomesticSearchDetail.decodeQuery(backStackEntry)
-
+        ) {
             DomesticSearchDetailScreen(
-                query = query,
                 navigateToAccommodation = { id ->
                     navController.navigate(NavItem.AccommodationDetail.createRoute(id))
                 },
@@ -40,11 +37,8 @@ fun NavGraphBuilder.searchDetailGraph(navController: NavHostController) {
             arguments = listOf(
                 navArgument("query") { type = NavType.StringType }
             )
-        ) { backStackEntry ->
-            val query = NavItem.OverseaSearchDetail.decodeQuery(backStackEntry)
-
+        ) {
             OverseaSearchDetailScreen(
-                query = query,
                 navigateToAccommodation = { id ->
                     navController.navigate(NavItem.AccommodationDetail.createRoute(id))
                 },

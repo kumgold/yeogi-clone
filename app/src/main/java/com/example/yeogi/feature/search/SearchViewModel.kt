@@ -17,6 +17,7 @@ data class SearchUiState(
     val startDate: LocalDate = LocalDate.now(),
     val endDate: LocalDate = LocalDate.now().plusDays(1),
     val guest: Int = 2,
+    val selectedIndex: Int = 0,
     val domesticRecentSearches: List<RecentSearch> = emptyList(),
     val overseaRecentSearches: List<RecentSearch> = emptyList()
 )
@@ -119,6 +120,14 @@ class SearchViewModel @Inject constructor(
                 startDate = startDate,
                 endDate = endDate,
                 guest = guest
+            )
+        }
+    }
+
+    fun onTabSelected(index: Int) {
+        _uiState.update {
+            it.copy(
+                selectedIndex = index
             )
         }
     }

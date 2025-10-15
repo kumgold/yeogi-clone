@@ -36,6 +36,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.yeogi.SystemBarColor
@@ -49,9 +51,11 @@ import com.example.yeogi.ui.theme.YeogiTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: SearchViewModel = hiltViewModel()
 ) {
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    var selectedTabIndex by remember { mutableIntStateOf(uiState.selectedIndex) }
     val tabs = listOf("국내숙소", "해외숙소", "항공", "레저·티켓")
 
     SystemBarColor(color = White)
@@ -115,6 +119,8 @@ fun SearchScreen(
                     2 -> FlightContent()
                     3 -> LeisureTicketContent()
                 }
+
+                viewModel.onTabSelected(targetIndex)
             }
         }
     }

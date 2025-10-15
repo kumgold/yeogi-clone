@@ -15,8 +15,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.yeogi.feature.accommodation.AccommodationScreen
 import com.example.yeogi.feature.hotel.HotelScreen
-import com.example.yeogi.feature.searchdetail.domestic.DomesticSearchDetailScreen
-import com.example.yeogi.feature.searchdetail.oversea.OverseaSearchDetailScreen
 import com.example.yeogi.navigation.graph.Graph
 import com.example.yeogi.navigation.graph.homeGraph
 import com.example.yeogi.navigation.graph.paymentGraph
