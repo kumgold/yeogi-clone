@@ -31,7 +31,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -58,7 +57,7 @@ fun SearchScreen(
     var selectedTabIndex by remember { mutableIntStateOf(uiState.selectedIndex) }
     val tabs = listOf("국내숙소", "해외숙소", "항공", "레저·티켓")
 
-    SystemBarColor(color = White)
+    SystemBarColor(color = MaterialTheme.colorScheme.background)
 
     Scaffold(
         topBar = {
