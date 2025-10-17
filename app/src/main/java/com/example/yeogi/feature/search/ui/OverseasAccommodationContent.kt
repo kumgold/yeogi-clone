@@ -71,6 +71,7 @@ fun OverseasAccommodationContent(
                 }
             },
             onSearch = { searchQuery ->
+                viewModel.addOverseasRecentSearch(searchQuery)
                 navigateToDetail(searchQuery)
                 scope.launch { sheetState.hide() }.invokeOnCompletion {
                     if (!sheetState.isVisible) {
@@ -116,7 +117,7 @@ fun OverseasAccommodationContent(
             OverseasSearchField(
                 icon = Icons.Default.LocationOn,
                 label = "지역",
-                value = "도쿄, 일본",
+                value = "장소, 지역을 검색하세요.",
                 onClick = {
                     isShowSearchBottomSheet = true
                 }
@@ -144,7 +145,7 @@ fun OverseasAccommodationContent(
 
             Button(
                 onClick = {
-
+                    isShowSearchBottomSheet = true
                 },
                 modifier = Modifier
                     .fillMaxWidth()
