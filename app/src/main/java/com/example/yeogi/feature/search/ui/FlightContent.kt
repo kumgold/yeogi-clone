@@ -46,14 +46,34 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.example.yeogi.navigation.NavItem
 
 @Composable
-fun FlightContent() {
+fun FlightContent(
+    navigateToDetail: () -> Unit
+) {
     var selectedFlightTabIndex by remember { mutableIntStateOf(0) }
     val flightTabs = listOf("왕복", "편도")
 
     var departure by remember { mutableStateOf("서울 (SEL)") }
     var arrival by remember { mutableStateOf("도쿄 (NRT)") }
+
+    var showBottomSheet by remember { mutableStateOf(false) }
+    var isSelectingDeparture by remember { mutableStateOf(true) }
+
+    if (showBottomSheet) {
+        DestinationBottomSheet(
+            onDismiss = { showBottomSheet = false },
+            onDestinationSelected = { destination ->
+                if (isSelectingDeparture) {
+//                    onDepartureChange(destination)
+                } else {
+//                    onArrivalChange(destination)
+                }
+                showBottomSheet = false
+            }
+        )
+    }
 
     Column(
         modifier = Modifier
@@ -91,14 +111,20 @@ fun FlightContent() {
                     icon = Icons.Default.FlightTakeoff,
                     label = "출발",
                     value = departure,
-                    onClick = { /* 출발지 선택 */ }
+                    onClick = {
+                        isSelectingDeparture = true
+                        showBottomSheet = true
+                    }
                 )
                 // 도착지
                 FlightSearchField(
                     icon = Icons.Default.FlightLand,
                     label = "도착",
                     value = arrival,
-                    onClick = { /* 도착지 선택 */ }
+                    onClick = {
+                        isSelectingDeparture = false
+                        showBottomSheet = true
+                    }
                 )
             }
 
@@ -151,7 +177,7 @@ fun FlightContent() {
 
         // 항공권 검색 버튼
         Button(
-            onClick = { /* 항공권 검색 실행 */ },
+            onClick = { navigateToDetail() },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(55.dp),

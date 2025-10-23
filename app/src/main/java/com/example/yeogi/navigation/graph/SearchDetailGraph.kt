@@ -6,6 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.example.yeogi.feature.searchdetail.domestic.DomesticSearchDetailScreen
+import com.example.yeogi.feature.searchdetail.flight.FlightSearchDetailScreen
 import com.example.yeogi.feature.searchdetail.oversea.OverseaSearchDetailScreen
 import com.example.yeogi.navigation.BottomNavItem
 import com.example.yeogi.navigation.NavItem
@@ -46,6 +47,17 @@ fun NavGraphBuilder.searchDetailGraph(navController: NavHostController) {
                     navController.popBackStack()
                 }
             )
+        }
+
+        horizontalSlideComposable(
+            route = NavItem.FlightSearchDetail.route
+        ) {
+            FlightSearchDetailScreen(
+                departure = "출발",
+                arrival = "도착"
+            ) {
+                navController.popBackStack()
+            }
         }
     }
 }

@@ -115,7 +115,11 @@ fun SearchScreen(
                             navController.navigate(NavItem.OverseaSearchDetail.createRoute(query))
                         }
                     )
-                    2 -> FlightContent()
+                    2 -> FlightContent(
+                        navigateToDetail = {
+                            navController.navigate(NavItem.FlightSearchDetail.route)
+                        }
+                    )
                     3 -> LeisureTicketContent()
                 }
 
