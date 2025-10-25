@@ -25,7 +25,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
@@ -36,18 +35,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
-// 임시 데이터 클래스
-data class FlightTicket(
-    val airline: String,
-    val departureTime: String,
-    val departureAirport: String,
-    val arrivalTime: String,
-    val arrivalAirport: String,
-    val duration: String,
-    val price: String,
-    val type: String // 예: "특가"
-)
+import com.example.yeogi.feature.searchdetail.flight.data.FlightTicket
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,58 +51,59 @@ fun FlightSearchDetailScreen(
         FlightTicket("티웨이항공", "11:20", "SEL", "13:45", "NRT", "2시간 25분", "175,500원", "일반석")
     )
 
-    Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(text = departure, fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                        Icon(
-                            imageVector = Icons.Default.SwapHoriz,
-                            contentDescription = "방향 전환",
-                            modifier = Modifier.padding(horizontal = 8.dp)
-                        )
-                        Text(text = arrival, fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                    }
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBackClick) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "뒤로가기")
-                    }
-                },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = Color.White,
-                    navigationIconContentColor = Color.White
-                )
-            )
-        }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .background(Color(0xFFF5F5F5))
-        ) {
-            SearchConditionChangeButton(
-                date = "9월 10일(화) ~ 9월 15일(일)",
-                passengers = "성인 1명",
-                onClick = { /* 검색 조건 변경 로직 */ }
-            )
-
-            // 항공권 목록
-            LazyColumn(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                item { Spacer(modifier = Modifier.height(4.dp)) }
-
-                items(dummyTickets) { ticket ->
-                    FlightTicketItem(ticket = ticket)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
+        CenterAlignedTopAppBar(
+            title = {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = departure,
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                    Icon(
+                        imageVector = Icons.Default.SwapHoriz,
+                        contentDescription = "방향 전환",
+                        modifier = Modifier.padding(horizontal = 8.dp)
+                    )
+                    Text(
+                        text = arrival,
+                        style = MaterialTheme.typography.bodyLarge
+                    )
                 }
+            },
+            navigationIcon = {
+                IconButton(onClick = onBackClick) {
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "뒤로가기")
+                }
+            },
+            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                navigationIconContentColor = MaterialTheme.colorScheme.onPrimary
+            )
+        )
 
-                item { Spacer(modifier = Modifier.height(16.dp)) }
+        SearchConditionChangeButton(
+            date = "9월 10일(화) ~ 9월 15일(일)",
+            passengers = "성인 1명",
+            onClick = { /* 검색 조건 변경 로직 */ }
+        )
+
+        // 항공권 목록
+        LazyColumn(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            item { Spacer(modifier = Modifier.height(4.dp)) }
+
+            items(dummyTickets) { ticket ->
+                FlightTicketItem(ticket = ticket)
             }
+
+            item { Spacer(modifier = Modifier.height(16.dp)) }
         }
     }
 }
