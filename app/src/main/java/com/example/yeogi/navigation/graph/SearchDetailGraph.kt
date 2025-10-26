@@ -50,14 +50,21 @@ fun NavGraphBuilder.searchDetailGraph(navController: NavHostController) {
         }
 
         horizontalSlideComposable(
-            route = NavItem.FlightSearchDetail.route
+            route = NavItem.FlightSearchDetail.route,
+            arguments = listOf(
+                navArgument("departure") { type = NavType.StringType },
+                navArgument("arrival") { type = NavType.StringType },
+                navArgument("type") { type = NavType.StringType }
+            )
         ) {
             FlightSearchDetailScreen(
                 departure = "출발",
-                arrival = "도착"
-            ) {
-                navController.popBackStack()
-            }
+                arrival = "도착",
+                type = "왕복",
+                popBackStack = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }

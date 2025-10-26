@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
+import com.example.yeogi.core.model.FlightTicket
 
 fun Modifier.skeletonBackground(shape: Shape = RoundedCornerShape(4.dp)): Modifier = composed {
     val transition = rememberInfiniteTransition(label = "skeleton transition")
@@ -47,4 +48,14 @@ fun Int?.toKRWString(): String {
 
     val formatter = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.KOREA)
     return "${formatter.format(this)}원"
+}
+
+fun FlightTicket.getTicket(
+    departureAirport: String,
+    arrivalAirport: String,
+    type: String
+): Boolean {
+    return this.departureAirport == departureAirport
+            && this.arrivalAirport == arrivalAirport
+            && this.type == type
 }

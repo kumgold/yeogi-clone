@@ -2,7 +2,10 @@ package com.example.yeogi.core.data.repository
 
 import com.example.yeogi.core.data.network.DummyServer
 import com.example.yeogi.core.model.Accommodation
+import com.example.yeogi.core.model.FlightTicket
+import com.example.yeogi.core.util.getTicket
 import com.example.yeogi.feature.hotel.data.Region
+import okhttp3.internal.filterList
 import java.time.LocalDate
 
 class SharedRepository {
@@ -36,5 +39,15 @@ class SharedRepository {
 
     fun getRegions(): Map<String, List<Region>> {
         return DummyServer.regions
+    }
+
+    fun getFlightTickets(
+        departureAirport: String,
+        arrivalAirport: String,
+        type: String
+    ): List<FlightTicket> {
+        return DummyServer.flightTickets.filter {
+            it.getTicket(departureAirport, arrivalAirport, type)
+        }
     }
 }

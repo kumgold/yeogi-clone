@@ -35,21 +35,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.yeogi.feature.searchdetail.flight.data.FlightTicket
+import com.example.yeogi.core.model.FlightTicket
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FlightSearchDetailScreen(
     departure: String,
     arrival: String,
-    onBackClick: () -> Unit
+    type: String,
+    popBackStack: () -> Unit
 ) {
-    val dummyTickets = listOf(
-        FlightTicket("대한항공", "08:00", "SEL", "10:25", "NRT", "2시간 25분", "250,000원", "일반석"),
-        FlightTicket("아시아나", "09:10", "SEL", "11:40", "NRT", "2시간 30분", "235,000원", "특가"),
-        FlightTicket("제주항공", "10:05", "SEL", "12:35", "NRT", "2시간 30분", "180,000원", "특가"),
-        FlightTicket("티웨이항공", "11:20", "SEL", "13:45", "NRT", "2시간 25분", "175,500원", "일반석")
-    )
+    val dummyTickets = listOf<FlightTicket>()
 
     Column(
         modifier = Modifier
@@ -75,7 +71,7 @@ fun FlightSearchDetailScreen(
                 }
             },
             navigationIcon = {
-                IconButton(onClick = onBackClick) {
+                IconButton(onClick = popBackStack) {
                     Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "뒤로가기")
                 }
             },

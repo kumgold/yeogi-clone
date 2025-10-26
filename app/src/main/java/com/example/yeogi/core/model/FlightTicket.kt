@@ -1,6 +1,7 @@
-package com.example.yeogi.feature.searchdetail.flight.data
+package com.example.yeogi.core.model
 
 data class FlightTicket(
+    val id: Int,
     val airline: String,
     val departureTime: String,
     val departureAirport: String,

@@ -28,6 +28,7 @@ import androidx.compose.material.icons.filled.Wifi
 import androidx.compose.material.icons.filled.Yard
 import com.example.yeogi.core.model.Accommodation
 import com.example.yeogi.core.model.Facility
+import com.example.yeogi.core.model.FlightTicket
 import com.example.yeogi.core.model.Review
 import com.example.yeogi.feature.hotel.data.Region
 
@@ -1551,5 +1552,50 @@ object DummyServer {
             hasMountainView = false,
             isAvailable = true
         )
+    )
+
+    val flightTickets = listOf(
+        FlightTicket(1, "대한항공", "08:00", "ICN", "10:00", "NRT", "2시간", "500,000원", "왕복"),
+        FlightTicket(2, "아시아나항공", "09:30", "GMP", "11:30", "HND", "2시간", "550,000원", "왕복"),
+        FlightTicket(3, "제주항공", "10:00", "ICN", "12:30", "KIX", "2시간 30분", "450,000원", "왕복"),
+        FlightTicket(4, "진에어", "11:00", "PUS", "12:30", "FUK", "1시간 30분", "300,000원", "왕복"),
+        FlightTicket(5, "티웨이항공", "13:00", "ICN", "15:00", "CJU", "2시간", "150,000원", "왕복"),
+        FlightTicket(6, "에어서울", "14:30", "ICN", "16:30", "NRT", "2시간", "480,000원", "왕복"),
+        FlightTicket(7, "이스타항공", "15:00", "CJJ", "17:00", "KIX", "2시간", "420,000원", "왕복"),
+        FlightTicket(8, "대한항공", "16:30", "CJU", "17:30", "GMP", "1시간", "120,000원", "왕복"),
+        FlightTicket(9, "아시아나항공", "18:00", "ICN", "20:00", "HND", "2시간", "600,000원", "왕복"),
+        FlightTicket(10, "제주항공", "19:30", "GMP", "21:00", "KIX", "1시간 30분", "400,000원", "왕복"),
+        FlightTicket(11, "진에어", "08:30", "NRT", "10:30", "ICN", "2시간", "520,000원", "왕복"),
+        FlightTicket(12, "티웨이항공", "10:00", "HND", "12:00", "GMP", "2시간", "580,000원", "왕복"),
+        FlightTicket(13, "에어서울", "11:30", "KIX", "13:30", "ICN", "2시간", "470,000원", "왕복"),
+        FlightTicket(14, "이스타항공", "13:00", "FUK", "14:30", "PUS", "1시간 30분", "320,000원", "왕복"),
+        FlightTicket(15, "대한항공", "15:00", "CJU", "16:00", "ICN", "1시간", "160,000원", "왕복"),
+        FlightTicket(16, "아시아나항공", "16:30", "NRT", "18:30", "ICN", "2시간", "530,000원", "왕복"),
+        FlightTicket(17, "제주항공", "18:00", "KIX", "20:00", "CJJ", "2시간", "440,000원", "왕복"),
+        FlightTicket(18, "진에어", "19:30", "GMP", "20:30", "CJU", "1시간", "130,000원", "왕복"),
+        FlightTicket(19, "티웨이항공", "20:00", "HND", "22:00", "ICN", "2시간", "620,000원", "왕복"),
+        FlightTicket(20, "에어서울", "21:30", "KIX", "23:00", "GMP", "1시간 30분", "410,000원", "왕복"),
+
+        // 편도 (One-way) - 20개
+        FlightTicket(21, "대한항공", "07:30", "ICN", "09:30", "NRT", "2시간", "250,000원", "편도"),
+        FlightTicket(22, "아시아나항공", "09:00", "GMP", "11:00", "HND", "2시간", "280,000원", "편도"),
+        FlightTicket(23, "제주항공", "10:30", "ICN", "12:30", "KIX", "2시간", "220,000원", "편도"),
+        FlightTicket(24, "진에어", "12:00", "PUS", "13:30", "FUK", "1시간 30분", "150,000원", "편도"),
+        FlightTicket(25, "티웨이항공", "14:00", "ICN", "15:00", "CJU", "1시간", "70,000원", "편도"),
+        FlightTicket(26, "에어서울", "15:30", "ICN", "17:30", "NRT", "2시간", "240,000원", "편도"),
+        FlightTicket(27, "이스타항공", "17:00", "CJJ", "19:00", "KIX", "2시간", "210,000원", "편도"),
+        FlightTicket(28, "대한항공", "18:30", "CJU", "19:30", "GMP", "1시간", "60,000원", "편도"),
+        FlightTicket(29, "아시아나항공", "20:00", "ICN", "22:00", "HND", "2시간", "300,000원", "편도"),
+        FlightTicket(30, "제주항공", "21:30", "GMP", "23:00", "KIX", "1시간 30분", "200,000원", "편도"),
+        FlightTicket(31, "진에어", "08:00", "NRT", "10:00", "ICN", "2시간", "260,000원", "편도"),
+        FlightTicket(32, "티웨이항공", "09:30", "HND", "11:30", "GMP", "2시간", "290,000원", "편도"),
+        FlightTicket(33, "에어서울", "11:00", "KIX", "13:00", "ICN", "2시간", "230,000원", "편도"),
+        FlightTicket(34, "이스타항공", "12:30", "FUK", "14:00", "PUS", "1시간 30분", "160,000원", "편도"),
+        FlightTicket(35, "대한항공", "14:30", "CJU", "15:30", "ICN", "1시간", "80,000원", "편도"),
+        FlightTicket(36, "아시아나항공", "16:00", "NRT", "18:00", "ICN", "2시간", "270,000원", "편도"),
+        FlightTicket(37, "제주항공", "17:30", "KIX", "19:30", "CJJ", "2시간", "220,000원", "편도"),
+        FlightTicket(38, "진에어", "19:00", "GMP", "20:00", "CJU", "1시간", "65,000원", "편도"),
+        FlightTicket(39, "티웨이항공", "20:30", "HND", "22:30", "ICN", "2시간", "310,000원", "편도"),
+        FlightTicket(40, "에어서울", "22:00", "KIX", "23:30", "GMP", "1시간 30분", "210,000원", "편도")
     )
 }
