@@ -58,9 +58,6 @@ fun NavGraphBuilder.searchDetailGraph(navController: NavHostController) {
             )
         ) {
             FlightSearchDetailScreen(
-                departure = "출발",
-                arrival = "도착",
-                type = "왕복",
                 popBackStack = {
                     navController.popBackStack()
                 }

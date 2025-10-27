@@ -40,9 +40,6 @@ import com.example.yeogi.core.model.FlightTicket
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FlightSearchDetailScreen(
-    departure: String,
-    arrival: String,
-    type: String,
     popBackStack: () -> Unit
 ) {
     val dummyTickets = listOf<FlightTicket>()
@@ -56,7 +53,7 @@ fun FlightSearchDetailScreen(
             title = {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        text = departure,
+                        text = "departure",
                         style = MaterialTheme.typography.bodyLarge
                     )
                     Icon(
@@ -65,7 +62,7 @@ fun FlightSearchDetailScreen(
                         modifier = Modifier.padding(horizontal = 8.dp)
                     )
                     Text(
-                        text = arrival,
+                        text = "arrival",
                         style = MaterialTheme.typography.bodyLarge
                     )
                 }

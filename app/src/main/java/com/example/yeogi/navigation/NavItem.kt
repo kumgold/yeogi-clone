@@ -47,7 +47,13 @@ sealed class NavItem(
             }
         }
     }
-    data object FlightSearchDetail: NavItem("flight_search_detail", "항공권 검색")
+    data object FlightSearchDetail: NavItem("flight_search_detail/{departure}/{arrival}/{type}", "항공권 검색") {
+        fun createRoute(
+            departure: String,
+            arrival: String,
+            type: String
+        ) = "flight_search_detail/$departure/$arrival/$type"
+    }
     data object AccommodationDetail: NavItem("accommodation/{accommodationId}", "숙소") {
         fun createRoute(accommodationId: Int) = "accommodation/$accommodationId"
     }
