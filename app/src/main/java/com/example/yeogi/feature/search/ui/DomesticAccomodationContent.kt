@@ -86,7 +86,7 @@ fun DomesticAccommodationContent(
             onDismissRequest = { isSearchSheetOpen = false },
             sheetState = sheetState,
             modifier = Modifier.fillMaxSize(),
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.background
         ) {
             SearchBottomSheetContent(
                 recentSearches = uiState.domesticRecentSearches,
