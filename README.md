@@ -53,7 +53,7 @@
 ### 4. 검색 및 최근 본 상품 (Search & History)
 - Room/DataStore 활용: 사용자가 조회한 숙소를 로컬에 저장하여 '최근 본 상품' 기능을 구현했습니다.
 
-## 프로젝트 구조
+## 📂 프로젝트 구조
 ```markdown
 yeogi-clone/
     ├── core/                   # 공통으로 사용되는 모듈
