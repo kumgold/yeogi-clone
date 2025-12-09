@@ -1,4 +1,11 @@
 # 여기어때 클론 프로젝트
+<p align="left">
+<img src="https://img.shields.io/badge/Android-3DDC84?style=flat&logo=android&logoColor=white"/>
+<img src="https://img.shields.io/badge/Kotlin-1.9.0-7F52FF?style=flat&logo=kotlin&logoColor=white"/>
+<img src="https://img.shields.io/badge/Jetpack%20Compose-4285F4?style=flat&logo=jetpackcompose&logoColor=white"/>
+<img src="https://img.shields.io/badge/Hilt-2C2C2C?style=flat&logo=google&logoColor=white"/>
+<img src="https://img.shields.io/badge/Firebase-FFCA28?style=flat&logo=firebase&logoColor=black"/>
+</p>
 
 ## 📖 프로젝트 소개
 실제로 자주 사용하는 여행 서비스 ‘여기어때’를 클론 코딩한 프로젝트입니다.
